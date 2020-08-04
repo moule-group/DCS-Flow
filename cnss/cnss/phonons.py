@@ -96,7 +96,7 @@ def dftb_command(dir):
             os.system('dftb+ 1>> forces.out 2>> forces.err')
 
         
-def calculate_forces(mpi=True):
+def calculate_forces(mpi=False):
     
     dirlist = np.array(sorted([x.name for x in os.scandir() if x.is_dir()]))
     
@@ -106,7 +106,7 @@ def calculate_forces(mpi=True):
             executor.map(dftb_command, dirlist)
     else:
         from multiprocessing import Pool        
-        pool = Pool(processes=None)
+        pool = Pool(processes=16)
         pool.map(dftb_command, dirlist)
 
 
