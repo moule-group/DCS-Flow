@@ -84,19 +84,19 @@ export PATH=/my_disk/my_name/cnss/cnss:$PATH (an example)
 
 The workflow will relax the structure, create supercell displacements, calculate forces, run oclimax. The easiest way to start is through the command line interface
 
-    1. Get the parameters file
+  1. Get the parameters file
+   
+  ```
+  cnss workflow --get-params
+  ```
 
-    ```
-    cnss workflow --get-params
-    ```
+  2. Define parameters in the file
 
-    2. Define parameters in the file
+  3. Run workflow
 
-    3. Run workflow
-
-    ```
-    cnss workflow
-    ```
+  ```
+  cnss workflow
+  ```
 
 
 
