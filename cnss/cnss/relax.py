@@ -54,7 +54,7 @@ def relax_structure(krelax, fmax, geo, calc):
                         Hamiltonian_SCC='Yes',
                         Hamiltonian_MaxAngularMomentum_='',
                         Hamiltonian_MaxAngularMomentum_C='p',
-                        Hamiltonian_MaxAngularMomentum_H='s'))
+                        Hamiltonian_MaxAngularMomentum_H='s')
         elif calc == 'vasp':
             from ase.calculators.dftb import Vasp
             calc = Vasp(kpts=krelax,
