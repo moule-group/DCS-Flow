@@ -13,59 +13,90 @@ CNSS is a software that automates simulations of ineslatic neutron scattering st
 
 * Installing ASE:
 
-$ pip install --upgrade --user ase
+```
+pip install --upgrade --user ase
+```
 
 * Installing DFTB+:
 
-1. [Download Slater-Koster files (parameters files for the DFTB method)](http://www.dftb.org/fileadmin/DFTB/public/slako-unpacked.tar.xz)
+  1. [Download Slater-Koster files (parameters files for the DFTB method)](http://www.dftb.org/fileadmin/DFTB/public/slako-unpacked.tar.xz)
 
-2. Download DFTB+
-$ git clone https://github.com/dftbplus/dftbplus.git
-$ cd dftbplus
-$ git submodule update --init --recursive
+  2. Download DFTB+
+  
+  ```
+  git clone https://github.com/dftbplus/dftbplus.git
+  cd dftbplus
+  git submodule update --init --recursive
+  ```
 
-3. Build DFTB+ (make sure to use your specific Fortran and C compilers)
-$ mkdir build
-$ cd build
-$ FC=gfortran CC=gcc cmake ..
+  3. Build DFTB+ (make sure to use your specific Fortran and C compilers)
 
-If configuration was successful
-$ make -j
+  ```
+  mkdir build
+  cd build
+  FC=gfortran CC=gcc cmake ..
+  ```
 
-Test it
-$ ctest -j2
+  If configuration was successful
+  
+  ```
+  make -j
+  ```
 
-4. Install DFTB+
-$ make install
+  Test it
+
+  ```
+  ctest -j2
+  ```
+
+  4. Install DFTB+
+
+  ```
+  make install
+  ```
 
 * Installing Phonopy
-$ pip install --upgrade --user phonopy
+
+```
+pip install --upgrade --user phonopy
+```
 
 * Installing CNSS
-$ git clone
+
+```
+git clone
+```
 
 ### Set environment variables
 
 Add these lines to your configuration file (.bashrc)
 
-$ export DFTB_PREFIX=/my_disk/my_name/slako/mio/mio-0-1/ (an example)
-$ export ASE_DFTB_COMMAND='/my_disk/my_name/dftbplus-20.1/bin/dftb+ > PREFIX.out' (an example)
-$ export PYTHONPATH=/my_disk/my_name/cnss:$PYTHONPATH
-$ export PATH=/my_disk/my_name/cnss/cnss:$PATH
+```
+export DFTB_PREFIX=/my_disk/my_name/slako/mio/mio-0-1/ (an example)
+export ASE_DFTB_COMMAND='/my_disk/my_name/dftbplus-20.1/bin/dftb+ > PREFIX.out' (an example)
+export PYTHONPATH=/my_disk/my_name/cnss:$PYTHONPATH
+export PATH=/my_disk/my_name/cnss/cnss:$PATH
+```
 
 ### Usage
 
 * Workflow
 
-The workflow will relax the structure, create supercell displacements, calculate forces, run oclimax
+The workflow will relax the structure, create supercell displacements, calculate forces, run oclimax. The easiest way to start is through the command line interface:
 
-1. Get the parameters file
-$ cnss workflow --get-params
+    1. Get the parameters file
 
-2. Define parameters in the file
+    ```
+    cnss workflow --get-params
+    ```
 
-3. Run workflow
-$ cnss workflow
+    2. Define parameters in the file
+
+    3. Run workflow
+
+    ```
+    cnss workflow
+    ```
 
 
 
