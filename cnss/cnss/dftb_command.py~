@@ -1,8 +1,0 @@
-import os
-from cnss import chdir
-
-
-def dftb_command(dir):
-    with chdir(dir):
-        if not os.path.exists('results.tag') or not os.path.getsize('results.tag') > 0:
-            os.system('dftb+ 1>> forces.out 2>> forces.err')
