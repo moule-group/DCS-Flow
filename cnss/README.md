@@ -64,7 +64,7 @@ pip install --upgrade --user phonopy
 * Installing CNSS
 
 ```
-git clone
+git clone https://gitlab.com/lucassamir1/adam-moule.git
 ```
 
 ### Set environment variables
