@@ -74,15 +74,15 @@ Add these lines to your configuration file (.bashrc)
 ```
 export DFTB_PREFIX=/my_disk/my_name/slako/mio/mio-0-1/ (an example)
 export ASE_DFTB_COMMAND='/my_disk/my_name/dftbplus-20.1/bin/dftb+ > PREFIX.out' (an example)
-export PYTHONPATH=/my_disk/my_name/cnss:$PYTHONPATH
-export PATH=/my_disk/my_name/cnss/cnss:$PATH
+export PYTHONPATH=/my_disk/my_name/cnss:$PYTHONPATH (an example)
+export PATH=/my_disk/my_name/cnss/cnss:$PATH (an example)
 ```
 
 ### Usage
 
 * Workflow
 
-The workflow will relax the structure, create supercell displacements, calculate forces, run oclimax. The easiest way to start is through the command line interface:
+The workflow will relax the structure, create supercell displacements, calculate forces, run oclimax. The easiest way to start is through the command line interface
 
     1. Get the parameters file
 
