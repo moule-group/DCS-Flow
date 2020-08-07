@@ -27,7 +27,6 @@ class CLICommand:
 
 def relax_done(fmax):
     import pandas as pd
-    from pandas.io import common
 
     try:
         df = pd.read_csv('relax.out', sep='\s+')
@@ -39,36 +38,38 @@ def relax_done(fmax):
         return False
 
     
-def relax_structure(krelax, fmax, geo, calc):
-    if relax_done(fmax = fmax):
+def relax_structure(krelax, fmax, geo, mode):
+    if relax_done(fmax=fmax):
         return
     else:
         atoms = read(geo)
         formula = atoms.get_chemical_formula()
 
-        if calc == 'dftbp':
+        if mode == 'dftbp':
             from ase.calculators.dftb import Dftb
-            calc = Dftb(label=formula,
-                        atoms=atoms,
-                        kpts=krelax,
-                        Hamiltonian_SCC='Yes',
-                        Hamiltonian_MaxAngularMomentum_='',
-                        Hamiltonian_MaxAngularMomentum_C='p',
-                        Hamiltonian_MaxAngularMomentum_H='s')
-        elif calc == 'vasp':
-            from ase.calculators.dftb import Vasp
-            calc = Vasp(kpts=krelax,
-                        encut=520,
-                        prec='Accurate',
-                        nwrite=1,
-                        lcharg=False,
-                        lwave=False,
-                        xc='optPBE-vdw',
-                        gamma=True)
+            calculator = Dftb(label=formula,
+                              atoms=atoms,
+                              kpts=krelax,
+                              Hamiltonian_SCC='Yes',
+                              Hamiltonian_MaxAngularMomentum_='',
+                              Hamiltonian_MaxAngularMomentum_C='p',
+                              Hamiltonian_MaxAngularMomentum_H='s')
+        elif mode == 'vasp':
+            from ase.calculators.vasp import Vasp
+            calculator = Vasp(kpts=krelax,
+                              encut=520,
+                              prec='Accurate',
+                              nwrite=1,
+                              ncore=16,
+                              lreal=False,
+                              lcharg=False,
+                              lwave=False,
+                              xc='optpbe-vdw',
+                              gamma=True)
         else:
-            raise NotImplementedError('{} calculator not implemented' .format(calc))
+            raise NotImplementedError('{} calculator not implemented' .format(mode))
             
-        atoms.set_calculator(calc)
+        atoms.set_calculator(calculator)
         opt = BFGS(atoms, trajectory= formula + '.traj')
         opt.run(fmax=fmax)
 
@@ -84,7 +85,7 @@ def relax(krelax=[6, 6, 6], fmax=0.01, geo=None, calc='dftbp'):
     mkdir(folder + '/1-optimization')
     with chdir(folder + '/1-optimization'):
         with out('relax'):
-            relax_structure(krelax=krelax, fmax=fmax, geo=geo[0], calc=calc)
+            relax_structure(krelax=krelax, fmax=fmax, geo=geo[0], mode=calc)
 
 if __name__ == '__main__':
     relax()
