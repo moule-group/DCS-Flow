@@ -109,15 +109,13 @@ def calculate_forces(kforce, mode, dir):
             if mode == 'dftbp':
                 from ase.calculators.dftb import Dftb
                 atoms = read('geo_end.gen')
-                calculator = Dftb(atoms=atoms,
-                                  kpts=kforce,
+                calculator = Dftb(kpts=kforce,
                                   Hamiltonian_SCC='No',
                                   Hamiltonian_MaxAngularMomentum_='',
                                   Hamiltonian_MaxAngularMomentum_C='p',
                                   Hamiltonian_MaxAngularMomentum_H='s',
                                   Analysis_='',
-                                  Analysis_CalculateForces='Yes',
-                                  Options_WriteResultsTag='Yes')
+                                  Analysis_CalculateForces='Yes')
                 calculator.write_dftb_in(filename='dftb_in.hsd')
                 os.system('dftb+ 1>> forces.out 2>> forces.err')
                 
@@ -129,12 +127,12 @@ def calculate_forces(kforce, mode, dir):
                                   prec='Accurate',
                                   nwrite=1,
                                   ncore=16,
-                                  lreal=False,
+                                  lreal='Auto',
                                   lcharg=False,
                                   lwave=False,
                                   xc='optpbe-vdw',
                                   gamma=True)
-                calculator.calculate(atoms)
+                calculator.calculate(atoms, properties=['forces'])
                 
                 
 def multi_forces(kforce, mode, mpi=False):

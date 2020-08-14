@@ -61,7 +61,7 @@ def relax_structure(krelax, fmax, geo, mode):
                               prec='Accurate',
                               nwrite=1,
                               ncore=16,
-                              lreal=False,
+                              lreal='Auto',
                               lcharg=False,
                               lwave=False,
                               xc='optpbe-vdw',
