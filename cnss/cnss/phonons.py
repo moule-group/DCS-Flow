@@ -41,6 +41,7 @@ def generate_supercell(dim, mode, d=0.01):
     from phonopy.interface.calculator import write_supercells_with_displacements
     from phonopy.interface.calculator import get_default_physical_units
 
+        
     if mode == 'dftbp':
         unitcell, info = read_crystal_structure('geo.gen', interface_mode=mode)
     if mode == 'vasp':
@@ -100,7 +101,7 @@ def forces_done(mode):
             return False
 
             
-def calculate_forces(kforce, mode, dir):
+def calculate_forces(kforce, mode, fmatch, dir):
 
     with chdir(dir):
         if forces_done(mode):
@@ -108,18 +109,34 @@ def calculate_forces(kforce, mode, dir):
         else:
             if mode == 'dftbp':
                 from ase.calculators.dftb import Dftb
-                atoms = read('geo_end.gen')
-                calculator = Dftb(atoms=atoms,
-                                  kpts=kforce,
-                                  Hamiltonian_SCC='No',
-                                  Hamiltonian_MaxAngularMomentum_='',
-                                  Hamiltonian_MaxAngularMomentum_C='p',
-                                  Hamiltonian_MaxAngularMomentum_H='s',
-                                  Analysis_='',
-                                  Analysis_CalculateForces='Yes',
-                                  Options_WriteResultsTag='Yes')
-                calculator.write_dftb_in(filename='dftb_in.hsd')
-                os.system('dftb+ 1>> forces.out 2>> forces.err')
+                if fmatch:
+                    from cnss.chimes import run_md_input
+                    copyfile('../../chimes/params.txt', 'params.txt')
+                    run_md_input()
+                    calculator = Dftb(kpts=kforce,
+                                      Hamiltonian_ChIMES='Yes',
+                                      Hamiltonian_SCC='No',
+                                      Hamiltonian_MaxAngularMomentum_='',
+                                      Hamiltonian_MaxAngularMomentum_C='p',
+                                      Hamiltonian_MaxAngularMomentum_H='s',
+                                      Analysis_='',
+                                      Analysis_CalculateForces='Yes',
+                                      Options_WriteResultsTag='Yes')
+                    calculator.write_dftb_in(filename='dftb_in.hsd')
+                    os.system('/home/lucas/dftbplus-19.1_serial_ChIMES/dftbplus-19.1_serial/_install/bin/dftb+ 1>> forces.out 2>> forces.err')
+
+                else:
+                    calculator = Dftb(atoms=atoms,
+                                      kpts=kforce,
+                                      Hamiltonian_SCC='No',
+                                      Hamiltonian_MaxAngularMomentum_='',
+                                      Hamiltonian_MaxAngularMomentum_C='p',
+                                      Hamiltonian_MaxAngularMomentum_H='s',
+                                      Analysis_='',
+                                      Analysis_CalculateForces='Yes',
+                                      Options_WriteResultsTag='Yes')
+                    calculator.write_dftb_in(filename='dftb_in.hsd')
+                    os.system('dftb+ 1>> forces.out 2>> forces.err')
                 
             if mode == 'vasp':    
                 from ase.calculators.vasp import Vasp
@@ -137,9 +154,9 @@ def calculate_forces(kforce, mode, dir):
                 calculator.calculate(atoms)
                 
                 
-def multi_forces(kforce, mode, mpi=False):
+def multi_forces(kforce, mode, fmatch, mpi=False):
     from functools import partial
-    command = partial(calculate_forces, kforce, mode)
+    command = partial(calculate_forces, kforce, mode, fmatch)
     
     dirlist = np.array(sorted([x.name for x in os.scandir() if x.is_dir()]))
    
@@ -179,10 +196,16 @@ def phonons(dim=[4, 4, 4], kforce=[1, 1, 1], mesh=[8, 8, 8], calc='dftbp'):
     folder = os.getcwd()
     mkdir(folder + '/2-phonons')
 
+    fmatch = False # argument to use force matching result from ChIMES
+    
     if calc == 'dftbp':
         copyfile(folder + '/1-optimization/geo_end.gen', folder + '/2-phonons/geo.gen')
     elif calc == 'vasp':
         copyfile(folder + '/1-optimization/POSCAR', folder + '/2-phonons/POSCAR')
+    elif calc == 'chimes':
+        copyfile(folder + '/chimes/geo_end.gen', folder + '/2-phonons/geo.gen')
+        calc = 'dftbp'
+        fmatch = True
     else:
         raise NotImplementedError('{} calculator not implemented' .format(calc))
     
@@ -190,7 +213,7 @@ def phonons(dim=[4, 4, 4], kforce=[1, 1, 1], mesh=[8, 8, 8], calc='dftbp'):
         with out('phonons'):
             phonon = generate_supercell(dim, calc)
             organize_folders(calc)
-            multi_forces(kforce, calc)
+            multi_forces(kforce, calc, fmatch)
             calculate_mesh(phonon, mesh, calc)
 
 if __name__ == '__main__':

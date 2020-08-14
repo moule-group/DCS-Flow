@@ -6,6 +6,7 @@ commands = [
     ('relax', 'cnss.relax'),
     ('phonons', 'cnss.phonons'),
     ('oclimax', 'cnss.oclimax'),
+    ('chimes', 'cnss.chimes'),
     ('workflow', 'cnss.workflow')]
 
 def main():

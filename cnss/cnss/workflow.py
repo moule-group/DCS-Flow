@@ -3,6 +3,7 @@ from pathlib import Path
 from cnss.relax import relax
 from cnss.phonons import phonons
 from cnss.oclimax import oclimax
+from cnss.chimes import chimes
 from cnss import read_json, write_json, get_default_parameters
 from ase.utils.timing import Timer
 
@@ -34,12 +35,23 @@ def workflow(dct=None):
     timer = Timer()
     
     if dct:
-        with timer('relaxation'):
-            relax(dct['krelax'], dct['fmax'], dct['geo'], dct['calc'])
-        with timer('phonon calculation'):
-            phonons(dct['dim'], dct['kforce'], dct['mesh'], dct['calc'])
-        with timer('oclimax calculation'):
-            oclimax(dct['params'], dct['task'], dct['e_unit'])
+        if dct['calc'] == 'chimes':
+            with timer('relaxation'):
+                relax(dct['krelax'], dct['fmax'], dct['geo'], 'vasp')
+            with timer('force matching'):
+                chimes(dct['2b'], dct['3b'])
+            with timer('phonon calculation'):
+                phonons(dct['dim'], dct['kforce'], dct['mesh'], dct['calc'])
+            with timer('oclimax calculation'):
+                oclimax(dct['params'], dct['task'], dct['e_unit'])
+
+        else:
+            with timer('relaxation'):
+                relax(dct['krelax'], dct['fmax'], dct['geo'], dct['calc'])
+            with timer('phonon calculation'):
+                phonons(dct['dim'], dct['kforce'], dct['mesh'], dct['calc'])
+            with timer('oclimax calculation'):
+                oclimax(dct['params'], dct['task'], dct['e_unit'])
     else:
         with timer('relaxation'):
             relax()
@@ -54,8 +66,9 @@ def write_params():
     relax_params = get_default_parameters(relax)
     phonons_params = get_default_parameters(phonons)
     oclimax_params = get_default_parameters(oclimax)
+    chimes_params = get_default_parameters(chimes)
 
-    params = {**relax_params, **phonons_params, **oclimax_params}
+    params = {**relax_params, **phonons_params, **oclimax_params, **chimes_params}
     write_json('workflow_params.json', params)
 
 if __name__ == '__main__':
