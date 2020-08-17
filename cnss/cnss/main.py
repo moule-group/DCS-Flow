@@ -1,6 +1,6 @@
 from ase.cli.main import main as ase_main
 
-version = '0.0.1'
+version = '0.0.2'
 
 commands = [
     ('relax', 'cnss.relax'),
