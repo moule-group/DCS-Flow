@@ -35,9 +35,9 @@ def workflow(dct=None):
     
     if dct:
         with timer('relaxation'):
-            relax(dct['krelax'], dct['fmax'], dct['geo'])
+            relax(dct['krelax'], dct['fmax'], dct['geo'], dct['calc'])
         with timer('phonon calculation'):
-            phonons(dct['dim'], dct['kforce'], dct['mesh'])
+            phonons(dct['dim'], dct['kforce'], dct['mesh'], dct['calc'])
         with timer('oclimax calculation'):
             oclimax(dct['params'], dct['task'], dct['e_unit'])
     else:
