@@ -3,6 +3,7 @@ from pathlib import Path
 from cnss.relax import relax
 from cnss.phonons import phonons
 from cnss.oclimax import oclimax
+from cnss.md import md
 from cnss.chimes import chimes
 from cnss import read_json, write_json, get_default_parameters
 from ase.utils.timing import Timer
@@ -38,8 +39,10 @@ def workflow(dct=None):
         if dct['calc'] == 'chimes':
             with timer('relaxation'):
                 relax(dct['krelax'], dct['fmax'], dct['geo'], 'vasp')
+            with timer('molecular dynamics'):
+                md(dct['md_calc'], dct['T'], dct['md_size'])
             with timer('force matching'):
-                chimes(dct['2b'], dct['3b'])
+                chimes(dct['b2'], dct['b3'])
             with timer('phonon calculation'):
                 phonons(dct['dim'], dct['kforce'], dct['mesh'], dct['calc'])
             with timer('oclimax calculation'):
@@ -66,9 +69,10 @@ def write_params():
     relax_params = get_default_parameters(relax)
     phonons_params = get_default_parameters(phonons)
     oclimax_params = get_default_parameters(oclimax)
+    md_params = get_default_parameters(md)
     chimes_params = get_default_parameters(chimes)
 
-    params = {**relax_params, **phonons_params, **oclimax_params, **chimes_params}
+    params = {**relax_params, **phonons_params, **oclimax_params, **md_params, **chimes_params}
     write_json('workflow_params.json', params)
 
 if __name__ == '__main__':

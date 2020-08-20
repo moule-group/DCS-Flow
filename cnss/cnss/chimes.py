@@ -7,12 +7,7 @@ default_atmmasses = {'C':12.0107,
                      'O':15.999}
 
 class CLICommand:
-    '''
-    Chebyshev Interaction Model for Efficient Simulation (ChIMES).
-    The model, which is comprised of linear combinations of Chebyshev
-    polynomials explicitly describing two- and three-body interactions, is largely
-    fit by force matching to Kohn−Sham Density Functional Theory (DFT).
-    '''
+    'Chebyshev Interaction Model for Efficient Simulation (ChIMES)'
 
     @staticmethod
     def add_arguments(parser):
@@ -28,6 +23,16 @@ class CLICommand:
     def run(args):
         chimes(args.b2, args.b3)
         
+
+def chimes_done():
+    if os.path.exists('params.txt'):
+        with open('params.txt') as f:
+            if any('ENDFILE' in line for line in f.readlines()):
+                return True
+            else:
+                return False
+    else:
+        return False
         
 def dftb_fmatch_input():
     from ase.io import Trajectory
@@ -75,7 +80,7 @@ def dftb_fmatch_input():
 
     nframes = len(traj)
     setsymbols = set(symbols)
-    smax = round(min(frame.get_cell().lengths()) / 2, 1)
+    smax = round(min(frame.get_cell().lengths()) / 2, 2)
     return nframes, setsymbols, smax 
 
 def rdf(smax, pair):
@@ -84,7 +89,7 @@ def rdf(smax, pair):
 
     traj = Trajectory('dft.traj')
     ana = Analysis(traj[-1])
-    rdf = ana.get_rdf(smax, 100, elements=pair, return_dists=True)
+    rdf = ana.get_rdf(smax - 0.5, 100, elements=pair, return_dists=True)
     g = rdf[0][0]
     r = rdf[0][1]
 
@@ -214,14 +219,17 @@ def chimes(b2=8, b3=2):
     import glob
 
     folder = os.getcwd()
-    mkdir(folder + '/chimes')
-    trajfile = glob.glob(folder + '/1-optimization/*.traj')[0]
-    copyfile(trajfile, folder + '/chimes/dft.traj')
-    with chdir(folder + '/chimes'):
+    trajfile = glob.glob(folder + '/1_1-molecular_dynamics/*.traj')[0]
+    mkdir(folder + '/1_2-chimes')
+    copyfile(trajfile, folder + '/1_2-chimes/dft.traj')
+    with chdir(folder + '/1_2-chimes'):
         with out('chimes'):
-            nframes, setsymbols, smax = dftb_fmatch_input()
-            fm_setup_input(nframes, b2, b3, setsymbols, smax)
-            lsq()
+            if chimes_done():
+                return
+            else:
+                nframes, setsymbols, smax = dftb_fmatch_input()
+                fm_setup_input(nframes, b2, b3, setsymbols, smax)
+                lsq()
     
 
 if __name__ == '__main__':

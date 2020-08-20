@@ -4,9 +4,10 @@ version = '0.0.2'
 
 commands = [
     ('relax', 'cnss.relax'),
+    ('md', 'cnss.md'),
+    ('chimes', 'cnss.chimes'),
     ('phonons', 'cnss.phonons'),
     ('oclimax', 'cnss.oclimax'),
-    ('chimes', 'cnss.chimes'),
     ('workflow', 'cnss.workflow')]
 
 def main():

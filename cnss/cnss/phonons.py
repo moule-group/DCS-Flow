@@ -111,7 +111,7 @@ def calculate_forces(kforce, mode, fmatch, dir):
                 from ase.calculators.dftb import Dftb
                 if fmatch:
                     from cnss.chimes import run_md_input
-                    copyfile('../../chimes/params.txt', 'params.txt')
+                    copyfile('../../1_2-chimes/params.txt', 'params.txt')
                     run_md_input()
                     calculator = Dftb(kpts=kforce,
                                       Hamiltonian_ChIMES='Yes',
@@ -126,8 +126,7 @@ def calculate_forces(kforce, mode, fmatch, dir):
                     os.system('/home/lucas/dftbplus-19.1_serial_ChIMES/dftbplus-19.1_serial/_install/bin/dftb+ 1>> forces.out 2>> forces.err')
 
                 else:
-                    calculator = Dftb(atoms=atoms,
-                                      kpts=kforce,
+                    calculator = Dftb(kpts=kforce,
                                       Hamiltonian_SCC='No',
                                       Hamiltonian_MaxAngularMomentum_='',
                                       Hamiltonian_MaxAngularMomentum_C='p',
@@ -203,7 +202,7 @@ def phonons(dim=[4, 4, 4], kforce=[1, 1, 1], mesh=[8, 8, 8], calc='dftbp'):
     elif calc == 'vasp':
         copyfile(folder + '/1-optimization/POSCAR', folder + '/2-phonons/POSCAR')
     elif calc == 'chimes':
-        copyfile(folder + '/chimes/geo_end.gen', folder + '/2-phonons/geo.gen')
+        copyfile(folder + '/1_2-chimes/geo_end.gen', folder + '/2-phonons/geo.gen')
         calc = 'dftbp'
         fmatch = True
     else:
