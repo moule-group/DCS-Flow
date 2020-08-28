@@ -60,11 +60,12 @@ def relax_structure(krelax, fmax, geo, mode):
                               encut=520,
                               prec='Accurate',
                               nwrite=1,
-                              ncore=16,
-                              lreal=False,
+                              npar=8,
+                              # ncore=1,
+                              lreal='Auto',
                               lcharg=False,
                               lwave=False,
-                              xc='optpbe-vdw',
+                              xc='pbe',
                               gamma=True)
         else:
             raise NotImplementedError('{} calculator not implemented' .format(mode))

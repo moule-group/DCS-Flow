@@ -192,8 +192,8 @@ def main():
         weightedA = numpy.zeros((A.shape[0],A.shape[1]),dtype=float)
         weightedb = numpy.zeros((A.shape[0],),dtype=float)
 
-        for i in xrange(A.shape[0]):     # Loop over rows (atom force components)
-            for j in xrange(A.shape[1]): # Loop over cols (variables in fit)
+        for i in range(A.shape[0]):     # Loop over rows (atom force components)
+            for j in range(A.shape[1]): # Loop over cols (variables in fit)
                 weightedA[i][j] = A[i][j]*WEIGHTS[i]
                 weightedb[i] = b[i]*WEIGHTS[i]
 
@@ -482,7 +482,7 @@ def main():
     ADD_LINES = 0
 
     if int(TOTAL_QUADS) > 0:
-        for t in xrange(0, int(TOTAL_QUADS)):
+        for t in range(0, int(TOTAL_QUADS)):
 
             P1 = hf[ATOM_QUADS_LINE+3+ADD_LINES].split()
 
@@ -495,7 +495,7 @@ def main():
 
                 ADD_LINES += 5
 
-                for i in xrange(0,int(TOTL)):
+                for i in range(0,int(TOTL)):
                     ADD_LINES += 1
 
     #print "TOTAL 4B PARAMETERS ", SNUM_4B            
@@ -594,7 +594,7 @@ def main():
 
         QUAD_PAR_IDX = 0
 
-        for t in xrange(int(TOTAL_QUADS)):
+        for t in range(int(TOTAL_QUADS)):
 
             PREV_QUADIDX = 0
 
@@ -636,7 +636,7 @@ def main():
                 if(t>0):
                     ADD_PARAM += 1
 
-                for i in xrange(0,int(TOTL)):
+                for i in range(0,int(TOTL)):
                     ADD_LINES += 1
                     LINE       = hf[ATOM_QUADS_LINE+2+ADD_LINES].rstrip('\n')
                     LINE_SPLIT = LINE.split()
@@ -691,7 +691,7 @@ def main():
     if len(x) == (total_params+N_ENER_OFFSETS):
         print("NO ENERGY OFFSETS: ", N_ENER_OFFSETS)
     
-        for i in xrange(N_ENER_OFFSETS):
+        for i in range(N_ENER_OFFSETS):
             print("ENERGY OFFSET " + '{}' + " " + str(x[total_params+i]) .format(i+1))
 
     if test_suite_run:
@@ -772,7 +772,7 @@ def read_matrix_market(f):
 
 def count_nonzero_vars(x):
     np = 0
-    for i in xrange(0, len(x)):
+    for i in range(0, len(x)):
         if ( abs(x[i]) > 1.0e-05 ):
             np = np + 1
     return np

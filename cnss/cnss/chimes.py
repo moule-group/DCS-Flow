@@ -1,5 +1,6 @@
 import os
 import numpy as np
+from shutil import copyfile
 
 default_atmmasses = {'C':12.0107,
                      'H':1.00784,
@@ -145,13 +146,15 @@ def fm_setup_input(nframes, b2, b3, setsymbols, smax):
                         .format(idx+1, pair[0], pair[1], smax, mlambda))
             f.write('\n'
                     '# FCUTTYP # \n'
-                    '        CUBIC \n'
+                    '        TERSOFF 0.5 \n'
                     '\n'
                     '# ENDFILE #')
 
 def run_md_input():
-    if os.path.exists('run_md.in'):
-        copyfile('../run_md.in', 'run_md.in')
+    if os.path.exists('../../run_md.in'):
+        copyfile('../../run_md.in', 'run_md.in')
+    elif os.path.exists('run_md.in'):
+        return
     else:
         with open('run_md.in', 'w') as f:
             f.write('################################### \n'
@@ -162,7 +165,7 @@ def run_md_input():
                     '# RNDSEED # ! Seed. If not specified, default value 123457 is used \n'
 	            '        12357 \n'
                     '# TEMPERA # ! In K \n'
-	            '        0.0 \n'
+	            '        300.0 \n'
                     '# CMPRFRC # ! Compare computed forces against a set of input forces? ...If true, provide name of the file containing the forces for comparison \n'
 	            '        false \n'
                     '# TIMESTP # ! In fs \n'
@@ -210,12 +213,11 @@ def run_md_input():
     
 def lsq():
     os.system('chimes_lsq fm_setup.in')
-    os.system('lsq2.py > params.txt')
+    os.system('lsq2.py --algorithm=lassolars > params.txt')
     
     
 def chimes(b2=8, b3=2):
     from cnss import mkdir, chdir, out
-    from shutil import copyfile, move
     import glob
 
     folder = os.getcwd()

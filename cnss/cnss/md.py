@@ -14,7 +14,8 @@ class CLICommand:
         add('--md_calc',
             help='Calculator used for moculecular dynamics simulation. Options are vasp',
             default='vasp')
-        add('--temp', help='Set the temperature in Kelvin',
+        add('--temp',
+            help='Set the temperature in Kelvin',
             default=300)
         add('--md_size',
             help='Size of supercell for md, e. g., 2 2 2',
@@ -54,10 +55,11 @@ def run_vasp_md(atoms, T):
         atoms.calc = Vasp(encut=520,
                           prec='Accurate',
                           nwrite=1,
-                          ncore=8,
+                          npar=8,
+                          lreal='Auto',
                           lcharg=False,
                           lwave=False,
-                          xc='optpbe-vdw')
+                          xc='pbe')
         dyn = Langevin(atoms, 1 * units.fs, T * units.kB, 0.002)
         dyn.attach(print_energy, 1, atoms)
         traj = Trajectory('md.traj', 'w', atoms)
@@ -69,7 +71,7 @@ def run_vasp_md(atoms, T):
 def md(md_calc='vasp', T=300, md_size=[2,2,2]):
     folder = os.getcwd()
     trajfile = glob.glob(folder + '/1-optimization/*.traj')[0]
-
+    
     mkdir(folder + '/1_1-molecular_dynamics')
     with chdir(folder + '/1_1-molecular_dynamics'):
         with out('md'):

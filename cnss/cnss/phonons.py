@@ -46,6 +46,10 @@ def generate_supercell(dim, mode, d=0.01):
         unitcell, info = read_crystal_structure('geo.gen', interface_mode=mode)
     if mode == 'vasp':
         unitcell, info = read_crystal_structure('POSCAR', interface_mode=mode)
+    if mode == 'chimes':
+        mode = 'vasp'
+        unitcell, info = read_crystal_structure('POSCAR', interface_mode=mode)
+        mode = 'dftbp'
         
     supercell_matrix = np.zeros((3, 3))
     np.fill_diagonal(supercell_matrix, dim)
@@ -68,21 +72,23 @@ def generate_supercell(dim, mode, d=0.01):
     
 def organize_folders(mode):
 
-    if mode == 'dftbp':
+    if mode == 'dftbp' or 'chimes':
         for filename in os.listdir('.'):
             if filename.startswith('geo.genS-'):
                 dir = filename[9:12]
                 mkdir(dir)
                 move(filename, '{}/geo_end.gen' .format(dir))
-    elif mode == 'vasp':
+                
+    if mode == 'vasp':
         for filename in os.listdir('.'):
             if filename.startswith('POSCAR-'):
                 dir = filename[7:10]
                 mkdir(dir)
                 move(filename, '{}/POSCAR' .format(dir))
 
+
 def forces_done(mode):
-    if mode == 'dftbp':
+    if mode == 'dftbp' or 'chimes':
         if os.path.exists('results.tag'):
             if os.path.getsize('results.tag') > 0:
                 return True
@@ -101,41 +107,41 @@ def forces_done(mode):
             return False
 
             
-def calculate_forces(kforce, mode, fmatch, dir):
+def calculate_forces(kforce, mode, dir):
 
     with chdir(dir):
         if forces_done(mode):
             return
         else:
+            if mode == 'chimes':
+                from ase.calculators.dftb import Dftb
+                from cnss.chimes import run_md_input
+                copyfile('../../1_2-chimes/params.txt', 'params.txt')
+                run_md_input()
+                calculator = Dftb(kpts=kforce,
+                                  Hamiltonian_ChIMES='Yes',
+                                  Hamiltonian_SCC='No',
+                                  Hamiltonian_MaxAngularMomentum_='',
+                                  Hamiltonian_MaxAngularMomentum_C='p',
+                                  Hamiltonian_MaxAngularMomentum_H='s',
+                                  Analysis_='',
+                                  Analysis_CalculateForces='Yes',
+                                  Options_WriteResultsTag='Yes')
+                calculator.write_dftb_in(filename='dftb_in.hsd')
+                os.system('dftb+ 1>> forces.out 2>> forces.err')
+
             if mode == 'dftbp':
                 from ase.calculators.dftb import Dftb
-                if fmatch:
-                    from cnss.chimes import run_md_input
-                    copyfile('../../1_2-chimes/params.txt', 'params.txt')
-                    run_md_input()
-                    calculator = Dftb(kpts=kforce,
-                                      Hamiltonian_ChIMES='Yes',
-                                      Hamiltonian_SCC='No',
-                                      Hamiltonian_MaxAngularMomentum_='',
-                                      Hamiltonian_MaxAngularMomentum_C='p',
-                                      Hamiltonian_MaxAngularMomentum_H='s',
-                                      Analysis_='',
-                                      Analysis_CalculateForces='Yes',
-                                      Options_WriteResultsTag='Yes')
-                    calculator.write_dftb_in(filename='dftb_in.hsd')
-                    os.system('/home/lucas/dftbplus-19.1_serial_ChIMES/dftbplus-19.1_serial/_install/bin/dftb+ 1>> forces.out 2>> forces.err')
-
-                else:
-                    calculator = Dftb(kpts=kforce,
-                                      Hamiltonian_SCC='No',
-                                      Hamiltonian_MaxAngularMomentum_='',
-                                      Hamiltonian_MaxAngularMomentum_C='p',
-                                      Hamiltonian_MaxAngularMomentum_H='s',
-                                      Analysis_='',
-                                      Analysis_CalculateForces='Yes',
-                                      Options_WriteResultsTag='Yes')
-                    calculator.write_dftb_in(filename='dftb_in.hsd')
-                    os.system('dftb+ 1>> forces.out 2>> forces.err')
+                calculator = Dftb(kpts=kforce,
+                                  Hamiltonian_SCC='No',
+                                  Hamiltonian_MaxAngularMomentum_='',
+                                  Hamiltonian_MaxAngularMomentum_C='p',
+                                  Hamiltonian_MaxAngularMomentum_H='s',
+                                  Analysis_='',
+                                  Analysis_CalculateForces='Yes',
+                                  Options_WriteResultsTag='Yes')
+                calculator.write_dftb_in(filename='dftb_in.hsd')
+                os.system('dftb+ 1>> forces.out 2>> forces.err')
                 
             if mode == 'vasp':    
                 from ase.calculators.vasp import Vasp
@@ -144,28 +150,28 @@ def calculate_forces(kforce, mode, fmatch, dir):
                                   encut=520,
                                   prec='Accurate',
                                   nwrite=1,
-                                  ncore=16,
-                                  lreal=False,
+                                  npar=8,
+                                  lreal='Auto',
                                   lcharg=False,
                                   lwave=False,
-                                  xc='optpbe-vdw',
+                                  xc='pbe',
                                   gamma=True)
                 calculator.calculate(atoms)
                 
                 
-def multi_forces(kforce, mode, fmatch, mpi=False):
+def multi_forces(kforce, mode, mpi=False):
     from functools import partial
-    command = partial(calculate_forces, kforce, mode, fmatch)
+    command = partial(calculate_forces, kforce, mode)
     
     dirlist = np.array(sorted([x.name for x in os.scandir() if x.is_dir()]))
    
     if mpi:
         from mpi4py.futures import MPIPoolExecutor
-        with MPIPoolExecutor(max_workers=16, main=False) as executor:
+        with MPIPoolExecutor(max_workers=68, main=False) as executor:
             executor.map(command, dirlist)
     else:
         from multiprocessing import Pool        
-        pool = Pool(processes=16)
+        pool = Pool(processes=68)
         pool.map(command, dirlist)
 
 
@@ -176,7 +182,10 @@ def calculate_mesh(phonon, mesh, mode):
     
     if mode == 'dftbp':
         filenames = [x + '/results.tag' for x in dirlist]
-    elif mode == 'vasp':
+    if mode == 'chimes':
+        filenames = [x + '/results.tag' for x in dirlist]
+        mode = 'dftbp'
+    if mode == 'vasp':
         filenames = [x + '/vasprun.xml' for x in dirlist]
 
     natom = phonon.supercell.get_number_of_atoms()
@@ -194,17 +203,11 @@ def calculate_mesh(phonon, mesh, mode):
 def phonons(dim=[4, 4, 4], kforce=[1, 1, 1], mesh=[8, 8, 8], calc='dftbp'):
     folder = os.getcwd()
     mkdir(folder + '/2-phonons')
-
-    fmatch = False # argument to use force matching result from ChIMES
     
     if calc == 'dftbp':
         copyfile(folder + '/1-optimization/geo_end.gen', folder + '/2-phonons/geo.gen')
-    elif calc == 'vasp':
+    elif calc == 'vasp' or calc == 'chimes':
         copyfile(folder + '/1-optimization/POSCAR', folder + '/2-phonons/POSCAR')
-    elif calc == 'chimes':
-        copyfile(folder + '/1_2-chimes/geo_end.gen', folder + '/2-phonons/geo.gen')
-        calc = 'dftbp'
-        fmatch = True
     else:
         raise NotImplementedError('{} calculator not implemented' .format(calc))
     
@@ -212,7 +215,7 @@ def phonons(dim=[4, 4, 4], kforce=[1, 1, 1], mesh=[8, 8, 8], calc='dftbp'):
         with out('phonons'):
             phonon = generate_supercell(dim, calc)
             organize_folders(calc)
-            multi_forces(kforce, calc, fmatch)
+            multi_forces(kforce, calc)
             calculate_mesh(phonon, mesh, calc)
 
 if __name__ == '__main__':

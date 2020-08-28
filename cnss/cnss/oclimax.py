@@ -14,7 +14,7 @@ class CLICommand:
             default=None)
         add('--task',
             help='0:inc approx. 1:coh+inc. 2:single-xtal Q-E. 3:single-xtal Q-Q',
-            default=1)
+            default=0)
         add('--e_unit',
             help='Energy unit [eu] (0:cm-1,1:meV,2:THz)',
             default=0)
@@ -105,7 +105,7 @@ def plot():
     plt.savefig(file[0][:-4]+'.png', dpi=300, bbox_inches='tight', pad_inches=0)
 
 
-def oclimax(params=None, task=1, e_unit=0):
+def oclimax(params=None, task=0, e_unit=0):
     folder = os.getcwd()
     mkdir(folder + '/3-oclimax')
     copyfile(folder + '/2-phonons/mesh.yaml', folder + '/3-oclimax/mesh.yaml')
