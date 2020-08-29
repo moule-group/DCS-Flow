@@ -72,13 +72,20 @@ def generate_supercell(dim, mode, d=0.01):
     
 def organize_folders(mode):
 
-    if mode == 'dftbp' or 'chimes':
+    if mode == 'dftbp':
         for filename in os.listdir('.'):
             if filename.startswith('geo.genS-'):
                 dir = filename[9:12]
                 mkdir(dir)
                 move(filename, '{}/geo_end.gen' .format(dir))
-                
+
+    if mode == 'chimes':
+        for filename in os.listdir('.'):
+            if filename.startswith('geo.genS-'):
+                dir = filename[9:12]
+                mkdir(dir)
+                move(filename, '{}/geo_end.gen' .format(dir))
+ 
     if mode == 'vasp':
         for filename in os.listdir('.'):
             if filename.startswith('POSCAR-'):
@@ -88,7 +95,8 @@ def organize_folders(mode):
 
 
 def forces_done(mode):
-    if mode == 'dftbp' or 'chimes':
+
+    if mode == 'dftbp':
         if os.path.exists('results.tag'):
             if os.path.getsize('results.tag') > 0:
                 return True
@@ -96,6 +104,16 @@ def forces_done(mode):
                 return False
         else:
             return False
+
+    if mode == 'chimes':
+        if os.path.exists('results.tag'):
+            if os.path.getsize('results.tag') > 0:
+                return True
+            else:
+                return False
+        else:
+            return False
+
         
     if mode == 'vasp':
         if os.path.exists('OUTCAR'):
@@ -210,7 +228,9 @@ def phonons(dim=[4, 4, 4], kforce=[1, 1, 1], mesh=[8, 8, 8], calc='dftbp'):
     
     if calc == 'dftbp':
         copyfile(folder + '/1-optimization/geo_end.gen', folder + '/2-phonons/geo.gen')
-    elif calc == 'vasp' or calc == 'chimes':
+    elif calc == 'vasp':
+        copyfile(folder + '/1-optimization/POSCAR', folder + '/2-phonons/POSCAR')
+    elif calc == 'chimes':
         copyfile(folder + '/1-optimization/POSCAR', folder + '/2-phonons/POSCAR')
     else:
         raise NotImplementedError('{} calculator not implemented' .format(calc))
