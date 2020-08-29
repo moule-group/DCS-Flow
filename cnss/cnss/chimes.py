@@ -57,7 +57,9 @@ def dftb_fmatch_input():
                     Hamiltonian_SCC='Yes',
                     Hamiltonian_MaxAngularMomentum_='',
                     Hamiltonian_MaxAngularMomentum_C='p',
-                    Hamiltonian_MaxAngularMomentum_H='s')
+                    Hamiltonian_MaxAngularMomentum_H='s',
+                    Hamiltonian_MaxAngularMomentum_Ti='d',
+                    Hamiltonian_MaxAngularMomentum_O='p')
         calc.calculate(frame, properties=['forces', 'stress', 'energy'])
 
         dftb_forces = calc.results['forces']

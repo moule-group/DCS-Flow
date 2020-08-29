@@ -4,7 +4,6 @@ from ase.optimize import BFGS
 from ase.io import read
 from cnss import mkdir, chdir, out
 
-
 class CLICommand:
     'Optimize structure'
 
@@ -53,7 +52,9 @@ def relax_structure(krelax, fmax, geo, mode):
                               Hamiltonian_SCC='Yes',
                               Hamiltonian_MaxAngularMomentum_='',
                               Hamiltonian_MaxAngularMomentum_C='p',
-                              Hamiltonian_MaxAngularMomentum_H='s')
+                              Hamiltonian_MaxAngularMomentum_H='s',
+                              Hamiltonian_MaxAngularMomentum_Ti='d',
+                              Hamiltonian_MaxAngularMomentum_O='p')
         elif mode == 'vasp':
             from ase.calculators.vasp import Vasp
             calculator = Vasp(kpts=krelax,
