@@ -42,7 +42,7 @@ def workflow(dct=None):
             with timer('molecular dynamics'):
                 md(dct['md_calc'], dct['T'], dct['md_size'])
             with timer('force matching'):
-                chimes(dct['b2'], dct['b3'])
+                chimes(dct['b2'], dct['b3'], dct['T'])
             with timer('phonon calculation'):
                 phonons(dct['dim'], dct['kforce'], dct['mesh'], dct['calc'])
             with timer('oclimax calculation'):

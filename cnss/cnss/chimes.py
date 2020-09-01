@@ -15,14 +15,17 @@ class CLICommand:
         add = parser.add_argument
         add('--b2',
             help='order of 2 body interactions (integer)',
-            default=8)
+            default=12)
         add('--b3',
             help='order of 3 body interactions (integer)',
-            default=2)
+            default=8)
+        add('--temp',
+            help='Set the temperature in Kelvin',
+            default=300)
 
     @staticmethod
     def run(args):
-        chimes(args.b2, args.b3)
+        chimes(args.b2, args.b3, args.temp)
         
 
 def chimes_done():
@@ -35,7 +38,7 @@ def chimes_done():
     else:
         return False
         
-def dftb_fmatch_input():
+def dftb_fmatch_input(T):
     from ase.io import Trajectory
     from ase.calculators.dftb import Dftb
     from ase.units import Hartree, Bohr, GPa, mol, kcal
@@ -59,8 +62,10 @@ def dftb_fmatch_input():
                     Hamiltonian_MaxAngularMomentum_C='p',
                     Hamiltonian_MaxAngularMomentum_H='s',
                     Hamiltonian_MaxAngularMomentum_Ti='d',
-                    Hamiltonian_MaxAngularMomentum_O='p')
-        calc.calculate(frame, properties=['forces', 'stress', 'energy'])
+                    Hamiltonian_MaxAngularMomentum_O='p',
+                    Hamiltonian_ShellResolvedSCC='Yes',
+                    Hamiltonian_Filling='Fermi {{Temperature [K] = {T} }}' .format(T=T))
+        calc.calculate(frame, properties=['energy', 'forces', 'stress'])
 
         dftb_forces = calc.results['forces']
         dftb_stress = calc.results['stress']
@@ -75,7 +80,7 @@ def dftb_fmatch_input():
 
         with open('dft-dftb.xyzf', 'a') as file:
             file.write('{} \n' .format(n))
-            file.write('{} {} {} \n' .format(cell, diff_stress, diff_energy))
+            file.write('{} {} {} \n' .format(cell, diff_stress, diff_energy[0]))
             for s,p,f in zip(symbols, positions, diff_forces):
                 p = ' ' .join(map(str, p))
                 f = ' ' .join(map(str, f))
@@ -96,7 +101,29 @@ def rdf(smax, pair):
     g = rdf[0][0]
     r = rdf[0][1]
 
-    return g, r
+    # choose rmin as the first position where g is greater than zero
+    i = np.where(g > 0)
+    rmin = r[i[0][0]]
+
+    # smooth g function
+    box_pts = 15
+    box = np.ones(box_pts)/box_pts
+    smoothg = np.convolve(g, box, mode='same')
+
+    # choose rmax as first local minimum of smooth g
+    ilocal = np.r_[True, smoothg[1:] < smoothg[:-1]] & np.r_[smoothg[:-1] < smoothg[1:], True]
+    imax = (np.where(ilocal == True))[0][0]
+    rmax = r[imax]
+
+    # choose max value of g as morse lambda factor
+    mlambda = max(g)
+
+    # round up or down
+    mlambda = round(mlambda, 2)
+    rmin = float(str(rmin)[:3])
+    rmax = float(str(rmax)[:3])
+    
+    return mlambda, rmin, rmax
 
 def fm_setup_input(nframes, b2, b3, setsymbols, smax):
     if os.path.exists('../fm_setup.in'):
@@ -141,11 +168,9 @@ def fm_setup_input(nframes, b2, b3, setsymbols, smax):
             from itertools import combinations_with_replacement
             pairs = list(combinations_with_replacement(setsymbols, 2))
             for idx, pair in enumerate(pairs):
-                g, r = rdf(smax, pair)
-                i = np.where(g > 0)
-                mlambda = round(g[i[0][0]], 2)
-                f.write('{}               {}               {}               0.1             {}             0.01            {}                    false           0               0               0 \n'
-                        .format(idx+1, pair[0], pair[1], smax, mlambda))
+                mlambda, rmin, rmax = rdf(smax, pair)
+                f.write('{}               {}               {}               {}               {}             0.01              {}                    false           0               0               0 \n'
+                        .format(idx+1, pair[0], pair[1], rmin, rmax, mlambda))
             f.write('\n'
                     '# FCUTTYP # \n'
                     '        TERSOFF 0.5 \n'
@@ -218,7 +243,7 @@ def lsq():
     os.system('lsq2.py --algorithm=lassolars > params.txt')
     
     
-def chimes(b2=8, b3=2):
+def chimes(b2=12, b3=8, T=300):
     from cnss import mkdir, chdir, out
     import glob
 
@@ -231,7 +256,7 @@ def chimes(b2=8, b3=2):
             if chimes_done():
                 return
             else:
-                nframes, setsymbols, smax = dftb_fmatch_input()
+                nframes, setsymbols, smax = dftb_fmatch_input(T)
                 fm_setup_input(nframes, b2, b3, setsymbols, smax)
                 lsq()
     
