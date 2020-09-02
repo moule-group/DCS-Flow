@@ -3,9 +3,7 @@ import numpy as np
 from shutil import copyfile
 
 default_atmmasses = {'C':12.0107,
-                     'H':1.00784,
-                     'Ti':47.867,
-                     'O':15.999}
+                     'H':1.00784}
 
 class CLICommand:
     'Chebyshev Interaction Model for Efficient Simulation (ChIMES)'
@@ -21,7 +19,7 @@ class CLICommand:
             default=8)
         add('--temp',
             help='Set the temperature in Kelvin',
-            default=300)
+            default=5)
 
     @staticmethod
     def run(args):
@@ -61,9 +59,6 @@ def dftb_fmatch_input(T):
                     Hamiltonian_MaxAngularMomentum_='',
                     Hamiltonian_MaxAngularMomentum_C='p',
                     Hamiltonian_MaxAngularMomentum_H='s',
-                    Hamiltonian_MaxAngularMomentum_Ti='d',
-                    Hamiltonian_MaxAngularMomentum_O='p',
-                    Hamiltonian_ShellResolvedSCC='Yes',
                     Hamiltonian_Filling='Fermi {{Temperature [K] = {T} }}' .format(T=T))
         calc.calculate(frame, properties=['energy', 'forces', 'stress'])
 
@@ -192,7 +187,7 @@ def run_md_input():
                     '# RNDSEED # ! Seed. If not specified, default value 123457 is used \n'
 	            '        12357 \n'
                     '# TEMPERA # ! In K \n'
-	            '        300.0 \n'
+	            '        5.0 \n'
                     '# CMPRFRC # ! Compare computed forces against a set of input forces? ...If true, provide name of the file containing the forces for comparison \n'
 	            '        false \n'
                     '# TIMESTP # ! In fs \n'
@@ -243,7 +238,7 @@ def lsq():
     os.system('lsq2.py --algorithm=lassolars > params.txt')
     
     
-def chimes(b2=12, b3=8, T=300):
+def chimes(b2=12, b3=8, T=5):
     from cnss import mkdir, chdir, out
     import glob
 

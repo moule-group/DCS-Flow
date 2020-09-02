@@ -142,8 +142,6 @@ def calculate_forces(kforce, mode, dir):
                                   Hamiltonian_MaxAngularMomentum_='',
                                   Hamiltonian_MaxAngularMomentum_C='p',
                                   Hamiltonian_MaxAngularMomentum_H='s',
-                                  Hamiltonian_MaxAngularMomentum_Ti='d',
-                                  Hamiltonian_MaxAngularMomentum_O='p',
                                   Analysis_='',
                                   Analysis_CalculateForces='Yes',
                                   Options_WriteResultsTag='Yes')
@@ -157,8 +155,6 @@ def calculate_forces(kforce, mode, dir):
                                   Hamiltonian_MaxAngularMomentum_='',
                                   Hamiltonian_MaxAngularMomentum_C='p',
                                   Hamiltonian_MaxAngularMomentum_H='s',
-                                  Hamiltonian_MaxAngularMomentum_Ti='d',
-                                  Hamiltonian_MaxAngularMomentum_O='p',
                                   Analysis_='',
                                   Analysis_CalculateForces='Yes',
                                   Options_WriteResultsTag='Yes')
@@ -169,15 +165,18 @@ def calculate_forces(kforce, mode, dir):
                 from ase.calculators.vasp import Vasp
                 atoms = read('POSCAR')
                 calculator = Vasp(kpts=kforce,
-                                  encut=520,
-                                  prec='Accurate',
-                                  nwrite=1,
-                                  npar=8,
-                                  lreal='Auto',
-                                  lcharg=False,
-                                  lwave=False,
-                                  xc='pbe',
-                                  gamma=True)
+                              prec='Accurate',
+                              encut=520,
+                              ibrion=-1,
+                              ediff=1e-8,
+                              sigma=0.1,
+                              nwrite=1,
+                              npar=8,
+                              lreal=False,
+                              lcharg=False,
+                              lwave=False,
+                              xc='pbe',
+                              gamma=True)
                 calculator.calculate(atoms)
                 
                 
