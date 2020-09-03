@@ -61,6 +61,18 @@ pip install --upgrade --user ase
 pip install --upgrade --user phonopy
 ```
 
+* Installing OCLIMAX
+
+  1. OCLIMAX uses the DOCKER platform to run the application.
+  [Please install it](https://www.docker.com/)
+
+  2. Now download OCLIMAX
+
+  ```  
+  curl -sL https://sites.google.com/site/ornliceman/getoclimax | bash
+  oclimax pull
+  ```
+
 * Installing CNSS
 
 ```
