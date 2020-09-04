@@ -68,7 +68,7 @@ def dftb_fmatch_input(T):
 
         diff_forces = (dft_forces - dftb_forces) / Hartree * Bohr
 
-        diff_stress = (dft_stress - dftb_stress)[:3] / GPa
+        diff_stress = -(dft_stress - dftb_stress)[:3] / GPa
         diff_stress = ' ' .join(map(str, diff_stress))
 
         diff_energy = (dft_energy - dftb_energy) * mol / kcal
