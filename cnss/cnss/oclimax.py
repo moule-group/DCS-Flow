@@ -80,8 +80,8 @@ def write_params(task, e_unit):
 
 def run_oclimax(params):
     
-    os.system('oclimax convert -yaml mesh.yaml -o > ocl.out')
-    os.system('oclimax run out.oclimax {} >> ocl.out' .format(params))
+    os.system('oclimax convert -yaml mesh.yaml -o')
+    os.system('oclimax run out.oclimax {}' .format(params))
 
 def plot():
     import pandas as pd
@@ -111,11 +111,12 @@ def oclimax(params=None, task=0, e_unit=0):
     copyfile(folder + '/2-phonons/mesh.yaml', folder + '/3-oclimax/mesh.yaml')
 
     with chdir(folder + '/3-oclimax'):
-        if not params:
-            write_params(task, e_unit)
-            params = 'out.params'
-        run_oclimax(params)
-        plot()
+        with out('ocl'):
+            if not params:
+                write_params(task, e_unit)
+                params = 'out.params'
+            run_oclimax(params)
+            plot()
 
 if __name__ == '__main__':
     oclimax()

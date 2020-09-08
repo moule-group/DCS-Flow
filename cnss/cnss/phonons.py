@@ -224,7 +224,6 @@ def calculate_mesh(phonon, mesh, mode):
 def phonons(dim=[4, 4, 4], kforce=[1, 1, 1], mesh=[8, 8, 8], calc='dftbp'):
     folder = os.getcwd()
     mkdir(folder + '/2-phonons')
-    
     if calc == 'dftbp':
         copyfile(folder + '/1-optimization/geo_end.gen', folder + '/2-phonons/geo.gen')
     elif calc == 'vasp':

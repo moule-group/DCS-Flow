@@ -80,9 +80,9 @@ def relax(krelax=[6, 6, 6], fmax=0.01, geo=None, calc='dftbp'):
     folder = os.getcwd()
     if not geo:
         geo = glob.glob(folder + '/*.cif') + \
-            glob.glob(folder + '/*.gen') + \
-            glob.glob(folder + '/*.sdf') + \
-            glob.glob(folder + '/*.xyz')
+              glob.glob(folder + '/*.gen') + \
+              glob.glob(folder + '/*.sdf') + \
+              glob.glob(folder + '/*.xyz')
 
     mkdir(folder + '/1-optimization')
     with chdir(folder + '/1-optimization'):

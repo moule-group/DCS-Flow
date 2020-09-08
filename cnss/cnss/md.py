@@ -39,7 +39,7 @@ def md_done(steps):
 
 
 def run_vasp_md(atoms, T):
-    steps = 20
+    steps = 100
     time_step = 1 # in fs                                                                               
     dump_interval = 1
     if md_done(steps):
@@ -61,7 +61,7 @@ def run_vasp_md(atoms, T):
                           mdalgo=2, # Nose-Hoover thermostat                                            
                           isif=2, # NVT ensemble                                                        
                           smass=0, # Canonical (Nose-Hoover) thermostat                                 
-                          ediff=1e-4, # global break condition for the electronic SC-loop               
+                          ediff=1e-6, # global break condition for the electronic SC-loop               
                           nwrite=1, # how much will be written to the OUTCAR file                      
                           npar=8, # number of bands that are treated in parallel                       
                           lcharg=False, # charge densities are not written                              
