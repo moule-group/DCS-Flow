@@ -1,8 +1,9 @@
 import os
 import glob
 from ase import units
+from ase.md.velocitydistribution import MaxwellBoltzmannDistribution
 from ase.md.langevin import Langevin
-from ase.io.trajectory import Trajectory
+from ase.io import Trajectory, read, write
 from cnss import mkdir, chdir, out
 
 class CLICommand:
@@ -16,10 +17,11 @@ class CLICommand:
             default='vasp')
         add('--temp',
             help='Set the temperature in Kelvin',
-            default=300)
+            default=300,
+            type=int)
         add('--md_size',
-            help='Size of supercell for md, e. g., 2 2 2',
-            default=[2, 2, 2],
+            help='Size of supercell for md, e. g., 1 1 1',
+            default=[1, 1, 1],
             nargs=3,
             type=int)
 
@@ -30,48 +32,50 @@ class CLICommand:
 
 
 def md_done(steps):
-    if os.path.exists('md.out'):
-        with open('md.out') as f:
-            if len(f.readlines()) > steps:
-                return True
-            else:
-                return False
+    if os.path.exists('md.traj'):
+        return True
     else:
-        return False    
-    
-def print_energy(a):
-    epot = a.get_potential_energy() / len(a)
-    ekin = a.get_kinetic_energy() / len(a)
-    print('Energy per atom: Epot = %.3feV  Ekin = %.3feV (T=%3.0fK)  '
-          'Etot = %.3feV' % (epot, ekin, ekin / (1.5 * units.kB), epot + ekin))
+        return False
 
-    
+
 def run_vasp_md(atoms, T):
     steps = 20
+    time_step = 1 # in fs                                                                               
+    dump_interval = 1
     if md_done(steps):
         return
     else:
         from ase.calculators.vasp import Vasp
-        atoms.calc = Vasp(encut=520,
-                          prec='Accurate',
-                          nwrite=1,
-                          npar=8,
-                          lreal='Auto',
-                          lcharg=False,
-                          lwave=False,
+        atoms.calc = Vasp(encut=550,
+                          prec='Normal',
+                          algo='Fast', # electronic minimisation algotithm                              
+                          lreal='Auto', # operators in real space                                       
+                          ismear=0, # gaussian smearing
+                          sigma=0.1, # width of smearing in eV
+                          isym=0, # no symmetry usage                                                   
+                          ibrion=0, # MD run
+                          potim=time_step, # md time step                                              
+                          nsw=steps, # maximum number of ionic steps                                    
+                          tebeg=T, # initial temperature                                                
+                          teend=T, # final temperature                                                  
+                          mdalgo=2, # Nose-Hoover thermostat                                            
+                          isif=2, # NVT ensemble                                                        
+                          smass=0, # Canonical (Nose-Hoover) thermostat                                 
+                          ediff=1e-4, # global break condition for the electronic SC-loop               
+                          nwrite=1, # how much will be written to the OUTCAR file                      
+                          npar=8, # number of bands that are treated in parallel                       
+                          lcharg=False, # charge densities are not written                              
+                          lwave=False, # wavefunctions are not written                                  
                           xc='pbe')
-        dyn = Langevin(atoms, 1 * units.fs, T * units.kB, 0.002)
-        dyn.attach(print_energy, 1, atoms)
-        traj = Trajectory('md.traj', 'w', atoms)
-        dyn.attach(traj.write, interval=1)
-        print_energy(atoms)
-        dyn.run(steps)
+        atoms.get_potential_energy()
+        vasptraj = read('OUTCAR', index=slice(0, steps, dump_interval))
+        write('md.traj', vasptraj)
 
-    
-def md(md_calc='vasp', T=300, md_size=[2,2,2]):
+
+def md(md_calc='vasp', T=300, md_size=[1,1,1]):
     folder = os.getcwd()
     trajfile = glob.glob(folder + '/1-optimization/*.traj')[0]
-    
+
     mkdir(folder + '/1_1-molecular_dynamics')
     with chdir(folder + '/1_1-molecular_dynamics'):
         with out('md'):
@@ -86,3 +90,5 @@ def md(md_calc='vasp', T=300, md_size=[2,2,2]):
 
 if __name__ == '__main__':
     md()
+
+
