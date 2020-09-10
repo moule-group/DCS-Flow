@@ -21,39 +21,10 @@ pip install --upgrade --user ase
 
   1. [Download Slater-Koster files (parameters files for the DFTB method)](http://www.dftb.org/fileadmin/DFTB/public/slako-unpacked.tar.xz)
 
-  2. Download DFTB+
-  
-  ```
-  git clone https://github.com/dftbplus/dftbplus.git
-  cd dftbplus
-  git submodule update --init --recursive
-  ```
+  2. [Download DFTB+ binaries](https://dftbplus.org/download/dftb-stable)
 
-  3. Build DFTB+ (make sure to use your specific Fortran and C compilers)
+  3. Extract the file and put it in your home folder
 
-  ```
-  mkdir build
-  cd build
-  FC=gfortran CC=gcc cmake ..
-  ```
-
-  If configuration was successful
-  
-  ```
-  make -j
-  ```
-
-  Test it
-
-  ```
-  ctest -j2
-  ```
-
-  4. Install DFTB+
-
-  ```
-  make install
-  ```
 
 * Installing Phonopy
 
@@ -73,7 +44,7 @@ Add these lines to your configuration file (.bashrc)
 
 ```
 export DFTB_PREFIX=/my_disk/my_name/slako/mio/mio-0-1/ (an example)
-export ASE_DFTB_COMMAND='/my_disk/my_name/dftbplus-20.1/bin/dftb+ > PREFIX.out' (an example)
+export ASE_DFTB_COMMAND='/my_disk/my_name/dftbplus-20.1.x86_64-linux/bin/dftb+ > PREFIX.out' (an example)
 export PYTHONPATH=/my_disk/my_name/adam-moule/cnss:$PYTHONPATH (an example)
 export PATH=/my_disk/my_name/adam-moule/cnss/cnss:$PATH (an example)
 ```
