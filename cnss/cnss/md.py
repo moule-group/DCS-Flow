@@ -3,8 +3,8 @@ import glob
 from ase import units
 from ase.md.velocitydistribution import MaxwellBoltzmannDistribution
 from ase.md.langevin import Langevin
-from ase.io import Trajectory, read, write
-from cnss import mkdir, chdir, out
+from ase.io import read, write
+from cnss import mkdir, chdir, out, done, isdone
 
 class CLICommand:
     'Molecular dynamics with constant temperature'
@@ -31,18 +31,11 @@ class CLICommand:
         md(args.md_calc, args.temp, args.md_size)
 
 
-def md_done(steps):
-    if os.path.exists('md.traj'):
-        return True
-    else:
-        return False
-
-
 def run_vasp_md(atoms, T):
     steps = 100
     time_step = 1 # in fs                                                                               
     dump_interval = 1
-    if md_done(steps):
+    if isdone('md'):
         return
     else:
         from ase.calculators.vasp import Vasp
@@ -70,17 +63,15 @@ def run_vasp_md(atoms, T):
         atoms.get_potential_energy()
         vasptraj = read('OUTCAR', index=slice(0, steps, dump_interval))
         write('md.traj', vasptraj)
-
+        done('md')
+        
 
 def md(md_calc='vasp', T=300, md_size=[1,1,1]):
     folder = os.getcwd()
-    trajfile = glob.glob(folder + '/1-optimization/*.traj')[0]
-
     mkdir(folder + '/1_1-molecular_dynamics')
     with chdir(folder + '/1_1-molecular_dynamics'):
         with out('md'):
-            traj = Trajectory(trajfile)
-            atoms = traj[-1]
+            atoms = read(folder + '/1-optimization/POSCAR')
             atoms = atoms.repeat(md_size)
 
             if md_calc=='vasp':

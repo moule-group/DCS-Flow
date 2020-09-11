@@ -506,7 +506,7 @@ def main():
         A2 = A1[2]
         A1 = A1[1]
 
-        print("PAIRTYPE PARAMS: " + '{}' + " " + A1 + " " + A2 + "\n" .format(i))
+        print("PAIRTYPE PARAMS: " + "{}" .format(i) + " " + A1 + " " + A2 + "\n")
 
         if CASE_BY_CASE:  
 
@@ -520,10 +520,10 @@ def main():
             SNUM_2B = int((2+m.floor((MAX - MIN)/DEL))*2)
 
         for j in range(0, int(SNUM_2B)):
-            print('{}' + " " + '{}' .format(j, x[i*SNUM_2B+j]))
+            print("{}" .format(j) + " " + "{}" .format(x[i*SNUM_2B+j]))
 
         if FIT_COUL == "true":
-            print("q_" + A1 + " x q_" + A2 + " " + {} .format(x[TOTAL_PAIRS*SNUM_2B + SNUM_3B + SNUM_4B + i]))
+            print("q_" + A1 + " x q_" + A2 + " " + "{}" .format(x[TOTAL_PAIRS*SNUM_2B + SNUM_3B + SNUM_4B + i]))
             COUNTED_COUL_PARAMS += 1
 
         print(" ")
@@ -576,7 +576,7 @@ def main():
                     LINE       = hf[ATOM_TRIPS_LINE+2+ADD_LINES].rstrip('\n')
                     LINE_SPLIT = LINE.split()
 
-                    print(LINE + " " + '{}' .format(x[TOTAL_PAIRS*SNUM_2B + TRIP_PAR_IDX+int(LINE_SPLIT[5])]))
+                    print(LINE + " " + "{}" .format(x[TOTAL_PAIRS*SNUM_2B + TRIP_PAR_IDX+int(LINE_SPLIT[5])]))
 
                 TRIP_PAR_IDX += int(UNIQ)
                 COUNTED_TRIP_PARAMS += int(UNIQ)
@@ -644,7 +644,7 @@ def main():
                     UNIQ_QUAD_IDX = int(LINE_SPLIT[8])
                     #print 'UNIQ_QUAD_IDX', str(UNIQ_QUAD_IDX)
 
-                    print(LINE + " " + '{}' .format(x[TOTAL_PAIRS*SNUM_2B + COUNTED_TRIP_PARAMS + QUAD_PAR_IDX + UNIQ_QUAD_IDX]))
+                    print(LINE + " " + "{}" .format(x[TOTAL_PAIRS*SNUM_2B + COUNTED_TRIP_PARAMS + QUAD_PAR_IDX + UNIQ_QUAD_IDX]))
 
                 QUAD_PAR_IDX += int(UNIQ)
                 COUNTED_QUAD_PARAMS += int(UNIQ)
@@ -657,7 +657,7 @@ def main():
 
 
     if FIT_POVER == "true":
-        print("P OVER: " + '{}' .format(x[len(x)-1]))
+        print("P OVER: " + "{}" .format(x[len(x)-1]))
         OVERCOORD_PARAMS = 1
     else:
         OVERCOORD_PARAMS = 0
@@ -692,12 +692,12 @@ def main():
         print("NO ENERGY OFFSETS: ", N_ENER_OFFSETS)
     
         for i in range(N_ENER_OFFSETS):
-            print("ENERGY OFFSET " + '{}' + " " + str(x[total_params+i]) .format(i+1))
+            print("ENERGY OFFSET " + "{}" .format(i+1) + " " + str(x[total_params+i]))
 
     if test_suite_run:
         test_suite_params=open("test_suite_params.txt","w")		
         for i in range(0,len(x)):
-            phrase = '{}' + " " + '{}' + '\n' .format(i, x[i])
+            phrase = "{}" .format(i) + " " + "{}" .format(x[i]) + '\n'
             test_suite_params.write(phrase)
             test_suite_params.close()
 
@@ -876,7 +876,7 @@ def fit_dlars(num_nodes, num_cores, alpha_val, split_files, algorithm, read_outp
             command = None
 	        
             if  is_active: # Then we're using the parallel driver and files are named differently
-                command = exepath + " " + Afile + " " + bfile + " dim.txt --lambda=" + '{}' .format(alpha_val)
+                command = exepath + " " + Afile + " " + bfile + " dim.txt --lambda=" + "{}" .format(alpha_val)
                 normalize = True
 
             else:

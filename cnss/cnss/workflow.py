@@ -39,31 +39,42 @@ def workflow(dct=None):
         if dct['calc'] == 'chimes':
             with timer('relaxation'):
                 relax(dct['krelax'], dct['fmax'], dct['geo'], 'vasp')
+            timer.write()
             with timer('molecular dynamics'):
                 md(dct['md_calc'], dct['T'], dct['md_size'])
+            timer.write()
             with timer('force matching'):
                 chimes(dct['b2'], dct['b3'], dct['T'])
+            timer.write()
             with timer('phonon calculation'):
                 phonons(dct['dim'], dct['kforce'], dct['mesh'], dct['calc'])
+            timer.write()
             with timer('oclimax calculation'):
                 oclimax(dct['params'], dct['task'], dct['e_unit'])
+            timer.write()
 
         else:
             with timer('relaxation'):
                 relax(dct['krelax'], dct['fmax'], dct['geo'], dct['calc'])
+            timer.write()
             with timer('phonon calculation'):
                 phonons(dct['dim'], dct['kforce'], dct['mesh'], dct['calc'])
+            timer.write()
             with timer('oclimax calculation'):
                 oclimax(dct['params'], dct['task'], dct['e_unit'])
+            timer.write()
     else:
         with timer('relaxation'):
             relax()
+        timer.write()
         with timer('phonon calculation'):
             phonons()
+        timer.write()
         with timer('oclimax calculation'):
             oclimax()
+        timer.write()
 
-    timer.write()
+    # timer.write() 
 
 def write_params():
     relax_params = get_default_parameters(relax)

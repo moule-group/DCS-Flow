@@ -2,7 +2,7 @@ import os
 import glob
 from ase.optimize import BFGS
 from ase.io import read
-from cnss import mkdir, chdir, out
+from cnss import mkdir, chdir, out, done, isdone
 
 class CLICommand:
     'Optimize structure'
@@ -24,21 +24,8 @@ class CLICommand:
     def run(args):
         relax(args.krelax, args.fmax, args.geo, args.calc)
 
-def relax_done(fmax):
-    import pandas as pd
-
-    try:
-        df = pd.read_csv('relax.out', sep='\s+')
-        if (df['fmax'] < fmax).any():
-            return True
-        else:
-            return False
-    except:
-        return False
-
-    
 def relax_structure(krelax, fmax, geo, mode):
-    if relax_done(fmax=fmax):
+    if isdone('relax'):
         return
     else:
         atoms = read(geo)
@@ -48,6 +35,12 @@ def relax_structure(krelax, fmax, geo, mode):
             from ase.calculators.dftb import Dftb
             calculator = Dftb(label=formula,
                               atoms=atoms,
+                              Driver='ConjugateGradient{',
+                              Driver_MovedAtoms='1:-1',
+                              Driver_MaxForceComponent=fmax,
+                              Driver_MaxSteps=100,
+                              Driver_LatticeOpt='Yes',
+                              Driver_AppendGeometries='Yes',
                               kpts=krelax,
                               Hamiltonian_SCC='Yes',
                               Hamiltonian_MaxAngularMomentum_='',
@@ -58,8 +51,12 @@ def relax_structure(krelax, fmax, geo, mode):
             calculator = Vasp(kpts=krelax,
                               prec='Accurate',
                               encut=520,
-                              ibrion=-1,
+                              nsw=100,
+                              isif=3,
+                              ismear=0,
+                              ibrion=1,
                               ediff=1e-8,
+                              ediffg=-fmax,
                               sigma=0.1,
                               nwrite=1,
                               npar=8,
@@ -72,9 +69,8 @@ def relax_structure(krelax, fmax, geo, mode):
             raise NotImplementedError('{} calculator not implemented' .format(mode))
             
         atoms.set_calculator(calculator)
-        opt = BFGS(atoms, trajectory= formula + '.traj')
-        opt.run(fmax=fmax)
-
+        atoms.get_potential_energy()
+        done('relax')
         
 def relax(krelax=[6, 6, 6], fmax=0.01, geo=None, calc='dftbp'):
     folder = os.getcwd()

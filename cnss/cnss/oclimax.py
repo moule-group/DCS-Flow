@@ -1,6 +1,6 @@
 import os
 import argparse
-from cnss import mkdir, chdir
+from cnss import mkdir, chdir, out, done, isdone
 from shutil import copyfile
 
 class CLICommand:
@@ -29,7 +29,7 @@ def write_params(task, e_unit):
         f.write('## General parameters \n'
                 'TASK    =         {} # 0:inc approx. 1:coh+inc. 2:single-xtal Q-E. 3:single-xtal Q-Q\n'
                 'INSTR   =         0  # 0:VISION 1:indirect traj 2:direct traj 3:Q-E or Q-Q mesh\n'
-                'TEMP    =      5.00  # Temperature [K]\n'
+                'TEMP    =      0.00  # Temperature [K]\n'
                 'E_UNIT  =         {} # Energy unit [eu] (0:cm-1,1:meV,2:THz)\n'
                 'OUTPUT  =   0  # 0:standard, 1:restart, 2:SPE, 3:full, 4:DOS, 5:modes\n'
  
@@ -42,7 +42,7 @@ def write_params(task, e_unit):
  
                 '## E parameters\n'
                 'MINE    =      8.00  # Energy range (minimum) to calculate [eu]\n'
-                'MAXE    =   3500.00  # Energy range (maximum) to calculate [eu]\n'
+                'MAXE    =   2000.00  # Energy range (maximum) to calculate [eu]\n'
                 'dE      =      1.00  # Energy bin size [eu]\n'
                 'ECUT    =     8.000  # Exclude modes below this cutoff energy [eu]\n'
                 'ERES    =   0.25E+01  0.50E-02  0.10E-06  # E resolution coeff\n'
@@ -80,8 +80,10 @@ def write_params(task, e_unit):
 
 def run_oclimax(params):
     
-    os.system('oclimax convert -yaml mesh.yaml -o')
-    os.system('oclimax run out.oclimax {}' .format(params))
+    if not isdone('convert'):
+        os.system('oclimax convert -yaml mesh.yaml -o 1>> ocl.out 2>> ocl.err')
+        done('convert')
+    os.system('oclimax run out.oclimax {} 1>> ocl.out 2>> ocl.err' .format(params))
 
 def plot():
     import pandas as pd

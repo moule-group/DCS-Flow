@@ -2,7 +2,7 @@ import os
 import numpy as np
 from shutil import copyfile, move
 from ase.io import read
-from cnss import mkdir, chdir, out
+from cnss import mkdir, chdir, out, done, isdone
 from phonopy import Phonopy
 
 class CLICommand:
@@ -94,41 +94,10 @@ def organize_folders(mode):
                 move(filename, '{}/POSCAR' .format(dir))
 
 
-def forces_done(mode):
-
-    if mode == 'dftbp':
-        if os.path.exists('results.tag'):
-            if os.path.getsize('results.tag') > 0:
-                return True
-            else:
-                return False
-        else:
-            return False
-
-    if mode == 'chimes':
-        if os.path.exists('results.tag'):
-            if os.path.getsize('results.tag') > 0:
-                return True
-            else:
-                return False
-        else:
-            return False
-
-        
-    if mode == 'vasp':
-        if os.path.exists('OUTCAR'):
-            if any('timing' in f.split() for f in open('OUTCAR')):
-                return True
-            else:
-                return False
-        else:
-            return False
-
-            
 def calculate_forces(kforce, mode, dir):
 
     with chdir(dir):
-        if forces_done(mode):
+        if isdone('forces'):
             return
         else:
             if mode == 'chimes':
@@ -165,20 +134,22 @@ def calculate_forces(kforce, mode, dir):
                 from ase.calculators.vasp import Vasp
                 atoms = read('POSCAR')
                 calculator = Vasp(kpts=kforce,
-                              prec='Accurate',
-                              encut=520,
-                              ibrion=-1,
-                              ediff=1e-8,
-                              sigma=0.1,
-                              nwrite=1,
-                              npar=8,
-                              lreal=False,
-                              lcharg=False,
-                              lwave=False,
-                              xc='pbe',
-                              gamma=True)
+                                  prec='Accurate',
+                                  encut=520,
+                                  ibrion=-1,
+                                  ediff=1e-8,
+                                  ismear=0,
+                                  sigma=0.1,
+                                  nwrite=1,
+                                  npar=8,
+                                  lreal=False,
+                                  lcharg=False,
+                                  lwave=False,
+                                  xc='pbe',
+                                  gamma=True)
                 calculator.calculate(atoms)
-                
+
+            done('forces')
                 
 def multi_forces(kforce, mode, mpi=False):
     from functools import partial
@@ -204,8 +175,8 @@ def calculate_mesh(phonon, mesh, mode):
     if mode == 'dftbp':
         filenames = [x + '/results.tag' for x in dirlist]
     if mode == 'chimes':
-        filenames = [x + '/results.tag' for x in dirlist]
         mode = 'dftbp'
+        filenames = [x + '/results.tag' for x in dirlist]
     if mode == 'vasp':
         filenames = [x + '/vasprun.xml' for x in dirlist]
 
@@ -214,6 +185,7 @@ def calculate_mesh(phonon, mesh, mode):
                             num_atoms=natom,
                             num_displacements=len(filenames),
                             force_filenames=filenames)
+    
     phonon.set_forces(forces)
     phonon.produce_force_constants()
     phonon.save()
@@ -235,10 +207,14 @@ def phonons(dim=[4, 4, 4], kforce=[1, 1, 1], mesh=[8, 8, 8], calc='dftbp'):
     
     with chdir(folder + '/2-phonons'):
         with out('phonons'):
-            phonon = generate_supercell(dim, calc)
-            organize_folders(calc)
-            multi_forces(kforce, calc)
-            calculate_mesh(phonon, mesh, calc)
+            if isdone('phonons'):
+                return
+            else:
+                phonon = generate_supercell(dim, calc)
+                organize_folders(calc)
+                multi_forces(kforce, calc)
+                calculate_mesh(phonon, mesh, calc)
+                done('phonons')
 
 if __name__ == '__main__':
     phonons()

@@ -25,16 +25,6 @@ class CLICommand:
     def run(args):
         chimes(args.b2, args.b3, args.temp)
         
-
-def chimes_done():
-    if os.path.exists('params.txt'):
-        with open('params.txt') as f:
-            if any('ENDFILE' in line for line in f.readlines()):
-                return True
-            else:
-                return False
-    else:
-        return False
         
 def dftb_fmatch_input(T):
     from ase.io import Trajectory
@@ -72,10 +62,10 @@ def dftb_fmatch_input(T):
         diff_stress = ' ' .join(map(str, diff_stress))
 
         diff_energy = (dft_energy - dftb_energy) * mol / kcal
-
+        
         with open('dft-dftb.xyzf', 'a') as file:
             file.write('{} \n' .format(n))
-            file.write('{} {} {} \n' .format(cell, diff_stress, diff_energy[0]))
+            file.write('{} {} {} \n' .format(cell, diff_stress, diff_energy))
             for s,p,f in zip(symbols, positions, diff_forces):
                 p = ' ' .join(map(str, p))
                 f = ' ' .join(map(str, f))
@@ -92,6 +82,14 @@ def rdf(smax, pair):
 
     traj = Trajectory('dft.traj')
     ana = Analysis(traj[-1])
+
+    # # just to keep graphite working
+    # atoms = traj[-1]
+    # cell = atoms.get_cell()
+    # atoms.set_cell(cell*2)
+    # smax=smax*2
+    # ana = Analysis(atoms)
+    
     rdf = ana.get_rdf(smax - 0.5, 100, elements=pair, return_dists=True)
     g = rdf[0][0]
     r = rdf[0][1]
@@ -234,12 +232,12 @@ def run_md_input():
     
     
 def lsq():
-    os.system('chimes_lsq fm_setup.in')
+    os.system('chimes_lsq fm_setup.in >> chimes.out')
     os.system('lsq2.py --algorithm=lassolars > params.txt')
     
     
 def chimes(b2=12, b3=8, T=5):
-    from cnss import mkdir, chdir, out
+    from cnss import mkdir, chdir, out, done, isdone
     import glob
 
     folder = os.getcwd()
@@ -248,13 +246,13 @@ def chimes(b2=12, b3=8, T=5):
     copyfile(trajfile, folder + '/1_2-chimes/dft.traj')
     with chdir(folder + '/1_2-chimes'):
         with out('chimes'):
-            if chimes_done():
+            if isdone('chimes'):
                 return
             else:
                 nframes, setsymbols, smax = dftb_fmatch_input(T)
                 fm_setup_input(nframes, b2, b3, setsymbols, smax)
                 lsq()
-    
+                done('chimes')
 
 if __name__ == '__main__':
     chimes()

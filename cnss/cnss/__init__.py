@@ -43,3 +43,14 @@ def write_json(filename, data):
 def read_json(filename):
     dct = jsonio.decode(Path(filename).read_text())
     return dct
+
+def done(mode):
+    with open(mode + '.done', 'w') as f:
+        f.close()
+
+def isdone(mode):
+    if os.path.exists(mode + '.done'):
+        return True
+    else:
+        return False
+
