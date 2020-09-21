@@ -107,7 +107,7 @@ def calculate_forces(kforce, mode, dir):
                 run_md_input()
                 calculator = Dftb(kpts=kforce,
                                   Hamiltonian_ChIMES='Yes',
-                                  Hamiltonian_SCC='No',
+                                  Hamiltonian_SCC='Yes',
                                   Hamiltonian_MaxAngularMomentum_='',
                                   Hamiltonian_MaxAngularMomentum_C='p',
                                   Hamiltonian_MaxAngularMomentum_H='s',
@@ -120,7 +120,7 @@ def calculate_forces(kforce, mode, dir):
             if mode == 'dftbp':
                 from ase.calculators.dftb import Dftb
                 calculator = Dftb(kpts=kforce,
-                                  Hamiltonian_SCC='No',
+                                  Hamiltonian_SCC='Yes',
                                   Hamiltonian_MaxAngularMomentum_='',
                                   Hamiltonian_MaxAngularMomentum_C='p',
                                   Hamiltonian_MaxAngularMomentum_H='s',
@@ -135,13 +135,13 @@ def calculate_forces(kforce, mode, dir):
                 atoms = read('POSCAR')
                 calculator = Vasp(kpts=kforce,
                                   prec='Accurate',
-                                  encut=520,
+                                  encut=550,
                                   ibrion=-1,
                                   ediff=1e-8,
                                   ismear=0,
                                   sigma=0.1,
                                   nwrite=1,
-                                  npar=8,
+                                  npar=16,
                                   lreal=False,
                                   lcharg=False,
                                   lwave=False,
@@ -156,17 +156,21 @@ def multi_forces(kforce, mode, mpi=False):
     command = partial(calculate_forces, kforce, mode)
     
     dirlist = np.array(sorted([x.name for x in os.scandir() if x.is_dir()]))
-   
-    if mpi:
-        from mpi4py.futures import MPIPoolExecutor
-        with MPIPoolExecutor(max_workers=68, main=False) as executor:
-            executor.map(command, dirlist)
+
+    if mode == 'vasp':
+        for dir in dirlist:
+            command(dir)
     else:
-        from multiprocessing import Pool        
-        pool = Pool(processes=68)
-        pool.map(command, dirlist)
+        if mpi:
+            from mpi4py.futures import MPIPoolExecutor
+            with MPIPoolExecutor(max_workers=68, main=False) as executor:
+                executor.map(command, dirlist)
+        else:
+            from multiprocessing import Pool        
+            with Pool(processes=68) as pool:
+                pool.map(command, dirlist)
 
-
+    
 def calculate_mesh(phonon, mesh, mode):
     from phonopy.interface.calculator import get_force_sets
 
@@ -199,9 +203,9 @@ def phonons(dim=[4, 4, 4], kforce=[1, 1, 1], mesh=[8, 8, 8], calc='dftbp'):
     if calc == 'dftbp':
         copyfile(folder + '/1-optimization/geo_end.gen', folder + '/2-phonons/geo.gen')
     elif calc == 'vasp':
-        copyfile(folder + '/1-optimization/POSCAR', folder + '/2-phonons/POSCAR')
+        copyfile(folder + '/1-optimization/CONTCAR', folder + '/2-phonons/POSCAR')
     elif calc == 'chimes':
-        copyfile(folder + '/1-optimization/POSCAR', folder + '/2-phonons/POSCAR')
+        copyfile(folder + '/1-optimization/CONTCAR', folder + '/2-phonons/POSCAR')
     else:
         raise NotImplementedError('{} calculator not implemented' .format(calc))
     

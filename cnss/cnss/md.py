@@ -32,19 +32,21 @@ class CLICommand:
 
 
 def run_vasp_md(atoms, T):
-    steps = 100
+    steps = 5000
     time_step = 1 # in fs                                                                               
-    dump_interval = 1
+    dump_interval = 100
     if isdone('md'):
         return
     else:
         from ase.calculators.vasp import Vasp
         atoms.calc = Vasp(encut=550,
                           prec='Normal',
-                          algo='Fast', # electronic minimisation algotithm                              
-                          lreal='Auto', # operators in real space                                       
-                          ismear=0, # gaussian smearing
+                          algo='Fast', # electronic minimisation algotithm
+                          lreal='Auto', # operators in real space
+                          ismear=0, # Gaussian smearing
                           sigma=0.1, # width of smearing in eV
+                          # ismear=-1, # Fermi smearing
+                          # sigma=T*units.kB, # width of smearing in eV
                           isym=0, # no symmetry usage                                                   
                           ibrion=0, # MD run
                           potim=time_step, # md time step                                              
@@ -56,7 +58,7 @@ def run_vasp_md(atoms, T):
                           smass=0, # Canonical (Nose-Hoover) thermostat                                 
                           ediff=1e-6, # global break condition for the electronic SC-loop               
                           nwrite=1, # how much will be written to the OUTCAR file                      
-                          npar=8, # number of bands that are treated in parallel                       
+                          npar=16, # number of bands that are treated in parallel                       
                           lcharg=False, # charge densities are not written                              
                           lwave=False, # wavefunctions are not written                                  
                           xc='pbe')
@@ -71,7 +73,7 @@ def md(md_calc='vasp', T=300, md_size=[1,1,1]):
     mkdir(folder + '/1_1-molecular_dynamics')
     with chdir(folder + '/1_1-molecular_dynamics'):
         with out('md'):
-            atoms = read(folder + '/1-optimization/POSCAR')
+            atoms = read(folder + '/1-optimization/CONTCAR')
             atoms = atoms.repeat(md_size)
 
             if md_calc=='vasp':

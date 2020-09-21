@@ -29,7 +29,7 @@ def write_params(task, e_unit):
         f.write('## General parameters \n'
                 'TASK    =         {} # 0:inc approx. 1:coh+inc. 2:single-xtal Q-E. 3:single-xtal Q-Q\n'
                 'INSTR   =         0  # 0:VISION 1:indirect traj 2:direct traj 3:Q-E or Q-Q mesh\n'
-                'TEMP    =      0.00  # Temperature [K]\n'
+                'TEMP    =      5.00  # Temperature [K]\n'
                 'E_UNIT  =         {} # Energy unit [eu] (0:cm-1,1:meV,2:THz)\n'
                 'OUTPUT  =   0  # 0:standard, 1:restart, 2:SPE, 3:full, 4:DOS, 5:modes\n'
  
@@ -100,7 +100,8 @@ def plot():
     # normint = ((int - min(int[200:])) / (max(int[200:]) - min(int[200:])))
 
     plt.plot(E, normint)
-    plt.xlabel('Energy (cm$^{-1}$)')
+    # plt.xlabel('Energy (cm$^{-1}$)')
+    plt.xlabel('Energy (meV)')
     plt.ylabel('Normalized intensity')
     # plt.xlim(0, 3500)
     # plt.ylim(0, 1)
