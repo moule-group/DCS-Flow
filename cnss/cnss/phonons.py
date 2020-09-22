@@ -1,7 +1,7 @@
 import os
 import numpy as np
 from shutil import copyfile, move
-from ase.io import read
+from ase.io import read, write
 from cnss import mkdir, chdir, out, done, isdone
 from phonopy import Phonopy
 
@@ -36,20 +36,23 @@ class CLICommand:
         phonons(args.dim, args.kforce, args.mesh, args.calc)
 
 
-def generate_supercell(dim, mode, d=0.01):
+def generate_supercell(dim, calc, d=0.01):
     from phonopy.interface.calculator import read_crystal_structure
     from phonopy.interface.calculator import write_supercells_with_displacements
     from phonopy.interface.calculator import get_default_physical_units
 
         
-    if mode == 'dftbp':
+    if calc == 'dftbp':
+        mode = 'dftbp'
         unitcell, info = read_crystal_structure('geo.gen', interface_mode=mode)
-    if mode == 'vasp':
-        unitcell, info = read_crystal_structure('POSCAR', interface_mode=mode)
-    if mode == 'chimes':
+    if calc == 'vasp':
         mode = 'vasp'
         unitcell, info = read_crystal_structure('POSCAR', interface_mode=mode)
+    if calc == 'chimes':
         mode = 'dftbp'
+        chimes_atoms = read('POSCAR')
+        write('geo.gen', chimes_atoms)
+        unitcell, info = read_crystal_structure('geo.gen', interface_mode=mode)
         
     supercell_matrix = np.zeros((3, 3))
     np.fill_diagonal(supercell_matrix, dim)
