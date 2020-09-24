@@ -12,6 +12,9 @@ class CLICommand:
     @staticmethod
     def add_arguments(parser):
         add = parser.add_argument
+        add('--optgeo',
+            help='path to DFT optimized geometry file',
+            default=None)
         add('--md_calc',
             help='Calculator used for moculecular dynamics simulation. Options are vasp',
             default='vasp')
@@ -24,17 +27,27 @@ class CLICommand:
             default=[1, 1, 1],
             nargs=3,
             type=int)
+        add('--steps',
+            help='Set the number of steps for MD simulation',
+            default=5000,
+            type=int)
+        add('--time_step',
+            help='Set the time step in fs',
+            default=1,
+            type=int)
+        add('--dump_interval',
+            help='Set the interval to save the frame on the trajectory file',
+            default=100,
+            type=int)
 
 
     @staticmethod
     def run(args):
-        md(args.md_calc, args.temp, args.md_size)
+        md(args.optgeo, args.md_calc, args.temp, args.md_size,
+           args.steps, args.time_step, args.dump_interval)
 
 
-def run_vasp_md(atoms, T):
-    steps = 5000
-    time_step = 1 # in fs                                                                               
-    dump_interval = 100
+def run_vasp_md(atoms, T, steps, time_step, dump_interval):
     if isdone('md'):
         return
     else:
@@ -68,16 +81,21 @@ def run_vasp_md(atoms, T):
         done('md')
         
 
-def md(md_calc='vasp', T=300, md_size=[1,1,1]):
+def md(optgeo=None, md_calc='vasp', T=300, md_size=[1,1,1],
+       steps=5000, time_step=1, dump_interval=100):
     folder = os.getcwd()
-    mkdir(folder + '/1_1-molecular_dynamics')
-    with chdir(folder + '/1_1-molecular_dynamics'):
-        with out('md'):
-            atoms = read(folder + '/1-optimization/CONTCAR')
-            atoms = atoms.repeat(md_size)
 
+    if optgeo:
+        atoms = read(optgeo)
+    else:
+        atoms = read(folder + '/1-optimization/CONTCAR')
+        
+    atoms = atoms.repeat(md_size)        
+    mkdir(folder + '/2-molecular_dynamics')
+    with chdir(folder + '/2-molecular_dynamics'):
+        with out('md'):
             if md_calc=='vasp':
-                run_vasp_md(atoms, T)
+                run_vasp_md(atoms, T, steps, time_step, dump_interval)
             else:
                 raise NotImplementedError('{} calculator not implemented' .format(md_calc))
 

@@ -36,42 +36,45 @@ class CLICommand:
         phonons(args.dim, args.kforce, args.mesh, args.calc)
 
 
-def generate_supercell(dim, calc, d=0.01):
-    from phonopy.interface.calculator import read_crystal_structure
-    from phonopy.interface.calculator import write_supercells_with_displacements
-    from phonopy.interface.calculator import get_default_physical_units
+def generate_supercell(dim, mode):
+    from phonopy.cui.collect_cell_info import collect_cell_info
+    from phonopy.interface.calculator import (write_supercells_with_displacements,
+                                              get_default_physical_units,
+                                              get_default_displacement_distance)
 
-        
-    if calc == 'dftbp':
-        mode = 'dftbp'
-        unitcell, info = read_crystal_structure('geo.gen', interface_mode=mode)
-    if calc == 'vasp':
-        mode = 'vasp'
-        unitcell, info = read_crystal_structure('POSCAR', interface_mode=mode)
-    if calc == 'chimes':
-        mode = 'dftbp'
-        chimes_atoms = read('POSCAR')
-        write('geo.gen', chimes_atoms)
-        unitcell, info = read_crystal_structure('geo.gen', interface_mode=mode)
-        
     supercell_matrix = np.zeros((3, 3))
     np.fill_diagonal(supercell_matrix, dim)
 
+    if mode == 'chimes':
+        mode = 'dftbp'
+
+    # reading structure file
+    cell_info = collect_cell_info(supercell_matrix,
+                                  interface_mode=mode,
+                                  return_dict=True)
     units = get_default_physical_units(interface_mode=mode)
 
-    phonon = Phonopy(unitcell=unitcell,
-                     supercell_matrix=supercell_matrix,
-                     factor=units['factor'])
+    # Initialize phonopy
+    phonon = Phonopy(cell_info['unitcell'],
+	             cell_info['supercell_matrix'],
+                     primitive_matrix=cell_info['primitive_matrix'],
+                     factor=units['factor'],
+                     calculator=cell_info['interface_mode'])
+
+    # Create constant amplitude displacements
+    d = get_default_displacement_distance(phonon.calculator)
     phonon.generate_displacements(distance=d)
     supercell = phonon.supercell
     supercells = phonon.supercells_with_displacements
-    
-    write_supercells_with_displacements(interface_mode=mode,
+    info = cell_info['optional_structure_info']
+    additional_info = {'supercell_matrix': phonon.supercell_matrix}
+    write_supercells_with_displacements(interface_mode=phonon.calculator,
                                         supercell=supercell,
                                         cells_with_disps=supercells,
                                         optional_structure_info=info,
-                                        additional_info={})
-    return phonon
+                                        additional_info=additional_info)
+    
+    phonon.save()
     
 def organize_folders(mode):
 
@@ -106,8 +109,7 @@ def calculate_forces(kforce, mode, dir):
             if mode == 'chimes':
                 from ase.calculators.dftb import Dftb
                 from cnss.chimes import run_md_input
-                copyfile('../../1_2-chimes/params.txt', 'params.txt')
-                run_md_input()
+                run_md_input('../../')
                 calculator = Dftb(kpts=kforce,
                                   Hamiltonian_ChIMES='Yes',
                                   Hamiltonian_SCC='Yes',
@@ -174,9 +176,10 @@ def multi_forces(kforce, mode, mpi=False):
                 pool.map(command, dirlist)
 
     
-def calculate_mesh(phonon, mesh, mode):
-    from phonopy.interface.calculator import get_force_sets
-
+def calculate_mesh(mesh, mode):
+    import phonopy
+    from phonopy.cui.create_force_sets import create_FORCE_SETS
+    
     dirlist = sorted([x.name for x in os.scandir() if x.is_dir()])
     
     if mode == 'dftbp':
@@ -187,15 +190,11 @@ def calculate_mesh(phonon, mesh, mode):
     if mode == 'vasp':
         filenames = [x + '/vasprun.xml' for x in dirlist]
 
-    natom = phonon.supercell.get_number_of_atoms()
-    forces = get_force_sets(interface_mode=mode,
-                            num_atoms=natom,
-                            num_displacements=len(filenames),
-                            force_filenames=filenames)
+    create_FORCE_SETS(interface_mode=mode,
+                      force_filenames=filenames,
+                      disp_filename='phonopy_params.yaml')
     
-    phonon.set_forces(forces)
-    phonon.produce_force_constants()
-    phonon.save()
+    phonon = phonopy.load("phonopy_params.yaml")
     phonon.run_mesh(mesh, with_eigenvectors=True)
     phonon.write_yaml_mesh()
 
@@ -208,7 +207,7 @@ def phonons(dim=[4, 4, 4], kforce=[1, 1, 1], mesh=[8, 8, 8], calc='dftbp'):
     elif calc == 'vasp':
         copyfile(folder + '/1-optimization/CONTCAR', folder + '/2-phonons/POSCAR')
     elif calc == 'chimes':
-        copyfile(folder + '/1-optimization/CONTCAR', folder + '/2-phonons/POSCAR')
+        copyfile(folder + '/1-optimization/geo_end.gen', folder + '/2-phonons/geo.gen')
     else:
         raise NotImplementedError('{} calculator not implemented' .format(calc))
     
@@ -217,10 +216,10 @@ def phonons(dim=[4, 4, 4], kforce=[1, 1, 1], mesh=[8, 8, 8], calc='dftbp'):
             if isdone('phonons'):
                 return
             else:
-                phonon = generate_supercell(dim, calc)
+                generate_supercell(dim, calc)
                 organize_folders(calc)
                 multi_forces(kforce, calc)
-                calculate_mesh(phonon, mesh, calc)
+                calculate_mesh(mesh, calc)
                 done('phonons')
 
 if __name__ == '__main__':

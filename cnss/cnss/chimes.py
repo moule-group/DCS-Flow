@@ -11,6 +11,9 @@ class CLICommand:
     @staticmethod
     def add_arguments(parser):
         add = parser.add_argument
+        add('--trajfile',
+            help='path to DFT-MD trajectory file',
+            default=None)
         add('--b2',
             help='order of 2 body interactions (integer)',
             default=12)
@@ -23,7 +26,7 @@ class CLICommand:
 
     @staticmethod
     def run(args):
-        chimes(args.b2, args.b3, args.temp)
+        chimes(args.trajfile, args.b2, args.b3, args.temp)
         
         
 def dftb_fmatch_input(T):
@@ -83,13 +86,6 @@ def rdf(smax, pair):
     traj = Trajectory('dft.traj')
     ana = Analysis(traj[-1])
 
-    # # just to keep graphite working
-    # atoms = traj[-1]
-    # cell = atoms.get_cell()
-    # atoms.set_cell(cell*2)
-    # smax=smax*2
-    # ana = Analysis(atoms)
-    
     rdf = ana.get_rdf(smax - 0.5, 100, elements=pair, return_dists=True)
     g = rdf[0][0]
     r = rdf[0][1]
@@ -119,7 +115,9 @@ def rdf(smax, pair):
     return mlambda, rmin, rmax
 
 def fm_setup_input(nframes, b2, b3, setsymbols, smax):
-    if os.path.exists('../fm_setup.in'):
+    if os.path.exists('../../fm_setup.in'):
+        copyfile('../../fm_setup.in', 'fm_setup.in')
+    elif os.path.exists('../fm_setup.in'):
         copyfile('../fm_setup.in', 'fm_setup.in')
     else:
         with open('fm_setup.in', 'w') as f:
@@ -170,11 +168,14 @@ def fm_setup_input(nframes, b2, b3, setsymbols, smax):
                     '\n'
                     '# ENDFILE #')
 
-def run_md_input():
-    if os.path.exists('../../run_md.in'):
-        copyfile('../../run_md.in', 'run_md.in')
-    elif os.path.exists('run_md.in'):
-        return
+def run_md_input(folder):
+    if os.path.exists(folder + '/params.txt'):
+        copyfile(folder + '/params.txt', 'params.txt')
+    else:
+        raise Exception('you need a ChIMES parameters file called params.txt')
+    
+    if os.path.exists(folder + '/run_md.in'):
+        copyfile(folder + '/run_md.in', 'run_md.in')
     else:
         with open('run_md.in', 'w') as f:
             f.write('################################### \n'
@@ -236,15 +237,20 @@ def lsq():
     os.system('lsq2.py --algorithm=lassolars > params.txt')
     
     
-def chimes(b2=12, b3=8, T=5):
+def chimes(trajfile=None, b2=12, b3=8, T=5):
     from cnss import mkdir, chdir, out, done, isdone
     import glob
 
     folder = os.getcwd()
-    trajfile = glob.glob(folder + '/1_1-molecular_dynamics/*.traj')[0]
-    mkdir(folder + '/1_2-chimes')
-    copyfile(trajfile, folder + '/1_2-chimes/dft.traj')
-    with chdir(folder + '/1_2-chimes'):
+    if trajfile is None:
+        if os.path.isdir(folder + '/2-molecular_dynamics'):
+            trajfile = glob.glob(folder + '/2-molecular_dynamics/*.traj')[0]
+        else:
+            trajfile = glob.glob('*.traj')[0]
+            
+    mkdir(folder + '/3-chimes')
+    copyfile(trajfile, folder + '/3-chimes/dft.traj')
+    with chdir(folder + '/3-chimes'):
         with out('chimes'):
             if isdone('chimes'):
                 return

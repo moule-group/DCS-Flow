@@ -1,5 +1,4 @@
 import os
-import glob
 from ase.optimize import BFGS
 from ase.io import read
 from cnss import mkdir, chdir, out, done, isdone
@@ -47,6 +46,25 @@ def relax_structure(krelax, fmax, geo, mode):
                               Hamiltonian_MaxAngularMomentum_='',
                               Hamiltonian_MaxAngularMomentum_C='p',
                               Hamiltonian_MaxAngularMomentum_H='s')
+
+        elif mode == 'chimes':
+            from ase.calculators.dftb import Dftb
+            from cnss.chimes import run_md_input
+            folder = os.getcwd()            
+            run_md_input(folder + '/..')
+            calculator = Dftb(label=formula,
+                              atoms=atoms,
+                              Driver_='ConjugateGradient',
+                              Driver_MovedAtoms='1:-1',
+                              Driver_MaxForceComponent=fmax,
+                              Driver_MaxSteps=100,
+                              kpts=krelax,
+                              Hamiltonian_ChIMES='Yes',
+                              Hamiltonian_SCC='Yes',
+                              Hamiltonian_MaxAngularMomentum_='',
+                              Hamiltonian_MaxAngularMomentum_C='p',
+                              Hamiltonian_MaxAngularMomentum_H='s')
+
         elif mode == 'vasp':
             from ase.calculators.vasp import Vasp
             calculator = Vasp(kpts=krelax,
@@ -72,19 +90,33 @@ def relax_structure(krelax, fmax, geo, mode):
         atoms.set_calculator(calculator)
         atoms.get_potential_energy()
         done('relax')
+
+def find_geo(folder):
+    import glob
+    
+    geo = glob.glob(folder + '/*.cif') + \
+          glob.glob(folder + '/*.gen') + \
+          glob.glob(folder + '/*.sdf') + \
+          glob.glob(folder + '/*.xyz')
+    geo = geo[0]
+
+    return geo
         
 def relax(krelax=[6, 6, 6], fmax=0.01, geo=None, calc='dftbp'):
     folder = os.getcwd()
-    if not geo:
-        geo = glob.glob(folder + '/*.cif') + \
-              glob.glob(folder + '/*.gen') + \
-              glob.glob(folder + '/*.sdf') + \
-              glob.glob(folder + '/*.xyz')
 
+    if geo:
+        try:
+            geo = folder + '/../' + geo
+        except:
+            geo = folder + '/' + geo
+    else:
+        geo = find_geo(folder)
+        
     mkdir(folder + '/1-optimization')
     with chdir(folder + '/1-optimization'):
         with out('relax'):
-            relax_structure(krelax=krelax, fmax=fmax, geo=geo[0], mode=calc)
+            relax_structure(krelax=krelax, fmax=fmax, geo=geo, mode=calc)
 
 if __name__ == '__main__':
     relax()
