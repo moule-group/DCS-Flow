@@ -2,22 +2,26 @@
 
 CNSS is a software that automates simulations of ineslatic neutron scattering starting from ab-initio and ab-initio based calculations.
 
-### Requirements
+
+### CNSS Requirements
 
 * [Atomic Simulation Environment](https://wiki.fysik.dtu.dk/ase/)
 * [DFTB+](https://www.dftbplus.org/)
 * [Phonopy](https://phonopy.github.io/phonopy/)
 * [Oclimax](https://neutrons.ornl.gov/sites/default/files/2018-NXS_Lecture_YQCheng_2.pdf)
-   
-### Installation (Linux)
 
-* Installing ASE:
+[Linux Installation](https://gitlab.com/lucassamir1/adam-moule/-/blob/MacOSInstallation/cnss/README.md#linux-installation)
+[MacOS Installation](https://gitlab.com/lucassamir1/adam-moule/-/blob/MacOSInstallation/cnss/README.md#macos-installation)
+   
+### Linux Installation
+
+* Install ASE:
 
 ```
 pip install --upgrade --user ase
 ```
 
-* Installing DFTB+:
+* Install DFTB+:
 
   1. [Download Slater-Koster files (parameters files for the DFTB method)](http://www.dftb.org/fileadmin/DFTB/public/slako-unpacked.tar.xz)
 
@@ -79,15 +83,94 @@ pip install --upgrade --user phonopy
 git clone https://gitlab.com/lucassamir1/adam-moule.git
 ```
 
-### Set environment variables
+[Go to Set Environment Variables](https://gitlab.com/lucassamir1/adam-moule/-/blob/MacOSInstallation/cnss/README.md#set-environment-variables)
 
-Add these lines to your configuration file (.bashrc)
+### MacOS Installation
+
+* Install ASE:
 
 ```
-export DFTB_PREFIX=/my_disk/my_name/slako/mio/mio-0-1/ (an example)
-export ASE_DFTB_COMMAND='/my_disk/my_name/dftbplus-20.1/bin/dftb+ > PREFIX.out' (an example)
-export PYTHONPATH=/my_disk/my_name/adam-moule/cnss:$PYTHONPATH (an example)
-export PATH=/my_disk/my_name/adam-moule/cnss/cnss:$PATH (an example)
+pip3 install --upgrade --user ase
+```
+
+* Install DFTB+:
+
+  1. [Download Slater-Koster files (parameters files for the DFTB method)](http://www.dftb.org/fileadmin/DFTB/public/slako-unpacked.tar.xz)
+
+  2. Download DFTB+
+  
+  ```
+  git clone https://github.com/dftbplus/dftbplus.git
+  cd dftbplus
+  git submodule update --init --recursive
+  ```
+  _ Debugging Step: If getting an error related to WITH_OMP, open CMakeLists.txt file and add in the following line of code before if(WITH_OMP):
+  ```
+   option(WITH_OMP FALSE)
+   ```
+
+  3. Build DFTB+ (make sure to use your specific Fortran and C compilers)
+
+  ```
+  mkdir build
+  cd build
+  FC=gfortran CC=gcc cmake ..
+  ```
+
+  If configuration was successful
+  
+  ```
+  ./dftb+
+  make -j
+  ```
+
+  Test it
+
+  ```
+  ctest
+  ```
+~
+  4. Install DFTB+
+
+  ```
+  make install
+  ```
+~
+
+* Install Phonopy
+
+```
+pip3 install --upgrade --user phonopy
+```
+
+* Install OCLIMAX
+
+  1. OCLIMAX uses the DOCKER platform to run the application.
+  [Please install it](https://www.docker.com/)
+
+  2. Download OCLIMAX
+
+  ```  
+  curl -sL https://sites.google.com/site/ornliceman/getoclimax | bash
+  oclimax pull
+  ```
+
+* Install CNSS
+
+```
+git clone https://gitlab.com/lucassamir1/adam-moule.git
+```
+
+
+### Set environment variables
+
+Add these lines to your configuration file (.bashrc for Linux, ~/.bash_profile for macOS). The following code uses example paths and must be edited according to your system.
+
+```
+export DFTB_PREFIX=/my_disk/my_name/slako/mio/mio-0-1/ # (path to Slako files)
+export ASE_DFTB_COMMAND='/my_disk/my_name/dftbplus-20.1/bin/dftb+ > PREFIX.out' # (path to dftb+ binary files)
+export PYTHONPATH=/my_disk/my_name/adam-moule/cnss:$PYTHONPATH #(path to CNSS file)
+export PATH=/my_disk/my_name/adam-moule/cnss/cnss:$PATH #(path to file within CNSS folder)
 ```
 
 ### Usage
@@ -109,7 +192,5 @@ The workflow will relax the structure, create supercell displacements, calculate
   ```
   cnss workflow
   ```
-
-
 
 
