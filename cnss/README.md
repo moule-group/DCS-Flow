@@ -74,6 +74,7 @@ Add these lines to your configuration file (.bashrc)
 ```
 export DFTB_PREFIX=/my_disk/my_name/slako/mio/mio-0-1/ (an example)
 export ASE_DFTB_COMMAND='/my_disk/my_name/dftbplus-20.1/bin/dftb+ > PREFIX.out' (an example)
+export PATH=/my_disk/my_name/dftbplus-20.1/bin:$PATH (an example)
 export PYTHONPATH=/my_disk/my_name/cnss:$PYTHONPATH (an example)
 export PATH=/my_disk/my_name/cnss/cnss:$PATH (an example)
 ```
