@@ -76,7 +76,7 @@ def run_vasp_md(atoms, T, steps, time_step, dump_interval):
                           lwave=False, # wavefunctions are not written                                  
                           xc='pbe')
         atoms.get_potential_energy()
-        vasptraj = read('OUTCAR', index=slice(0, steps, dump_interval))
+        vasptraj = read('OUTCAR', index=slice(1, steps, dump_interval))
         write('md.traj', vasptraj)
         done('md')
         

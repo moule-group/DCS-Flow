@@ -48,6 +48,7 @@ def dftb_fmatch_input(T):
         dft_energy = frame.get_total_energy()
 
         calc = Dftb(kpts=(1,1,1),
+                    # Hamiltonian_PolynomialRepulsive='{C-C = Yes}',
                     Hamiltonian_SCC='Yes',
                     Hamiltonian_MaxAngularMomentum_='',
                     Hamiltonian_MaxAngularMomentum_C='p',
@@ -104,8 +105,9 @@ def rdf(smax, pair):
     imax = (np.where(ilocal == True))[0][0]
     rmax = r[imax]
 
-    # choose max value of g as morse lambda factor
-    mlambda = max(g)
+    # choose position of max value of g as morse lambda factor
+    igmax = np.argmax(g)
+    mlambda = r[igmax]
 
     # round up or down
     mlambda = round(mlambda, 2)
