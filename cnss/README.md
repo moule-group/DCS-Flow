@@ -170,8 +170,10 @@ Add these lines to your configuration file (.bashrc for Linux, ~/.bash_profile f
 ```
 export DFTB_PREFIX=/my_disk/my_name/slako/mio/mio-0-1/ # (path to Slako files)
 export ASE_DFTB_COMMAND='/my_disk/my_name/dftbplus-20.1/bin/dftb+ > PREFIX.out' # (path to dftb+ binary files)
+export PATH=/my_disk/my_name/dftbplus-20.1/bin:$PATH (path to dftb+ files)
 export PYTHONPATH=/my_disk/my_name/adam-moule/cnss:$PYTHONPATH #(path to CNSS file)
 export PATH=/my_disk/my_name/adam-moule/cnss/cnss:$PATH #(path to file within CNSS folder)
+
 ```
 
 ### Usage
