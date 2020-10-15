@@ -130,13 +130,13 @@ pip3 install --upgrade --user ase
   ```
   ctest
   ```
-~
+
   4. Install DFTB+
 
   ```
   make install
   ```
-~
+  
 
 * Install Phonopy
 
