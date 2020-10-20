@@ -16,7 +16,10 @@ class CLICommand:
             default=[6, 6, 6],
             nargs=3,
             type=int)
-        add('--fmax', help='Convergence criteria for forces', default=0.01)
+        add('--fmax',
+            help='Convergence criteria for forces',
+            default=0.01,
+            type=float)
 
 
     @staticmethod
