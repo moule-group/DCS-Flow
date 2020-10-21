@@ -102,8 +102,11 @@ def rdf(smax, pair):
 
     # choose rmax as first local minimum of smooth g
     ilocal = np.r_[True, smoothg[1:] < smoothg[:-1]] & np.r_[smoothg[:-1] < smoothg[1:], True]
-    imax = (np.where(ilocal == True))[0][0]
-    rmax = r[imax]
+    try:
+        imax = (np.where(ilocal == True))[0][0]
+        rmax = r[imax]
+    except:
+        rmax = 2 * rmin
 
     # choose position of max value of g as morse lambda factor
     igmax = np.argmax(g)
