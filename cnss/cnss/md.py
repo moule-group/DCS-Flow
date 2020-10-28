@@ -71,7 +71,7 @@ def run_vasp_md(atoms, T, steps, time_step, dump_interval):
                           smass=0, # Canonical (Nose-Hoover) thermostat                                 
                           ediff=1e-6, # global break condition for the electronic SC-loop               
                           nwrite=1, # how much will be written to the OUTCAR file                      
-                          npar=16, # number of bands that are treated in parallel                       
+                          ncore=16, # number of bands that are treated in parallel
                           lcharg=False, # charge densities are not written                              
                           lwave=False, # wavefunctions are not written                                  
                           xc='pbe')

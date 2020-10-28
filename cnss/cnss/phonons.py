@@ -146,7 +146,7 @@ def calculate_forces(kforce, mode, dir):
                                   ismear=0,
                                   sigma=0.1,
                                   nwrite=1,
-                                  npar=16,
+                                  ncore=16,
                                   lreal=False,
                                   lcharg=False,
                                   lwave=False,
