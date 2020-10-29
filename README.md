@@ -7,9 +7,9 @@
 
 ### Installation 
 
-* [Linux Installation](https://gitlab.com/lucassamir1/adam-moule/-/blob/MacOSInstall/cnss/Install_Linux.md)
+* [Linux Installation](https://gitlab.com/lucassamir1/adam-moule/-/blob/MacOSInstall/Install/Install_Linux.md)
 
-* [MacOS Installation](https://gitlab.com/lucassamir1/adam-moule/-/blob/MacOSInstall/cnss/Install_MacOS.md)
+* [MacOS Installation](https://gitlab.com/lucassamir1/adam-moule/-/blob/MacOSInstall/Install/Install_MacOS.md)
 
 
 
