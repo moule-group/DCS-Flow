@@ -1,3 +1,3 @@
 #!/usr/bin/env python3
-from cnss.main import main
+from main.py import main
 main()
