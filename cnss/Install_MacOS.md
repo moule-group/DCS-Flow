@@ -10,11 +10,6 @@ CNSS is a software that automates simulations of ineslatic neutron scattering st
 * [Phonopy](https://phonopy.github.io/phonopy/)
 * [Oclimax](https://neutrons.ornl.gov/sites/default/files/2018-NXS_Lecture_YQCheng_2.pdf)
 
-[Linux Installation](https://gitlab.com/lucassamir1/adam-moule/-/blob/MacOSInstall/cnss/README.md#linux-installation)
-
-[MacOS Installation](https://gitlab.com/lucassamir1/adam-moule/-/blob/MacOSInstall/cnss/README.md#macos-installation)
-   
-
 ### MacOS Installation
 
 * Install ASE:
