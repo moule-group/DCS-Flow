@@ -84,92 +84,13 @@ pip install --upgrade --user phonopy
 git clone https://gitlab.com/lucassamir1/adam-moule.git
 ```
 
-[Go to Set Environment Variables](https://gitlab.com/lucassamir1/adam-moule/-/blob/MacOSInstall/cnss/README.md#set-environment-variables)
-
-### MacOS Installation
-
-* Install ASE:
-
-```
-pip3 install --upgrade --user ase
-```
-
-* Install DFTB+:
-
-  1. [Download Slater-Koster files (parameters files for the DFTB method)](http://www.dftb.org/fileadmin/DFTB/public/slako-unpacked.tar.xz)
-
-  2. Download DFTB+
-  
-  ```
-  git clone https://github.com/dftbplus/dftbplus.git
-  cd dftbplus
-  git submodule update --init --recursive
-  ```
-  _ Debugging Step: If getting an error related to WITH_OMP, open CMakeLists.txt file and add in the following line of code before if(WITH_OMP):
-  ```
-   option(WITH_OMP FALSE)
-   ```
-
-  3. Build DFTB+ (make sure to use your specific Fortran and C compilers)
-
-  ```
-  mkdir build
-  cd build
-  FC=gfortran CC=gcc cmake ..
-  ```
-
-  If configuration was successful
-  
-  ```
-  ./dftb+
-  make -j
-  ```
-
-  Test it
-
-  ```
-  ctest
-  ```
-
-  4. Install DFTB+
-
-  ```
-  make install
-  ```
-  
-
-* Install Phonopy
-
-```
-pip3 install --upgrade --user phonopy
-```
-
-* Install OCLIMAX
-
-  1. OCLIMAX uses the DOCKER platform to run the application.
-  [Please install it](https://www.docker.com/)
-
-  2. Download OCLIMAX
-
-  ```  
-  curl -sL https://sites.google.com/site/ornliceman/getoclimax | bash
-  oclimax pull
-  ```
-
-* Install CNSS
-
-```
-git clone https://gitlab.com/lucassamir1/adam-moule.git
-```
-
-
 ### Set environment variables
 
 Add these lines to your configuration file (.bashrc for Linux, ~/.bash_profile for macOS). The following code uses example paths and must be edited according to your system.
 
 ```
 export DFTB_PREFIX=/my_disk/my_name/slako/mio/mio-0-1/ # (path to Slako files)
-export ASE_DFTB_COMMAND='/my_disk/my_name/dftbplus-20.1/bin/dftb+ > PREFIX.out' # (path to dftb+ binary files)
+export ASE_DFTB_COMMAND=/my_disk/my_name/dftbplus-20.1/bin/dftb+ > PREFIX.out # (path to dftb+)
 export PATH=/my_disk/my_name/dftbplus-20.1/bin:$PATH (path to dftb+ files)
 export PYTHONPATH=/my_disk/my_name/adam-moule/cnss:$PYTHONPATH #(path to CNSS file)
 export PATH=/my_disk/my_name/adam-moule/cnss/cnss:$PATH #(path to file within CNSS folder)
