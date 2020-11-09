@@ -12,15 +12,17 @@ def mkdir(folder):
         if exception.errno != errno.EEXIST:
             raise
 
-def copy(src, dst):
-    from shutil import copyfile, SameFileError
+@contextmanager
+def mktempdir():
+    import tempfile
+    import shutil
+    
+    temp_dir = tempfile.mkdtemp()
     try:
-        copyfile(src, dst)
-    except SameFileError:
-        pass
-    except:
-        raise
-
+        yield temp_dir
+    finally:
+        shutil.rmtree(temp_dir)
+    
 @contextmanager
 def chdir(folder):
     dir = os.getcwd()
