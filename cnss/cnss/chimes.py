@@ -29,55 +29,75 @@ class CLICommand:
         chimes(args.trajfile, args.b2, args.b3, args.temp)
         
         
-def dftb_fmatch_input(T):
-    from ase.io import Trajectory
+def dftb_fmatch_input(T, frame):
     from ase.calculators.dftb import Dftb
     from ase.units import Hartree, Bohr, GPa, mol, kcal
+    import tempfile
+    from cnss import mktempdir, chdir
 
-    traj = Trajectory('dft.traj')
+    with mktempdir() as temp_dir:
+        with chdir(temp_dir):
+            n = frame.get_global_number_of_atoms()
+            cell = frame.get_cell().lengths()
+            cell = ' ' .join(map(str, cell))
+            symbols = frame.get_chemical_symbols()
+            positions = frame.get_positions()
+    
+            dft_forces = frame.get_forces()
+            dft_stress = frame.get_stress()
+            dft_energy = frame.get_total_energy()
 
-    for frame in traj:
-        n = frame.get_global_number_of_atoms()
-        cell = frame.get_cell().lengths()
-        cell = ' ' .join(map(str, cell))
-        symbols = frame.get_chemical_symbols()
-        positions = frame.get_positions()
+            calc = Dftb(kpts=(1,1,1),
+                        # Hamiltonian_PolynomialRepulsive='{C-C = Yes}',
+                        Hamiltonian_SCC='Yes',
+                        Hamiltonian_MaxAngularMomentum_='',
+                        Hamiltonian_MaxAngularMomentum_C='p',
+                        Hamiltonian_MaxAngularMomentum_H='s',
+                Hamiltonian_Filling='Fermi {{Temperature [K] = {T} }}' .format(T=T))
+            calc.calculate(frame, properties=['energy', 'forces', 'stress'])
 
-        dft_forces = frame.get_forces()
-        dft_stress = frame.get_stress()
-        dft_energy = frame.get_total_energy()
+            dftb_forces = calc.results['forces']
+            dftb_stress = calc.results['stress']
+            dftb_energy = calc.results['energy']
 
-        calc = Dftb(kpts=(1,1,1),
-                    # Hamiltonian_PolynomialRepulsive='{C-C = Yes}',
-                    Hamiltonian_SCC='Yes',
-                    Hamiltonian_MaxAngularMomentum_='',
-                    Hamiltonian_MaxAngularMomentum_C='p',
-                    Hamiltonian_MaxAngularMomentum_H='s',
-                    Hamiltonian_Filling='Fermi {{Temperature [K] = {T} }}' .format(T=T))
-        calc.calculate(frame, properties=['energy', 'forces', 'stress'])
+            diff_forces = (dft_forces - dftb_forces) / Hartree * Bohr
 
-        dftb_forces = calc.results['forces']
-        dftb_stress = calc.results['stress']
-        dftb_energy = calc.results['energy']
+            diff_stress = -(dft_stress - dftb_stress)[:3] / GPa
+            diff_stress = ' ' .join(map(str, diff_stress))
 
-        diff_forces = (dft_forces - dftb_forces) / Hartree * Bohr
+            diff_energy = (dft_energy - dftb_energy) * mol / kcal
 
-        diff_stress = -(dft_stress - dftb_stress)[:3] / GPa
-        diff_stress = ' ' .join(map(str, diff_stress))
+            frame_fmatch = []
 
-        diff_energy = (dft_energy - dftb_energy) * mol / kcal
-        
-        with open('dft-dftb.xyzf', 'a') as file:
-            file.write('{} \n' .format(n))
-            file.write('{} {} {} \n' .format(cell, diff_stress, diff_energy))
+            frame_fmatch.append('{} \n' .format(n))
+            frame_fmatch.append('{} {} {} \n' .format(cell, diff_stress, diff_energy))
             for s,p,f in zip(symbols, positions, diff_forces):
                 p = ' ' .join(map(str, p))
                 f = ' ' .join(map(str, f))
-                file.write('{} {} {} \n' .format(s,p,f))
+                frame_fmatch.append('{} {} {} \n' .format(s,p,f))
+
+    return frame_fmatch
+
+def multi_fmatch(T):
+    from ase.io import Trajectory
+    from multiprocessing import Pool
+    from functools import partial
+
+    traj = Trajectory('dft.traj')
+
+    command = partial(dftb_fmatch_input, T)
+    with Pool(processes=50) as pool:
+        results = pool.map(command, list(traj))
+
+    with open('dft-dftb.xyzf', 'a') as file:
+        for result in results:
+            for line in result:
+                file.write(line)
 
     nframes = len(traj)
-    setsymbols = set(symbols)
-    smax = round(min(frame.get_cell().lengths()) / 2, 2)
+    setsymbols = set(traj[0].get_chemical_symbols())
+    smax = round(min(traj[0].get_cell().lengths()) / 2, 2)
+
     return nframes, setsymbols, smax 
 
 def rdf(smax, pair):
@@ -85,21 +105,26 @@ def rdf(smax, pair):
     from ase.geometry.analysis import Analysis
 
     traj = Trajectory('dft.traj')
-    ana = Analysis(traj[-1])
+    ana = Analysis(list(traj))
 
     rdf = ana.get_rdf(smax - 0.5, 100, elements=pair, return_dists=True)
-    g = rdf[0][0]
     r = rdf[0][1]
 
-    # choose rmin as the first position where g is greater than zero
-    i = np.where(g > 0)
+    # get average g function                                                                            
+    g = []
+    for i in range(len(traj)):
+        g.append(rdf[i][0])
+    aveg = np.average(g, axis=0)
+    
+    # choose rmin as the first position where aveg is greater than zero          
+    i = np.where(aveg > 0)
     rmin = r[i[0][0]]
 
     # smooth g function
-    box_pts = 15
+    box_pts = 5
     box = np.ones(box_pts)/box_pts
-    smoothg = np.convolve(g, box, mode='same')
-
+    smoothg = np.convolve(aveg, box, mode='same')
+    
     # choose rmax as first local minimum of smooth g
     ilocal = np.r_[True, smoothg[1:] < smoothg[:-1]] & np.r_[smoothg[:-1] < smoothg[1:], True]
     try:
@@ -108,16 +133,22 @@ def rdf(smax, pair):
     except:
         rmax = 2 * rmin
 
-    # choose position of max value of g as morse lambda factor
-    igmax = np.argmax(g)
+    # # choose rmax as first local minimum of aveg  
+    # ilocal = np.r_[True, aveg[1:] < aveg[:-1]] & np.r_[aveg[:-1] < aveg[1:], True]
+    # imax = (np.where(ilocal == True))[0][0]
+    # rmax = r[imax]
+
+    # choose position of max value of aveg as morse lambda factor                                       
+    igmax = np.argmax(aveg)
     mlambda = r[igmax]
 
-    # round up or down
+    # round up or down                                                                                 
     mlambda = round(mlambda, 2)
     rmin = float(str(rmin)[:3])
     rmax = float(str(rmax)[:3])
-    
+
     return mlambda, rmin, rmax
+
 
 def fm_setup_input(nframes, b2, b3, setsymbols, smax):
     if os.path.exists('../../fm_setup.in'):
@@ -260,7 +291,7 @@ def chimes(trajfile=None, b2=12, b3=8, T=5):
             if isdone('chimes'):
                 return
             else:
-                nframes, setsymbols, smax = dftb_fmatch_input(T)
+                nframes, setsymbols, smax = multi_fmatch(T)
                 fm_setup_input(nframes, b2, b3, setsymbols, smax)
                 lsq()
                 done('chimes')
