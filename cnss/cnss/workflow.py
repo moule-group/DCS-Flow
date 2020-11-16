@@ -36,19 +36,24 @@ def workflow(dct=None):
     if dct:
         with timer('relaxation'):
             relax(dct['krelax'], dct['fmax'], dct['geo'], dct['calc'])
+        timer.write()
         with timer('phonon calculation'):
             phonons(dct['dim'], dct['kforce'], dct['mesh'], dct['calc'])
+        timer.write()
         with timer('oclimax calculation'):
             oclimax(dct['params'], dct['task'], dct['e_unit'])
+        timer.write()
+
     else:
         with timer('relaxation'):
             relax()
+        timer.write()
         with timer('phonon calculation'):
             phonons()
+        timer.write()
         with timer('oclimax calculation'):
             oclimax()
-
-    timer.write()
+        timer.write()
 
 def write_params():
     relax_params = get_default_parameters(relax)

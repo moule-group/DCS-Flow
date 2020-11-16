@@ -13,6 +13,17 @@ def mkdir(folder):
             raise
 
 @contextmanager
+def mktempdir():
+    import tempfile
+    import shutil
+    
+    temp_dir = tempfile.mkdtemp()
+    try:
+        yield temp_dir
+    finally:
+        shutil.rmtree(temp_dir)
+    
+@contextmanager
 def chdir(folder):
     dir = os.getcwd()
     os.chdir(str(folder))
@@ -43,3 +54,14 @@ def write_json(filename, data):
 def read_json(filename):
     dct = jsonio.decode(Path(filename).read_text())
     return dct
+
+def done(mode):
+    with open(mode + '.done', 'w') as f:
+        f.close()
+
+def isdone(mode):
+    if os.path.exists(mode + '.done'):
+        return True
+    else:
+        return False
+
