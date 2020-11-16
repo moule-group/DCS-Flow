@@ -151,14 +151,9 @@ def calculate_forces(kforce, mode, dir):
                                   lwave=False,
                                   xc='pbe',
                                   gamma=True)
-<<<<<<< HEAD
-                calculator.calculate(atoms, properties=['forces'])
-                
-=======
                 calculator.calculate(atoms)
 
             done('forces')
->>>>>>> chimes
                 
 def multi_forces(kforce, mode, mpi=False):
     from functools import partial
