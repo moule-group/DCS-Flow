@@ -125,18 +125,18 @@ def rdf(smax, pair):
     box = np.ones(box_pts)/box_pts
     smoothg = np.convolve(aveg, box, mode='same')
     
-    # choose rmax as first local minimum of smooth g
-    ilocal = np.r_[True, smoothg[1:] < smoothg[:-1]] & np.r_[smoothg[:-1] < smoothg[1:], True]
+    # choose rmax as first zero after peak or local minimum of smooth g
     try:
-        imax = (np.where(ilocal == True))[0][0]
+        ilocal = np.where(np.r_[True, smoothg[1:] < smoothg[:-1]] & np.r_[True, smoothg[1:] == 0])
+        imax = ilocal[0][1]
         rmax = r[imax]
     except:
-        rmax = 2 * rmin
-
-    # # choose rmax as first local minimum of aveg  
-    # ilocal = np.r_[True, aveg[1:] < aveg[:-1]] & np.r_[aveg[:-1] < aveg[1:], True]
-    # imax = (np.where(ilocal == True))[0][0]
-    # rmax = r[imax]
+        try:
+            ilocal = np.r_[True, smoothg[1:] < smoothg[:-1]] & np.r_[smoothg[:-1] < smoothg[1:], True]
+            imax = (np.where(ilocal == True))[0][0]
+            rmax = r[imax]
+        except:
+            rmax = 2 * rmin
 
     # choose position of max value of aveg as morse lambda factor                                       
     igmax = np.argmax(aveg)
