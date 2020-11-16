@@ -140,7 +140,7 @@ def calculate_forces(kforce, mode, dir):
                 atoms = read('POSCAR')
                 calculator = Vasp(kpts=kforce,
                                   prec='Accurate',
-                                  encut=550,
+                                  encut=520,
                                   ibrion=-1,
                                   ediff=1e-8,
                                   ismear=0,

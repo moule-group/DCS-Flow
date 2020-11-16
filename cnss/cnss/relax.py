@@ -72,7 +72,7 @@ def relax_structure(krelax, fmax, geo, mode):
             from ase.calculators.vasp import Vasp
             calculator = Vasp(kpts=krelax,
                               prec='Accurate',
-                              encut=550,
+                              encut=520,
                               nsw=100,
                               isif=2,
                               ismear=0,

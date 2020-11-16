@@ -52,7 +52,7 @@ def run_vasp_md(atoms, T, steps, time_step, dump_interval):
         return
     else:
         from ase.calculators.vasp import Vasp
-        atoms.calc = Vasp(encut=550,
+        atoms.calc = Vasp(encut=520,
                           prec='Normal',
                           algo='Fast', # electronic minimisation algotithm
                           lreal='Auto', # operators in real space
