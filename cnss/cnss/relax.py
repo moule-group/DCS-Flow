@@ -9,7 +9,7 @@ class CLICommand:
     @staticmethod
     def add_arguments(parser):
         add = parser.add_argument
-        add('--calc', help='Calculator used. Options are dftbp or vasp', default='dftbp')
+        add('--calc', help='Calculator used. Options are dftbp, vasp or castep', default='dftbp')
         add('--geo', help='Name of geometry file for structure (cif or gen extensions)')
         add('--krelax',
             help='Number of k points for relaxation, e.g., 6 6 6',
@@ -87,6 +87,28 @@ def relax_structure(krelax, fmax, geo, mode):
                               lwave=False,
                               xc='pbe',
                               gamma=True)
+
+        elif mode == 'castep':
+            import ase.calculators.castep
+
+            calculator = ase.calculators.castep.Castep()
+            directory = '../1-optimization'
+            calculator._export_settings = True
+            calculator._directory = directory
+            calculator._rename_existing_dir = False
+            calculator._export_settings = True
+            calculator._label = 'relax'
+            calculator._set_atoms = True
+            calculator.param.task = 'GeometryOptimization'
+            calculator.param.xc_functional = 'PBE'
+            calculator.param.cut_off_energy = 520
+            calculator.param.num_dump_cycles = 0
+            calculator.param.geom_force_tol = fmax
+            calculator.param.geom_max_iter = 100
+            calculator.cell.kpoint_mp_grid = krelax
+            calculator.cell.fix_com = False
+            calculator.cell.fix_all_cell = True
+            
         else:
             raise NotImplementedError('{} calculator not implemented' .format(mode))
             
