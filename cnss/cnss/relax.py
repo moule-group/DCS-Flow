@@ -100,13 +100,17 @@ def relax_structure(krelax, fmax, geo, mode):
             calculator._label = 'relax'
             calculator._set_atoms = True
             calculator.param.task = 'GeometryOptimization'
+            # calculator.param.geom_method = 'Delocalized'
             calculator.param.xc_functional = 'PBE'
-            calculator.param.cut_off_energy = 520
+            # calculator.param.cut_off_energy = 520
+            calculator.param.basis_precision = 'MEDIUM'
             calculator.param.num_dump_cycles = 0
             calculator.param.geom_force_tol = fmax
+            calculator.param.geom_energy_tol = 2e-5
+            calculator.param.geom_disp_tol = 2e-3
+            calculator.param.elec_energy_tol = 2e-6
             calculator.param.geom_max_iter = 100
             calculator.cell.kpoint_mp_grid = krelax
-            calculator.cell.fix_com = False
             calculator.cell.fix_all_cell = True
             
         else:
@@ -127,7 +131,7 @@ def find_geo(folder):
 
     return geo
         
-def relax(krelax=[6, 6, 6], fmax=0.01, geo=None, calc='dftbp'):
+def relax(krelax=[6, 6, 6], fmax=0.05, geo=None, calc='dftbp'):
     folder = os.getcwd()
 
     if geo:
