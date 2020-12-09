@@ -105,6 +105,7 @@ def run_castep_md(atoms, T, steps, time_step, dump_interval):
         calculator.param.md_temperature = str(T) + ' K'
         calculator.param.md_thermostat = 'nose-hoover'
         calculator.param.md_elec_energy_tol = 1e-6
+        calculator.param.md_sample_iter = 1
         calculator.cell.kpoint_mp_grid = '1 1 1'
         calculator.cell.fix_com = False
         calculator.cell.fix_all_cell = True

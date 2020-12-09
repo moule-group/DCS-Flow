@@ -42,7 +42,7 @@ def write_params(task, e_unit):
  
                 '## E parameters\n'
                 'MINE    =      8.00  # Energy range (minimum) to calculate [eu]\n'
-                'MAXE    =   2000.00  # Energy range (maximum) to calculate [eu]\n'
+                'MAXE    =   5000.00  # Energy range (maximum) to calculate [eu]\n'
                 'dE      =      1.00  # Energy bin size [eu]\n'
                 'ECUT    =     8.000  # Exclude modes below this cutoff energy [eu]\n'
                 'ERES    =   0.25E+01  0.50E-02  0.10E-06  # E resolution coeff\n'
@@ -100,8 +100,8 @@ def plot():
     # normint = ((int - min(int[200:])) / (max(int[200:]) - min(int[200:])))
 
     plt.plot(E, normint)
-    # plt.xlabel('Energy (cm$^{-1}$)')
-    plt.xlabel('Energy (meV)')
+    plt.xlabel('Energy (cm$^{-1}$)')
+    # plt.xlabel('Energy (meV)')
     plt.ylabel('Normalized intensity')
     # plt.xlim(0, 3500)
     # plt.ylim(0, 1)
