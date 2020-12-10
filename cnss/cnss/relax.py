@@ -39,7 +39,7 @@ def relax_structure(krelax, fmax, geo, mode):
                               atoms=atoms,
                               Driver_='ConjugateGradient',
                               Driver_MovedAtoms='1:-1',
-                              Driver_MaxForceComponent=fmax,
+                              Driver_ConjugateGradient='MaxForceComponent[eV/AA] = {}' .format(fmax),
                               Driver_MaxSteps=100,
                               Driver_LatticeOpt='Yes',
                               Driver_Isotropic='Yes',
@@ -60,7 +60,7 @@ def relax_structure(krelax, fmax, geo, mode):
                               atoms=atoms,
                               Driver_='ConjugateGradient',
                               Driver_MovedAtoms='1:-1',
-                              Driver_MaxForceComponent=fmax,
+                              Driver_ConjugateGradient='MaxForceComponent[eV/AA] = {}' .format(fmax),
                               Driver_MaxSteps=100,
                               Driver_LatticeOpt='Yes',
                               Driver_Isotropic='Yes',
@@ -105,10 +105,10 @@ def relax_structure(krelax, fmax, geo, mode):
             calculator._label = 'relax'
             calculator._set_atoms = True
             calculator.param.task = 'GeometryOptimization'
-            # calculator.param.geom_method = 'Delocalized'
             calculator.param.xc_functional = 'PBE'
-            # calculator.param.cut_off_energy = 520
             calculator.param.basis_precision = 'MEDIUM'
+            calculator.param.geom_method = 'BFGS'
+            calculator.param.cut_off_energy = 520
             calculator.param.num_dump_cycles = 0
             calculator.param.geom_force_tol = fmax
             calculator.param.geom_energy_tol = 2e-5
@@ -116,7 +116,8 @@ def relax_structure(krelax, fmax, geo, mode):
             calculator.param.elec_energy_tol = 2e-6
             calculator.param.geom_max_iter = 100
             calculator.cell.kpoint_mp_grid = krelax
-            calculator.cell.fix_all_cell = True
+            # calculator.cell.fix_com = False
+            # calculator.cell.fix_all_cell = True
             
         else:
             raise NotImplementedError('{} calculator not implemented' .format(mode))

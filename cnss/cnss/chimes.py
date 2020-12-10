@@ -48,7 +48,6 @@ def dftb_fmatch_input(T, frame):
             dft_energy = frame.get_total_energy()
 
             calc = Dftb(kpts=(1,1,1),
-                        # Hamiltonian_PolynomialRepulsive='{C-C = Yes}',
                         Hamiltonian_SCC='Yes',
                         Hamiltonian_MaxAngularMomentum_='',
                         Hamiltonian_MaxAngularMomentum_C='p',
@@ -228,13 +227,13 @@ def run_md_input(folder):
                     '# CMPRFRC # ! Compare computed forces against a set of input forces? ...If true, provide name of the file containing the forces for comparison \n'
 	            '        false \n'
                     '# TIMESTP # ! In fs \n'
-	            '        0.5 \n'
+	            '        1.0 \n'
                     '# N_MDSTP # ! Total number of MD steps \n'
 	            '        10000 \n'
                     '# NLAYERS # ! x,y, and z supercells.. small unit cell should have >= 1 \n'
-	            '        0 \n'
+	            '        1 \n'
                     '# USENEIG # ! Use a neighbor list? HIGHLY reccommended when NLAYERS > 0 \n'
-	            '        false \n'
+	            '        true \n'
                     '# PRMFILE # ! Parameter file (i.e. params.txt) \n'
 	            '        params.txt \n'
                     '# CRDFILE # ! Coordinate file (.xyz) or force file (.xyzf) \n'
