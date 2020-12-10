@@ -115,7 +115,10 @@ def calculate_forces(kforce, mode, dir):
                                   Hamiltonian_SCC='Yes',
                                   Hamiltonian_MaxAngularMomentum_='',
                                   Hamiltonian_MaxAngularMomentum_C='p',
+                                  Hamiltonian_MaxAngularMomentum_O='p',
                                   Hamiltonian_MaxAngularMomentum_H='s',
+                                  Hamiltonian_MaxAngularMomentum_N='p',
+                                  Hamiltonian_MaxAngularMomentum_S='d',
                                   Analysis_='',
                                   Analysis_CalculateForces='Yes',
                                   Options_WriteResultsTag='Yes')
@@ -128,7 +131,10 @@ def calculate_forces(kforce, mode, dir):
                                   Hamiltonian_SCC='Yes',
                                   Hamiltonian_MaxAngularMomentum_='',
                                   Hamiltonian_MaxAngularMomentum_C='p',
+                                  Hamiltonian_MaxAngularMomentum_O='p',
                                   Hamiltonian_MaxAngularMomentum_H='s',
+                                  Hamiltonian_MaxAngularMomentum_N='p',
+                                  Hamiltonian_MaxAngularMomentum_S='d',
                                   Analysis_='',
                                   Analysis_CalculateForces='Yes')
                 calculator.write_dftb_in(filename='dftb_in.hsd')

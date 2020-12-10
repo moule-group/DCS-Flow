@@ -40,15 +40,18 @@ def relax_structure(krelax, fmax, geo, mode):
                               Driver_='ConjugateGradient',
                               Driver_MovedAtoms='1:-1',
                               Driver_empty='MaxForceComponent[eV/AA] = {}' .format(fmax),
-                              Driver_MaxSteps=100,
-                              # Driver_LatticeOpt='Yes',
-                              # Driver_Isotropic='Yes',
-                              # Driver_AppendGeometries='Yes',
+                              Driver_MaxSteps=1000,
+                              Driver_LatticeOpt='Yes',
+                              Driver_Isotropic='Yes',
+                              Driver_AppendGeometries='Yes',
                               kpts=krelax,
                               Hamiltonian_SCC='Yes',
                               Hamiltonian_MaxAngularMomentum_='',
                               Hamiltonian_MaxAngularMomentum_C='p',
-                              Hamiltonian_MaxAngularMomentum_H='s')
+                              Hamiltonian_MaxAngularMomentum_O='p',
+                              Hamiltonian_MaxAngularMomentum_H='s',
+                              Hamiltonian_MaxAngularMomentum_N='p',
+                              Hamiltonian_MaxAngularMomentum_S='d')
 
         elif mode == 'chimes':
             from ase.calculators.dftb import Dftb
@@ -60,13 +63,19 @@ def relax_structure(krelax, fmax, geo, mode):
                               Driver_='ConjugateGradient',
                               Driver_MovedAtoms='1:-1',
                               Driver_empty='MaxForceComponent[eV/AA] = {}' .format(fmax),
-                              Driver_MaxSteps=100,
+                              Driver_MaxSteps=1000,
+                              Driver_LatticeOpt='Yes',
+                              Driver_Isotropic='Yes',
+                              Driver_AppendGeometries='Yes',
                               kpts=krelax,
                               Hamiltonian_ChIMES='Yes',
                               Hamiltonian_SCC='Yes',
                               Hamiltonian_MaxAngularMomentum_='',
                               Hamiltonian_MaxAngularMomentum_C='p',
-                              Hamiltonian_MaxAngularMomentum_H='s')
+                              Hamiltonian_MaxAngularMomentum_O='p',
+                              Hamiltonian_MaxAngularMomentum_H='s',
+                              Hamiltonian_MaxAngularMomentum_N='p',
+                              Hamiltonian_MaxAngularMomentum_S='d')
 
         elif mode == 'vasp':
             from ase.calculators.vasp import Vasp
@@ -74,7 +83,7 @@ def relax_structure(krelax, fmax, geo, mode):
                               prec='Accurate',
                               encut=520,
                               nsw=100,
-                              isif=2,
+                              isif=3,
                               ismear=0,
                               ibrion=1,
                               ediff=1e-8,
