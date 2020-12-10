@@ -98,6 +98,8 @@ def run_castep_md(atoms, T, steps, time_step, dump_interval):
         calculator.param.cut_off_energy = 520
         calculator.param.opt_strategy = 'speed'
         calculator.param.calculate_stress = True
+        calculator.param.md_sample_iter = 50
+        calculator.param.popn_calculate = False
         calculator.param.num_dump_cycles = 0
         calculator.param.md_num_iter = steps
         calculator.param.md_delta_t = str(time_step) + ' fs'
