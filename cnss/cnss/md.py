@@ -98,7 +98,7 @@ def run_castep_md(atoms, T, steps, time_step, dump_interval):
         calculator.param.cut_off_energy = 520
         calculator.param.opt_strategy = 'speed'
         calculator.param.calculate_stress = True
-        calculator.param.md_sample_iter = 50
+        calculator.param.md_sample_iter = int(steps / 50)
         calculator.param.popn_calculate = False
         calculator.param.num_dump_cycles = 0
         calculator.param.md_num_iter = steps
@@ -107,7 +107,6 @@ def run_castep_md(atoms, T, steps, time_step, dump_interval):
         calculator.param.md_temperature = str(T) + ' K'
         calculator.param.md_thermostat = 'nose-hoover'
         calculator.param.md_elec_energy_tol = 1e-6
-        calculator.param.md_sample_iter = 1
         calculator.cell.kpoint_mp_grid = '1 1 1'
         calculator.cell.fix_com = False
         calculator.cell.fix_all_cell = True
