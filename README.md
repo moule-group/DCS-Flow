@@ -42,21 +42,22 @@ uses specified mode (dftbp or vasp) to optmize geometry, returns if relax.out fi
 ```
 relax(krelax=[6, 6, 6], fmax=0.01, geo=None, calc='dftbp')
 ```
-krelax: Number of k points for relaxation, e.g., 6 6 6 \n
-fmax: Convergence criteria for forces \n
-geo: Name of geometry file for structure (cif or gen extensions) \n 
-calc: Calculator used; dftbp or vasp \n
-
+krelax: Number of k points for relaxation, e.g., 6 6 6  
+fmax: Convergence criteria for forces  
+geo: Name of geometry file for structure (cif or gen extensions)  
+calc: Calculator used; dftbp or vasp  
+  
 THEN for example, i'd want to include the parameters, would they go elsewhere or under the func like i have 
 
         
 #### Workflow
 
-```write_params(task: int, e_unit: int)```
-        writes out.params file
-``` run_oclimax(params)```
-        creates plot of Energy versus normalized intensity 
-        params: JSON file with parameters for workflow
+```write_params(task: int, e_unit: int)```  
+        writes out.params file  
+``` run_oclimax(params)```  
+        creates plot of Energy versus normalized intensity  
+        params: JSON file with parameters for workflow  
+        
 
 
 
