@@ -2,9 +2,13 @@ import os
 import argparse
 from cnss import mkdir, chdir
 from shutil import copyfile
+import pandas as pd
+import matplotlib.pyplot as plt
+import glob
 
 class CLICommand:
     'Run oclimax simulation'
+    # creates class to define help function?? Wouldn't this be the same as __doc__ or """ explanation """? Does it have another purpose?
 
     @staticmethod
     def add_arguments(parser):
@@ -24,8 +28,10 @@ class CLICommand:
         oclimax(args.params, args.task, args.e_unit)
 
 
-def write_params(task, e_unit):
-    with open('out.params', 'w') as f:
+def write_params(task: int, e_unit: int): -> dict # added type, possible to add range?
+    """ writes out.params file (where is this used in code? or is this the params folder? kinda confused?)
+        inputs: task= 0:inc approx. 1:coh+inc. 2:single-xtal Q-E. 3:single-xtal Q-Q, e_unit= 0:cm-1 1:meV 2:THz"""
+    with open('out.params', 'w') as f: # sets f as command to open and write into file
         f.write('## General parameters \n'
                 'TASK    =         {} # 0:inc approx. 1:coh+inc. 2:single-xtal Q-E. 3:single-xtal Q-Q\n'
                 'INSTR   =         0  # 0:VISION 1:indirect traj 2:direct traj 3:Q-E or Q-Q mesh\n'
@@ -78,22 +84,21 @@ def write_params(task, e_unit):
                 'W_WIDTH =     150.0  # Energy width [eu] of initial wing)\n' .format(task, e_unit))
     
 
-def run_oclimax(params):
-    
+def run_oclimax(params): #-> need to clarify purpose
+    """converts input mesh to ocl.out"""
     os.system('oclimax convert -yaml mesh.yaml -o > ocl.out')
     os.system('oclimax run out.oclimax {} >> ocl.out' .format(params))
 
-def plot():
-    import pandas as pd
-    import matplotlib.pyplot as plt
-    import glob
-
+def plot(): -> plot
+    """ creates plot using ______csv file and saves as figure"""
+    # uses glob to find a csv file type, reads csv (which file should this be?), plots energy v norm intensity
+    # moved libraries install tp top
     file = glob.glob('*.csv')
     df = pd.read_csv(file[0], skiprows=4, header=None)
-    E = df.iloc[:, 0]
-    totback = df.iloc[:, 1]
-    totfor = df.iloc[:, 2]
-    int = (totback + totfor) / 2
+    E = df.iloc[:, 0] # E= first column of df
+    totback = df.iloc[:, 1] # totback= second column, intensity?
+    totfor = df.iloc[:, 2] # totfor= third column
+    int = (totback + totfor) / 2 # finds average of totback and totfor
     normint = int
     # normint = ((int - min(int[200:])) / (max(int[200:]) - min(int[200:])))
 
@@ -105,17 +110,24 @@ def plot():
     plt.savefig(file[0][:-4]+'.png', dpi=300, bbox_inches='tight', pad_inches=0)
 
 
-def oclimax(params=None, task=1, e_unit=0):
-    folder = os.getcwd()
-    mkdir(folder + '/3-oclimax')
-    copyfile(folder + '/2-phonons/mesh.yaml', folder + '/3-oclimax/mesh.yaml')
+def oclimax(params=None, task=1:int, e_unit=0:int):
+    """creates folder 3-oclimax within working directory and write params file using default values if no dict exist in folder"""
+    # overall function (the one imported by main), combines the other oclimax functions
+    folder = os.getcwd() #sets folder to current working directory of process
+    mkdir(folder + '/3-oclimax') # creates folder with name 3-oclimax
+    copyfile(folder + '/2-phonons/mesh.yaml', folder + '/3-oclimax/mesh.yaml') # copies file from 2-phonons source to 3-oclimax folder just created
 
-    with chdir(folder + '/3-oclimax'):
+    with chdir(folder + '/3-oclimax'): # changes directory to 3-oclimax folder
         if not params:
+        # if file is not params type (dict) (when it hasn't been created already) then it will write params file using
             write_params(task, e_unit)
             params = 'out.params'
-        run_oclimax(params)
+        run_oclimax(params) 
         plot()
 
 if __name__ == '__main__':
     oclimax()
+    # if this is a module, whenever the module is called, this runs
+    # essentially syntax to make it clear this file is a module and not the main one that imports the module files
+
+

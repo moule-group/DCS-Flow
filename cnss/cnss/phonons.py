@@ -22,7 +22,7 @@ class CLICommand:
         add('--kforce',
             help='Number of k points for force calculation, e. g., 1 1 1',
             default=[1, 1, 1],
-            nargs=3,
+            nargs=3, #number of arguments
             type=int)
         add('--mesh',
             help='Size of mesh along each dimension, e. g., 8 8 8',
@@ -41,7 +41,7 @@ def generate_supercell(dim, mode, d=0.01):
     from phonopy.interface.calculator import write_supercells_with_displacements
     from phonopy.interface.calculator import get_default_physical_units
 
-    if mode == 'dftbp':
+    if mode == 'dftbp': #defined by calc?
         unitcell, info = read_crystal_structure('geo.gen', interface_mode=mode)
     if mode == 'vasp':
         unitcell, info = read_crystal_structure('POSCAR', interface_mode=mode)

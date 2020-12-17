@@ -3,14 +3,17 @@ import glob
 from ase.optimize import BFGS
 from ase.io import read
 from cnss import mkdir, chdir, out
+import pandas as pd
 
 
 class CLICommand:
+    # adding the argument/subcommand and help explanation
     'Optimize structure'
 
     @staticmethod
     def add_arguments(parser):
-        add = parser.add_argument
+        # defining function add_arguments with argument=parser, not sure where parser comes from
+        add = parser.add_argument # parser=object with add_argument attribute
         add('--calc', help='Calculator used. Options are dftbp or vasp', default='dftbp')
         add('--geo', help='Name of geometry file for structure (cif or gen extensions)')
         add('--krelax',
@@ -25,9 +28,8 @@ class CLICommand:
     def run(args):
         relax(args.krelax, args.fmax, args.geo, args.calc)
 
-def relax_done(fmax):
-    import pandas as pd
-
+def relax_done(fmax:int): # -> boolean, idk if type hinting necessary for functions like this that a user wouldnt see
+    """checks for relax.out file, if relax.out files exists = True """
     try:
         df = pd.read_csv('relax.out', sep='\s+')
         if (df['fmax'] < fmax).any():
@@ -38,7 +40,8 @@ def relax_done(fmax):
         return False
 
     
-def relax_structure(krelax, fmax, geo, mode):
+def relax_structure(krelax, fmax, geo, mode): # -> geom optimized struct
+    """uses specified method to optimize molecule geometry """
     if relax_done(fmax=fmax):
         return
     else:
@@ -74,17 +77,18 @@ def relax_structure(krelax, fmax, geo, mode):
         opt.run(fmax=fmax)
 
         
-def relax(krelax=[6, 6, 6], fmax=0.01, geo=None, calc='dftbp'):
-    folder = os.getcwd()
-    if not geo:
+def relax(krelax=[6, 6, 6], fmax=0.01:int, geo=None, calc='dftbp':str): #sets default values, i added the :int and :str but dunno if necessary for this sort of thing
+    """ find molecule file, checks in geo opt done, """
+    folder = os.getcwd() #sets folder = current wd
+    if not geo: # if geo file doesn't exist?, finds molecule file (cif, gen, etc)
         geo = glob.glob(folder + '/*.cif') + \
             glob.glob(folder + '/*.gen') + \
             glob.glob(folder + '/*.sdf') + \
             glob.glob(folder + '/*.xyz')
 
-    mkdir(folder + '/1-optimization')
+    mkdir(folder + '/1-optimization') # creates 1-optimization folder
     with chdir(folder + '/1-optimization'):
-        with out('relax'):
+        with out('relax'): # runs relax_structure
             relax_structure(krelax=krelax, fmax=fmax, geo=geo[0], mode=calc)
 
 if __name__ == '__main__':
