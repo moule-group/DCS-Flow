@@ -31,15 +31,21 @@ CNSS is a collection of the following scripts:
 (wouldn't necessarily include these, maybe for my thesis, but as an example )
 
  #### Relax 
- ```relax_done(fmax)```
-        checks if relax.out file already exists (geom opt already done)
-```relax_structure(krelax, fmax, geo, mode)```
-        uses specified mode (dftbp or vasp) to optmize geometry, returns if relax.out file already exists 
-```relax(krelax=[6, 6, 6], fmax=0.01, geo=None, calc='dftbp')```
-        krelax: Number of k points for relaxation, e.g., 6 6 6
-        fmax: Convergence criteria for forces
-        geo: Name of geometry file for structure (cif or gen extensions)
-        calc: Calculator used; dftbp or vasp
+ ```
+ relax_done(fmax)
+ ```
+checks if relax.out file already exists (geom opt already done)
+```
+relax_structure(krelax, fmax, geo, mode)
+```
+uses specified mode (dftbp or vasp) to optmize geometry, returns if relax.out file already exists 
+```
+relax(krelax=[6, 6, 6], fmax=0.01, geo=None, calc='dftbp')
+```
+krelax: Number of k points for relaxation, e.g., 6 6 6 \n
+fmax: Convergence criteria for forces \n
+geo: Name of geometry file for structure (cif or gen extensions) \n 
+calc: Calculator used; dftbp or vasp \n
 
 THEN for example, i'd want to include the parameters, would they go elsewhere or under the func like i have 
 
