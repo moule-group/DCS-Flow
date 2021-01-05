@@ -40,7 +40,7 @@ def relax_structure(krelax, fmax, geo, mode):
                               Driver_='ConjugateGradient',
                               Driver_MovedAtoms='1:-1',
                               Driver_ConjugateGradient='MaxForceComponent[eV/AA] = {}' .format(fmax),
-                              Driver_MaxSteps=100,
+                              Driver_MaxSteps=1000,
                               Driver_LatticeOpt='Yes',
                               Driver_Isotropic='Yes',
                               Driver_AppendGeometries='Yes',
@@ -61,7 +61,7 @@ def relax_structure(krelax, fmax, geo, mode):
                               Driver_='ConjugateGradient',
                               Driver_MovedAtoms='1:-1',
                               Driver_ConjugateGradient='MaxForceComponent[eV/AA] = {}' .format(fmax),
-                              Driver_MaxSteps=100,
+                              Driver_MaxSteps=1000,
                               Driver_LatticeOpt='Yes',
                               Driver_Isotropic='Yes',
                               Driver_AppendGeometries='Yes',
@@ -114,10 +114,16 @@ def relax_structure(krelax, fmax, geo, mode):
             calculator.param.geom_energy_tol = 2e-5
             calculator.param.geom_disp_tol = 2e-3
             calculator.param.elec_energy_tol = 2e-6
-            calculator.param.geom_max_iter = 100
+            calculator.param.geom_max_iter = 1000
             calculator.cell.kpoint_mp_grid = krelax
             # calculator.cell.fix_com = False
             # calculator.cell.fix_all_cell = True
+
+            ##### tips params #####
+            calculator.param.fix_occupancy = True
+            calculator.param.sedc_apply = True
+            calculator.param.sedc_scheme = 'MBD*'
+            
             
         else:
             raise NotImplementedError('{} calculator not implemented' .format(mode))
