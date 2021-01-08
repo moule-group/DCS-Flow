@@ -57,7 +57,7 @@ def run_vasp_md(atoms, T, steps, time_step, dump_interval):
                           algo='Fast', # electronic minimisation algotithm
                           lreal='Auto', # operators in real space
                           ismear=0, # Gaussian smearing
-                          sigma=0.1, # width of smearing in eV
+                          sigma=0.05, # width of smearing in eV
                           # ismear=-1, # Fermi smearing
                           # sigma=T*units.kB, # width of smearing in eV
                           isym=0, # no symmetry usage                                                   
@@ -108,7 +108,7 @@ def run_castep_md(atoms, T, steps, time_step, dump_interval):
         calculator.param.md_thermostat = 'nose-hoover'
         calculator.param.md_elec_energy_tol = 1e-6
         calculator.cell.kpoint_mp_grid = '1 1 1'
-        calculator.cell.fix_com = False
+        calculator.cell.fix_com = True
         calculator.cell.fix_all_cell = True
         atoms.set_calculator(calculator)
         atoms.get_potential_energy()

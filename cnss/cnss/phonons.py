@@ -120,6 +120,7 @@ def calculate_forces(kforce, mode, dir):
                 calculator = Dftb(kpts=kforce,
                                   Hamiltonian_ChIMES='Yes',
                                   Hamiltonian_SCC='Yes',
+                                  Hamiltonian_SCCTolerance=1e-7,
                                   Hamiltonian_MaxAngularMomentum_='',
                                   Hamiltonian_MaxAngularMomentum_C='p',
                                   Hamiltonian_MaxAngularMomentum_H='s',
@@ -133,6 +134,7 @@ def calculate_forces(kforce, mode, dir):
                 from ase.calculators.dftb import Dftb
                 calculator = Dftb(kpts=kforce,
                                   Hamiltonian_SCC='Yes',
+                                  Hamiltonian_SCCTolerance=1e-7,
                                   Hamiltonian_MaxAngularMomentum_='',
                                   Hamiltonian_MaxAngularMomentum_C='p',
                                   Hamiltonian_MaxAngularMomentum_H='s',
@@ -150,10 +152,10 @@ def calculate_forces(kforce, mode, dir):
                                   ibrion=-1,
                                   ediff=1e-8,
                                   ismear=0,
-                                  sigma=0.1,
+                                  sigma=0.05,
                                   nwrite=1,
                                   ncore=16,
-                                  lreal='Auto',
+                                  lreal=False,
                                   lcharg=False,
                                   lwave=False,
                                   xc='pbe',
@@ -194,11 +196,11 @@ def multi_forces(kforce, mode, mpi=False):
     else:
         if mpi:
             from mpi4py.futures import MPIPoolExecutor
-            with MPIPoolExecutor(max_workers=68, main=False) as executor:
+            with MPIPoolExecutor(max_workers=64, main=False) as executor:
                 executor.map(command, dirlist)
         else:
             from multiprocessing import Pool        
-            with Pool(processes=68) as pool:
+            with Pool(processes=64) as pool:
                 pool.map(command, dirlist)
 
     

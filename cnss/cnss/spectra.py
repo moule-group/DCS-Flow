@@ -52,7 +52,7 @@ def ir():
     calculator._rename_existing_dir = False
     calculator._export_settings = True
     calculator._label = 'phonons'
-    calculator.param.task = 'SinglePoint'
+    calculator.param.task = 'Phonon'
     calculator.param.xc_functional = 'PBE'
     calculator.param.cut_off_energy = 520
     calculator.param.elec_energy_tol = 1e-8

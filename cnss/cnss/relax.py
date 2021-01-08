@@ -37,15 +37,15 @@ def relax_structure(krelax, fmax, geo, mode):
             from ase.calculators.dftb import Dftb
             calculator = Dftb(label=formula,
                               atoms=atoms,
-                              Driver_='ConjugateGradient',
+                              Driver_='LBFGS',
                               Driver_MovedAtoms='1:-1',
                               Driver_ConjugateGradient='MaxForceComponent[eV/AA] = {}' .format(fmax),
                               Driver_MaxSteps=1000,
                               Driver_LatticeOpt='Yes',
                               Driver_Isotropic='Yes',
-                              Driver_AppendGeometries='Yes',
                               kpts=krelax,
                               Hamiltonian_SCC='Yes',
+                              Hamiltonian_SCCTolerance=1e-7,
                               Hamiltonian_Filling='Fermi {{Temperature [Kelvin] = {T} }}' .format(T=5),
                               Hamiltonian_MaxAngularMomentum_='',
                               Hamiltonian_MaxAngularMomentum_C='p',
@@ -58,16 +58,16 @@ def relax_structure(krelax, fmax, geo, mode):
             run_md_input(folder + '/..')
             calculator = Dftb(label=formula,
                               atoms=atoms,
-                              Driver_='ConjugateGradient',
+                              Driver_='LBFGS',
                               Driver_MovedAtoms='1:-1',
                               Driver_ConjugateGradient='MaxForceComponent[eV/AA] = {}' .format(fmax),
                               Driver_MaxSteps=1000,
                               Driver_LatticeOpt='Yes',
                               Driver_Isotropic='Yes',
-                              Driver_AppendGeometries='Yes',
                               kpts=krelax,
                               Hamiltonian_ChIMES='Yes',
                               Hamiltonian_SCC='Yes',
+                              Hamiltonian_SCCTolerance=1e-7,
                               Hamiltonian_Filling='Fermi {{Temperature [Kelvin] = {T} }}' .format(T=5),
                               Hamiltonian_MaxAngularMomentum_='',
                               Hamiltonian_MaxAngularMomentum_C='p',
@@ -84,10 +84,10 @@ def relax_structure(krelax, fmax, geo, mode):
                               ibrion=1,
                               ediff=1e-8,
                               ediffg=-fmax,
-                              sigma=0.1,
+                              sigma=0.05,
                               nwrite=1,
                               ncore=16,
-                              lreal='Auto',
+                              lreal=False,
                               lcharg=False,
                               lwave=False,
                               xc='pbe',
@@ -116,8 +116,6 @@ def relax_structure(krelax, fmax, geo, mode):
             calculator.param.elec_energy_tol = 2e-6
             calculator.param.geom_max_iter = 1000
             calculator.cell.kpoint_mp_grid = krelax
-            # calculator.cell.fix_com = False
-            # calculator.cell.fix_all_cell = True
 
             ##### tips params #####
             calculator.param.fix_occupancy = True

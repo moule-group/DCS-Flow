@@ -96,15 +96,10 @@ def plot():
     totback = df.iloc[:, 1]
     totfor = df.iloc[:, 2]
     int = (totback + totfor) / 2
-    normint = int
-    # normint = ((int - min(int[200:])) / (max(int[200:]) - min(int[200:])))
 
-    plt.plot(E, normint)
+    plt.plot(E, int)
     plt.xlabel('Energy (cm$^{-1}$)')
-    # plt.xlabel('Energy (meV)')
     plt.ylabel('Normalized intensity')
-    # plt.xlim(0, 3500)
-    # plt.ylim(0, 1)
     plt.savefig(file[0][:-4]+'.png', dpi=300, bbox_inches='tight', pad_inches=0)
 
 
