@@ -113,6 +113,7 @@ def calculate_forces(kforce, mode, dir):
                 calculator = Dftb(kpts=kforce,
                                   Hamiltonian_ChIMES='Yes',
                                   Hamiltonian_SCC='Yes',
+                                  Hamiltonian_Filling='Fermi {{Temperature [Kelvin] = {T} }}' .format(T=5),
                                   Hamiltonian_MaxAngularMomentum_='',
                                   Hamiltonian_MaxAngularMomentum_C='p',
                                   Hamiltonian_MaxAngularMomentum_O='p',
@@ -129,6 +130,7 @@ def calculate_forces(kforce, mode, dir):
                 from ase.calculators.dftb import Dftb
                 calculator = Dftb(kpts=kforce,
                                   Hamiltonian_SCC='Yes',
+                                  Hamiltonian_Filling='Fermi {{Temperature [Kelvin] = {T} }}' .format(T=5),
                                   Hamiltonian_MaxAngularMomentum_='',
                                   Hamiltonian_MaxAngularMomentum_C='p',
                                   Hamiltonian_MaxAngularMomentum_O='p',
