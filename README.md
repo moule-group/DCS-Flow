@@ -2,10 +2,10 @@
 
 ## Contents
 
-* Installation
-* Workflow
-* Documentation
-* Examples 
+* [Installation](https://gitlab.com/lucassamir1/adam-moule/-/tree/MacOSInstall#installation) 
+* [Workflow](https://gitlab.com/lucassamir1/adam-moule/-/tree/MacOSInstall#workflow)
+* [Documentation](https://gitlab.com/lucassamir1/adam-moule/-/tree/MacOSInstall#documentation)
+* [Examples](https://gitlab.com/lucassamir1/adam-moule/-/tree/MacOSInstall#examples)
 
 
 ## Installation 
@@ -16,6 +16,7 @@
 
 
 ## Workflow 
+TODO: explain parameters
 
 
 ## Documentation
@@ -48,7 +49,7 @@ THEN for example, i'd want to include the parameters, would they go elsewhere or
 
 * ```write_params(task: int, e_unit: int)```  
     writes out.params file  
-* ``` run_oclimax(params)```  
+* ```run_oclimax(params)```  
     creates plot of Energy versus normalized intensity  
     params: JSON file with parameters for workflow  
         
@@ -58,3 +59,6 @@ THEN for example, i'd want to include the parameters, would they go elsewhere or
 
 
 ## Examples
+``` python
+show snippets of code (what they input and outputs)
+```

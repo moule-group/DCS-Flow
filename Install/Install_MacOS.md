@@ -92,14 +92,14 @@ git clone https://gitlab.com/lucassamir1/adam-moule.git
 Add these lines to your configuration file (.bashrc for Linux, ~/.bash_profile for macOS). The following code uses example paths and must be edited according to your system.
 
 ```
-export DFTB_PREFIX=/Users/my_name/slako/mio/mio-1-1/    #(Path to Slako files)
-export ASE_DFTB_COMMAND=/Users/my_name/dftbplus/build/install/bin/dftb+ >PREFIX.out     #(Path to dftb+)
-export PATH=/Users/my_name/dftbplus/build/install/bin:$PATH     #(Path to dftb+)
-export PYTHONPATH=/Users/my_name/dftbplus/build/install/bin/dftb+:$PYTHONPATH   #(Python path to dftb+)
-export PATH=/Users/my_name/adam-moule/cnss/cnss:$PATH   #(Path to CNSS file)
-export PYTHONPATH=/Users/my_name/adam-moule/cnss:$PYTHONPATH    #(Python path to CNSS file)
-export PATH=/Users/my_name/.local/bin:$PATH     #(Path to ase file)
-export PYTHONPATH=/Users/my_name/.local/bin/ase:$PYTHONPATH     #(Python path to ase file)
+export DFTB_PREFIX=/Users/my_name/slako/mio/mio-1-1/                                #(Path to Slako files)
+export ASE_DFTB_COMMAND=/Users/my_name/dftbplus/build/install/bin/dftb+ >PREFIX.out #(Path to dftb+)
+export PATH=/Users/my_name/dftbplus/build/install/bin:$PATH                         #(Path to dftb+)
+export PYTHONPATH=/Users/my_name/dftbplus/build/install/bin/dftb+:$PYTHONPATH       #(Python path to dftb+)
+export PATH=/Users/my_name/adam-moule/cnss/cnss:$PATH                               #(Path to CNSS file)
+export PYTHONPATH=/Users/my_name/adam-moule/cnss:$PYTHONPATH                        #(Python path to CNSS file)
+export PATH=/Users/my_name/.local/bin:$PATH                                         #(Path to ase file)
+export PYTHONPATH=/Users/my_name/.local/bin/ase:$PYTHONPATH                         #(Python path to ase file)
 
 ```
 
