@@ -44,33 +44,34 @@ def dftb_fmatch_input(T, frame):
             positions = frame.get_positions()
     
             dft_forces = frame.get_forces()
-            dft_stress = frame.get_stress()
+            # dft_stress = frame.get_stress()
             dft_energy = frame.get_total_energy()
 
             calc = Dftb(kpts=(1,1,1),
-                        # Hamiltonian_PolynomialRepulsive='{C-C = Yes}',
                         Hamiltonian_SCC='Yes',
                         Hamiltonian_MaxAngularMomentum_='',
                         Hamiltonian_MaxAngularMomentum_C='p',
                         Hamiltonian_MaxAngularMomentum_H='s',
-                Hamiltonian_Filling='Fermi {{Temperature [K] = {T} }}' .format(T=T))
-            calc.calculate(frame, properties=['energy', 'forces', 'stress'])
+                        Hamiltonian_Filling='Fermi {{Temperature [Kelvin] = {T} }}' .format(T=T))
+            # calc.calculate(frame, properties=['energy', 'forces', 'stress'])
+            calc.calculate(frame, properties=['energy', 'forces'])
 
             dftb_forces = calc.results['forces']
-            dftb_stress = calc.results['stress']
+            # dftb_stress = calc.results['stress']
             dftb_energy = calc.results['energy']
 
             diff_forces = (dft_forces - dftb_forces) / Hartree * Bohr
 
-            diff_stress = -(dft_stress - dftb_stress)[:3] / GPa
-            diff_stress = ' ' .join(map(str, diff_stress))
+            # diff_stress = -(dft_stress - dftb_stress)[:3] / GPa
+            # diff_stress = ' ' .join(map(str, diff_stress))
 
             diff_energy = (dft_energy - dftb_energy) * mol / kcal
 
             frame_fmatch = []
 
             frame_fmatch.append('{} \n' .format(n))
-            frame_fmatch.append('{} {} {} \n' .format(cell, diff_stress, diff_energy))
+            # frame_fmatch.append('{} {} {} \n' .format(cell, diff_stress, diff_energy))
+            frame_fmatch.append('{} {} \n' .format(cell, diff_energy))
             for s,p,f in zip(symbols, positions, diff_forces):
                 p = ' ' .join(map(str, p))
                 f = ' ' .join(map(str, f))
@@ -86,7 +87,7 @@ def multi_fmatch(T):
     traj = Trajectory('dft.traj')
 
     command = partial(dftb_fmatch_input, T)
-    with Pool(processes=50) as pool:
+    with Pool(processes=4) as pool:
         results = pool.map(command, list(traj))
 
     with open('dft-dftb.xyzf', 'a') as file:
@@ -226,7 +227,7 @@ def run_md_input(folder):
                     '# CMPRFRC # ! Compare computed forces against a set of input forces? ...If true, provide name of the file containing the forces for comparison \n'
 	            '        false \n'
                     '# TIMESTP # ! In fs \n'
-	            '        0.5 \n'
+	            '        1.0 \n'
                     '# N_MDSTP # ! Total number of MD steps \n'
 	            '        10000 \n'
                     '# NLAYERS # ! x,y, and z supercells.. small unit cell should have >= 1 \n'

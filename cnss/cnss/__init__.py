@@ -22,7 +22,7 @@ def mktempdir():
         yield temp_dir
     finally:
         shutil.rmtree(temp_dir)
-    
+
 @contextmanager
 def chdir(folder):
     dir = os.getcwd()

@@ -42,7 +42,7 @@ def write_params(task, e_unit):
  
                 '## E parameters\n'
                 'MINE    =      8.00  # Energy range (minimum) to calculate [eu]\n'
-                'MAXE    =   2000.00  # Energy range (maximum) to calculate [eu]\n'
+                'MAXE    =   5000.00  # Energy range (maximum) to calculate [eu]\n'
                 'dE      =      1.00  # Energy bin size [eu]\n'
                 'ECUT    =     8.000  # Exclude modes below this cutoff energy [eu]\n'
                 'ERES    =   0.25E+01  0.50E-02  0.10E-06  # E resolution coeff\n'
@@ -96,15 +96,10 @@ def plot():
     totback = df.iloc[:, 1]
     totfor = df.iloc[:, 2]
     int = (totback + totfor) / 2
-    normint = int
-    # normint = ((int - min(int[200:])) / (max(int[200:]) - min(int[200:])))
 
-    plt.plot(E, normint)
-    # plt.xlabel('Energy (cm$^{-1}$)')
-    plt.xlabel('Energy (meV)')
+    plt.plot(E, int)
+    plt.xlabel('Energy (cm$^{-1}$)')
     plt.ylabel('Normalized intensity')
-    # plt.xlim(0, 3500)
-    # plt.ylim(0, 1)
     plt.savefig(file[0][:-4]+'.png', dpi=300, bbox_inches='tight', pad_inches=0)
 
 
