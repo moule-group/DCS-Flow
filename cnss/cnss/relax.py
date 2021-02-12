@@ -78,7 +78,7 @@ def relax_structure(krelax, fmax, geo, mode):
             calculator = Vasp(kpts=krelax,
                               prec='Accurate',
                               encut=520,
-                              nsw=100,
+                              nsw=1000,
                               isif=3,
                               ismear=0,
                               ibrion=1,
@@ -111,17 +111,11 @@ def relax_structure(krelax, fmax, geo, mode):
             calculator.param.cut_off_energy = 520
             calculator.param.num_dump_cycles = 0
             calculator.param.geom_force_tol = fmax
-            calculator.param.geom_energy_tol = 2e-5
-            calculator.param.geom_disp_tol = 2e-3
-            calculator.param.elec_energy_tol = 2e-6
+            calculator.param.geom_energy_tol = 1e-5
+            calculator.param.geom_disp_tol = 1e-3
+            calculator.param.elec_energy_tol = 1e-8
             calculator.param.geom_max_iter = 1000
-            calculator.cell.kpoint_mp_grid = krelax
-
-            ##### tips params #####
-            calculator.param.fix_occupancy = True
-            calculator.param.sedc_apply = True
-            calculator.param.sedc_scheme = 'MBD*'
-            
+            calculator.cell.kpoint_mp_grid = krelax            
             
         else:
             raise NotImplementedError('{} calculator not implemented' .format(mode))
