@@ -13,6 +13,11 @@ class CLICommand:
 
     @staticmethod
     def add_arguments(parser):
+        """Sets up command line to run train script i.e. recognize arguments and commands.
+
+        Args:
+            parser (argparse): Arguments to be added. 
+        """
         add = parser.add_argument
         add('--params',
             help='JSON file with parameters for training workflow',
@@ -23,6 +28,11 @@ class CLICommand:
 
     @staticmethod
     def run(args):
+        """Runs train.py functions using command line arguments. 
+
+        Args:
+            args (argparse): Command line arguments added to parser using the function add_arguments.
+        """
         if args.get_params:
             write_params()
             return
@@ -33,6 +43,11 @@ class CLICommand:
         train(dct)
 
 def train(dct=None):
+    """Calls all train functions with a timer using specified parameters, else with default parameters.
+
+    Args:
+        dct (dict, optional): Specified parameters for relax, md, and chimes functions. Defaults to None.
+    """
     timer = Timer()
     folder = os.getcwd()
         
@@ -66,6 +81,8 @@ def train(dct=None):
     copy(folder + '/0-train/3-chimes/params.txt', folder + '/params.txt')
 
 def write_params():
+    """Writes a json file with the arguments and default values for realx, md, and chimes functions.
+    """
     relax_params = get_default_parameters(relax)
     md_params = get_default_parameters(md)
     chimes_params = get_default_parameters(chimes)

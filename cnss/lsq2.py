@@ -731,15 +731,6 @@ def str2bool(v):
                        
         
 def write_matrix_market(mat, f):
-    """prints an array in matrix market format 
-
-    Args:
-        mat (matrix): matrix to be written
-        f (string): [name of file]
-
-    Returns:
-        [type]: [description]
-    """     
 # Print an array in matrix market format.
 # Matrix market uses column-oriented storage.
 # Only dense 1 and 2d arrays supported.    

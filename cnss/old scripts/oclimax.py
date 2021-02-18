@@ -28,9 +28,9 @@ class CLICommand:
         oclimax(args.params, args.task, args.e_unit)
 
 
-def write_params(task: int, e_unit: int): -> dict # added type, possible to add range?
+def write_params(task: int, e_unit: int):
     """ writes out.params file (where is this used in code? or is this the params folder? kinda confused?)
-        inputs: task= 0:inc approx. 1:coh+inc. 2:single-xtal Q-E. 3:single-xtal Q-Q, e_unit= 0:cm-1 1:meV 2:THz"""
+    inputs: task= 0:inc approx. 1:coh+inc. 2:single-xtal Q-E. 3:single-xtal Q-Q, e_unit= 0:cm-1 1:meV 2:THz"""
     with open('out.params', 'w') as f: # sets f as command to open and write into file
         f.write('## General parameters \n'
                 'TASK    =         {} # 0:inc approx. 1:coh+inc. 2:single-xtal Q-E. 3:single-xtal Q-Q\n'
@@ -84,12 +84,12 @@ def write_params(task: int, e_unit: int): -> dict # added type, possible to add 
                 'W_WIDTH =     150.0  # Energy width [eu] of initial wing)\n' .format(task, e_unit))
     
 
-def run_oclimax(params): #-> need to clarify purpose
+def run_oclimax(params): 
     """converts input mesh to ocl.out"""
     os.system('oclimax convert -yaml mesh.yaml -o > ocl.out')
     os.system('oclimax run out.oclimax {} >> ocl.out' .format(params))
 
-def plot(): -> plot
+def plot():
     """ creates plot using ______csv file and saves as figure"""
     # uses glob to find a csv file type, reads csv (which file should this be?), plots energy v norm intensity
     # moved libraries install tp top
@@ -110,7 +110,7 @@ def plot(): -> plot
     plt.savefig(file[0][:-4]+'.png', dpi=300, bbox_inches='tight', pad_inches=0)
 
 
-def oclimax(params=None, task=1:int, e_unit=0:int):
+def oclimax(params=None, task:int=1,e_unit:int=0):
     """creates folder 3-oclimax within working directory and write params file using default values if no dict exist in folder"""
     # overall function (the one imported by main), combines the other oclimax functions
     folder = os.getcwd() #sets folder to current working directory of process

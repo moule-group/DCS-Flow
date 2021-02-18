@@ -4,10 +4,13 @@ from cnss import mkdir, chdir, out, done, isdone
 from shutil import copyfile
 
 class CLICommand:
-    'Run oclimax simulation'
-
     @staticmethod
     def add_arguments(parser):
+        """Sets up command line to run oclimax i.e. recognize arguments and commands.
+
+        Args:
+            parser (argparse): Arguments to be added. 
+        """
         add = parser.add_argument
         add('--params',
             help='Parameters file, e. g., out.params',
@@ -21,12 +24,22 @@ class CLICommand:
 
     @staticmethod
     def run(args):
+        """Runs Oclimax functions using command line arguments. 
+
+        Args:
+            args (argparse): Command line arguments added to parser using the function add_arguments.
+        """
         oclimax(args.params, args.task, args.e_unit)
 
 
 def write_params(task, e_unit):
-    ''' what this function does
-    '''
+    """Creates parameters file for Oclimax. 
+
+    Args:
+        task (int): Defines approximation method where 
+            0:inc approx. 1:coh+inc. 2:single-xtal Q-E. 3:single-xtal Q-Q.
+        e_unit (int): Defines energy units such that 0:cm-1 1:meV 2:THz. 
+    """
     with open('out.params', 'w') as f:
         f.write('## General parameters \n'
                 'TASK    =         {} # 0:inc approx. 1:coh+inc. 2:single-xtal Q-E. 3:single-xtal Q-Q\n'
@@ -81,13 +94,21 @@ def write_params(task, e_unit):
     
 
 def run_oclimax(params):
-    
+    """If convert.done file doesn't exist, runs oclimax convert; converts input mesh to out.oclimax.
+        out.oclimax is the oclimax format for mesh type files.
+
+    Args:
+        params (str): Oclimax parameters file name defined in write_params function.
+    """
     if not isdone('convert'):
         os.system('oclimax convert -yaml mesh.yaml -o 1>> ocl.out 2>> ocl.err')
         done('convert')
     os.system('oclimax run out.oclimax {} 1>> ocl.out 2>> ocl.err' .format(params))
 
 def plot():
+    """Creates plot using csv file (oclimax output with INS data) and saves as a png.
+        Plots energy (meV) versus Normalized intensity.
+    """
     import pandas as pd
     import matplotlib.pyplot as plt
     import glob
@@ -111,6 +132,14 @@ def plot():
 
 
 def oclimax(params=None, task=0, e_unit=0):
+    """Creates folder 3-oclimax within wd and write params file using default values if no dict exist in folder
+
+    Args:
+        params (str, optional): Oclimax parameters file defined in write_params function. Defaults to None.
+        task (int, optional): Defines approximation method. 
+            0:inc approx. 1:coh+inc. 2:single-xtal Q-E. 3:single-xtal Q-Q. Defaults to 0.
+        e_unit (int, optional): Defines energy unit. Defaults to 0.
+    """
     folder = os.getcwd()
     mkdir(folder + '/3-oclimax')
     copyfile(folder + '/2-phonons/mesh.yaml', folder + '/3-oclimax/mesh.yaml')

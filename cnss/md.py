@@ -7,10 +7,13 @@ from ase.io import read, write
 from cnss import mkdir, chdir, out, done, isdone
 
 class CLICommand:
-    'Molecular dynamics with constant temperature'
-
     @staticmethod
     def add_arguments(parser):
+        """Sets up command line to run molecular dynamics with constant temperature i.e. recognize arguments and commands.
+
+        Args:
+            parser (argparse): Arguments to be added. 
+        """
         add = parser.add_argument
         add('--optgeo',
             help='path to DFT optimized geometry file',
@@ -43,11 +46,25 @@ class CLICommand:
 
     @staticmethod
     def run(args):
+        """Runs md.py functions using command line arguments. 
+
+        Args:
+            args (argparse): Command line arguments added to parser using the function add_arguments.
+        """
         md(args.optgeo, args.md_calc, args.temp, args.md_size,
            args.steps, args.time_step, args.dump_interval)
 
 
 def run_vasp_md(atoms, T, steps, time_step, dump_interval):
+    """Runs vasp program on atoms for specified intervals.
+
+    Args:
+        atoms (list): Atoms object involved in calc from ASE.
+        T (int): Initial and final simulation temperature.
+        steps (int): Maximum number of ionic steps, defines the total simulation time.
+        time_step (int): md time step in fs.
+        dump_interval (int): Ionic step size.
+    """
     if isdone('md'):
         return
     else:
@@ -83,6 +100,20 @@ def run_vasp_md(atoms, T, steps, time_step, dump_interval):
 
 def md(optgeo=None, md_calc='vasp', T=300, md_size=[1,1,1],
        steps=5000, time_step=1, dump_interval=100):
+    """Runs md using vasp; if other calculator specified, raises error.
+
+    Args:
+        optgeo (NoneType, optional): Optimized geometry file, only true if optgeo defined. Defaults to None.
+        md_calc (str, optional): Specifies calculator. Defaults to 'vasp'.
+        T (int, optional): Simulation temperature. Defaults to 300.
+        md_size (list, optional): Size of supercell. Defaults to [1,1,1].
+        steps (int, optional): Maximum number of ionic steps. Defaults to 5000.
+        time_step (int, optional): Md time step in fs. Defaults to 1. 
+        dump_interval (int, optional): Step size. Defaults to 100. 
+
+    Raises:
+        NotImplementedError: If calculator other than vasp specified.
+    """
     folder = os.getcwd()
 
     if optgeo:

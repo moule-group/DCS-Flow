@@ -4,10 +4,16 @@ from ase.io import read
 from cnss import mkdir, chdir, out, done, isdone
 
 class CLICommand:
-    'Optimize structure'
+    """Sets up command line to run relax. 
+    """
 
     @staticmethod
     def add_arguments(parser):
+        """Sets up command line to run relax script i.e. recognize arguments and commands.
+
+        Args:
+            parser (argparse): Arguments to be added. 
+        """
         add = parser.add_argument
         add('--calc', help='Calculator used. Options are dftbp or vasp', default='dftbp')
         add('--geo', help='Name of geometry file for structure (cif or gen extensions)')
@@ -24,9 +30,25 @@ class CLICommand:
 
     @staticmethod
     def run(args):
+        """Runs relax.py functions using command line arguments. 
+
+        Args:
+            args (argparse): Command line arguments added to parser using the function add_arguments.
+        """
         relax(args.krelax, args.fmax, args.geo, args.calc)
 
 def relax_structure(krelax, fmax, geo, mode):
+    """Imports specified calculator and calculates optimized structure. [q] or just relaxes structure
+
+    Args:
+        krelax (list): Number of k points for relaxation. 
+        fmax (float): Maximum allowed force for convergence between atoms.
+        geo (str): Geometry file or structure. Allowed file types are cif, gen, sdf, or xyz. 
+        mode (str): Calculator used. Options are 'dftbp', 'chimes', or 'vasp'. 
+
+    Raises:
+        NotImplementedError: If specified calculator/mode is not one of the above three, error raised. 
+    """
     if isdone('relax'):
         return
     else:
@@ -104,6 +126,15 @@ def relax_structure(krelax, fmax, geo, mode):
         done('relax')
 
 def find_geo(folder):
+    """Searches the current working directory for the molecular structure file. 
+        Allowed file types are cif, gen, sdf, or xyz. 
+
+    Args:
+        folder (str): The current working directory.
+
+    Returns:
+        str: Molecular structure file. 
+    """
     import glob
     
     geo = glob.glob(folder + '/*.cif') + \
@@ -115,6 +146,15 @@ def find_geo(folder):
     return geo
         
 def relax(krelax=[6, 6, 6], fmax=0.01, geo=None, calc='dftbp'):
+    """Finds geo file and runs relax_structure funtion using specified calculator. 
+
+    Args:
+        krelax (list, optional): Number of k points for relaxation. Defaults to [6, 6, 6].
+        fmax (float, optional): Maximum allowed force for convergence between atoms. Defaults to 0.01.
+        geo (str, optional): Geometry file or structure. 
+            Allowed file types are cif, gen, sdf, or xyz. Defaults to None.
+        calc (str, optional): Calculator used. Options are 'dftbp', 'chimes', or 'vasp'. Defaults to 'dftbp'.
+    """
     folder = os.getcwd()
 
     if geo:

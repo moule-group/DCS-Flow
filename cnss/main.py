@@ -12,4 +12,6 @@ commands = [
     ('train', 'cnss.train')]
 
 def main():
+    """looks up ase_main function: tool that sets up command line
+    """
     ase_main('cnss', 'CNSS command-line tool', version=version, commands=commands)

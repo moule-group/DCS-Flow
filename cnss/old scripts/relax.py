@@ -28,7 +28,7 @@ class CLICommand:
     def run(args):
         relax(args.krelax, args.fmax, args.geo, args.calc)
 
-def relax_done(fmax:int): # -> boolean, idk if type hinting necessary for functions like this that a user wouldnt see
+def relax_done(fmax:int): -> bool
     """checks for relax.out file, if relax.out files exists = True """
     try:
         df = pd.read_csv('relax.out', sep='\s+')
@@ -41,7 +41,7 @@ def relax_done(fmax:int): # -> boolean, idk if type hinting necessary for functi
 
     
 def relax_structure(krelax, fmax, geo, mode): # -> geom optimized struct
-    """uses specified method to optimize molecule geometry """
+    """Uses specified method to optimize molecule geometry """
     if relax_done(fmax=fmax):
         return
     else:
