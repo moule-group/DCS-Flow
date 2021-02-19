@@ -52,7 +52,8 @@ def relax_structure(krelax, fmax, geo, mode):
                               Hamiltonian_MaxAngularMomentum_O='p',
                               Hamiltonian_MaxAngularMomentum_H='s',
                               Hamiltonian_MaxAngularMomentum_N='p',
-                              Hamiltonian_MaxAngularMomentum_S='d')
+                              Hamiltonian_MaxAngularMomentum_S='d',
+                              Hamiltonian_MaxAngularMomentum_Si='d')
 
         elif mode == 'chimes':
             from ase.calculators.dftb import Dftb
@@ -77,7 +78,8 @@ def relax_structure(krelax, fmax, geo, mode):
                               Hamiltonian_MaxAngularMomentum_O='p',
                               Hamiltonian_MaxAngularMomentum_H='s',
                               Hamiltonian_MaxAngularMomentum_N='p',
-                              Hamiltonian_MaxAngularMomentum_S='d')
+                              Hamiltonian_MaxAngularMomentum_S='d',
+                              Hamiltonian_MaxAngularMomentum_Si='d')
 
         elif mode == 'vasp':
             from ase.calculators.vasp import Vasp
