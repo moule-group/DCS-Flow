@@ -57,10 +57,10 @@ def train(dct=None):
     with chdir(folder + '/0-train'):
         if dct:
             with timer('relaxation'):
-                relax(dct['krelax'], dct['fmax'], dct['geo'], 'vasp')
+                relax(dct['krelax'], dct['fmax'], dct['geo'], dct['calc'])
             timer.write()
             with timer('molecular dynamics'):
-                md(dct['optgeo'], dct['md_calc'], dct['T'], dct['md_size'],
+                md(dct['optgeo'], dct['calc'], dct['T'], dct['md_size'],
                    dct['steps'], dct['time_step'], dct['dump_interval'])
             timer.write()
             with timer('force matching'):

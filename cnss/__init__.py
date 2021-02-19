@@ -22,20 +22,20 @@ def mktempdir():
     """Creates a temporary directory. 
 
     Yields:
-        str: temporary directory 
+        str: Temporary directory name.
     """
     import tempfile
     import shutil
-
+    
     temp_dir = tempfile.mkdtemp()
     try:
         yield temp_dir
     finally:
         shutil.rmtree(temp_dir)
-    
+
 @contextmanager
 def chdir(folder):
-    """ Changes the working directory to folder if not already current wd. 
+    """Changes the working directory to folder if not already current wd. 
 
     Args:
         folder (str): Name of folder to make wd.
@@ -54,7 +54,7 @@ def out(task):
     """
     sys.stdout = open(task + '.out', 'a')
     sys.stderr = open(task + '.err', 'a')
-    yield 
+    yield    
 
 def get_default_parameters(func):
     """Inspects function func for argument names and default arguments.
@@ -86,7 +86,7 @@ def write_json(filename, data):
     Path(filename).write_text(jsonio.MyEncoder(indent=4).encode(data))
 
 def read_json(filename):
-    """Read specified json file. 
+    """Reads specified json file. 
 
     Args:
         filename (str): Full name of json file.

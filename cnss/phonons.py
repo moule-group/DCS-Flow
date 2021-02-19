@@ -6,8 +6,7 @@ from cnss import mkdir, chdir, out, done, isdone
 from phonopy import Phonopy
 
 class CLICommand:
-    """Sets up command line to run phonopy simulations i.e. recognize arguments and commands. 
-    """
+    'Calculate phonons'
 
     @staticmethod
     def add_arguments(parser):
@@ -18,7 +17,7 @@ class CLICommand:
         """
         add = parser.add_argument
         add('--calc',
-            help='Calculator used. Options are dftbp or vasp',
+            help='Calculator used. Options are dftbp, vasp or castep',
             default='dftbp')
         add('--dim',
             help='Dimension of supercell, e. g., 4 4 4',
@@ -52,7 +51,7 @@ def generate_supercell(dim, mode):
 
     Args:
         dim (list): Dimensions of the supercell. 
-        mode (str): Calculator used for the task. Options are dftbp or chimes. 
+        mode (str): Calculator used for the task. Options are 'dftbp' or 'chimes'. 
     """
     from phonopy.cui.collect_cell_info import collect_cell_info
     from phonopy.interface.calculator import (write_supercells_with_displacements,
@@ -98,8 +97,9 @@ def organize_folders(mode):
         Creates directory with supercell displacement number, and moves supercell displacement file into created directory.
 
     Args:
-        mode (str): Calculator used for task. Options are dftbp, chimes, or vasp. 
+        mode (str): Calculator used for task. Options are 'dftbp', 'chimes', 'vasp', or 'castep'. 
     """
+
     if mode == 'dftbp':
         for filename in os.listdir('.'):
             if filename.startswith('geo.genS-'):
@@ -121,13 +121,20 @@ def organize_folders(mode):
                 mkdir(dir)
                 move(filename, '{}/POSCAR' .format(dir))
 
+    if mode == 'castep':
+        for filename in os.listdir('.'):
+            if filename.startswith('supercell-'):
+                dir = filename[10:13]
+                mkdir(dir)
+                move(filename, '{}/supercell.cell' .format(dir))
+
 
 def calculate_forces(kforce, mode, dir):
     """Runs md simulations using specified mode to calculate forces. Writes results into a file.
 
     Args:
         kforce (list): Number of k points for force calculations.
-        mode (str): Calculator used for task. Options are dftbp, chimes, or vasp. 
+        mode (str): Calculator used for task. Options are 'dftbp', 'chimes', 'vasp', or 'castep'. 
         dir (str): Directory to change to and run calculator in.
     """
     with chdir(dir):
@@ -141,6 +148,8 @@ def calculate_forces(kforce, mode, dir):
                 calculator = Dftb(kpts=kforce,
                                   Hamiltonian_ChIMES='Yes',
                                   Hamiltonian_SCC='Yes',
+                                  Hamiltonian_SCCTolerance=1e-7,
+                                  Hamiltonian_Filling='Fermi {{Temperature [Kelvin] = {T} }}' .format(T=5),
                                   Hamiltonian_MaxAngularMomentum_='',
                                   Hamiltonian_MaxAngularMomentum_C='p',
                                   Hamiltonian_MaxAngularMomentum_O='p',
@@ -157,6 +166,8 @@ def calculate_forces(kforce, mode, dir):
                 from ase.calculators.dftb import Dftb
                 calculator = Dftb(kpts=kforce,
                                   Hamiltonian_SCC='Yes',
+                                  Hamiltonian_SCCTolerance=1e-7,
+                                  Hamiltonian_Filling='Fermi {{Temperature [Kelvin] = {T} }}' .format(T=5),
                                   Hamiltonian_MaxAngularMomentum_='',
                                   Hamiltonian_MaxAngularMomentum_C='p',
                                   Hamiltonian_MaxAngularMomentum_O='p',
@@ -177,16 +188,36 @@ def calculate_forces(kforce, mode, dir):
                                   ibrion=-1,
                                   ediff=1e-8,
                                   ismear=0,
-                                  sigma=0.1,
+                                  sigma=0.05,
                                   nwrite=1,
                                   ncore=16,
-                                  lreal='Auto',
+                                  lreal=False,
                                   lcharg=False,
                                   lwave=False,
                                   xc='pbe',
                                   gamma=True)
                 calculator.calculate(atoms)
+                
+            if mode == 'castep':
+                import ase.calculators.castep
 
+                atoms = read('supercell.cell')
+                calculator = ase.calculators.castep.Castep()
+                directory = '../' + dir
+                calculator._export_settings = True
+                calculator._directory = directory
+                calculator._rename_existing_dir = False
+                calculator._export_settings = True
+                calculator._label = 'phonons'
+                calculator.param.task = 'SinglePoint'
+                calculator.param.xc_functional = 'PBE'
+                calculator.param.cut_off_energy = 520
+                calculator.param.elec_energy_tol = 1e-8
+                calculator.param.num_dump_cycles = 0
+                calculator.cell.kpoint_mp_grid = kforce
+
+                calculator.calculate(atoms)
+                
             done('forces')
                 
 def multi_forces(kforce, mode, mpi=False):
@@ -194,7 +225,7 @@ def multi_forces(kforce, mode, mpi=False):
 
     Args:
         kforce (list): Number of k points for force calculations.
-        mode (str): Calculator used for task. Options are dftbp, chimes, or vasp. 
+        mode (str): Calculator used for task. Options are 'dftbp', 'chimes', 'vasp', or 'castep'. 
         mpi (bool, optional): Not currently implemented. Defaults to False. 
     """
     from functools import partial
@@ -202,17 +233,17 @@ def multi_forces(kforce, mode, mpi=False):
     
     dirlist = np.array(sorted([x.name for x in os.scandir() if x.is_dir()]))
 
-    if mode == 'vasp':
+    if mode == 'vasp' or 'castep':
         for dir in dirlist:
             command(dir)
     else:
         if mpi:
             from mpi4py.futures import MPIPoolExecutor
-            with MPIPoolExecutor(max_workers=68, main=False) as executor:
+            with MPIPoolExecutor(max_workers=64, main=False) as executor:
                 executor.map(command, dirlist)
         else:
             from multiprocessing import Pool        
-            with Pool(processes=68) as pool:
+            with Pool(processes=64) as pool:
                 pool.map(command, dirlist)
 
     
@@ -221,7 +252,7 @@ def calculate_mesh(mesh, mode):
 
     Args:
         mesh (list): Uniform meshes for each axis. 
-        mode (str): Calculator used for task. Options are dftbp, chimes, or vasp.
+        mode (str): Calculator used for task. Options are 'dftbp', 'chimes', 'vasp', or 'castep'.
     """
     import phonopy
     from phonopy.cui.create_force_sets import create_FORCE_SETS
@@ -235,6 +266,8 @@ def calculate_mesh(mesh, mode):
         filenames = [x + '/results.tag' for x in dirlist]
     if mode == 'vasp':
         filenames = [x + '/vasprun.xml' for x in dirlist]
+    if mode == 'castep':
+        filenames = [x + '/phonons.castep' for x in dirlist]
 
     create_FORCE_SETS(interface_mode=mode,
                       force_filenames=filenames,
@@ -252,7 +285,7 @@ def phonons(dim=[4, 4, 4], kforce=[1, 1, 1], mesh=[8, 8, 8], calc='dftbp'):
         dim (list, optional): Dimensions of the supercell. Defaults to [4, 4, 4].
         kforce (list, optional): Number of k points for force calculations. Defaults to [1, 1, 1].
         mesh (list, optional): Uniform meshes for each axis. Defaults to [8, 8, 8].
-        calc (str, optional): Calculator used for task. Options are dftbp, chimes, or vasp. Defaults to 'dftbp'.
+        calc (str, optional): Calculator used for task. Options are 'dftbp', 'chimes', 'vasp', or 'castep'. Defaults to 'dftbp'.
 
     Raises:
         NotImplementedError: Raised if 'calc' specified is not available. 
@@ -265,6 +298,10 @@ def phonons(dim=[4, 4, 4], kforce=[1, 1, 1], mesh=[8, 8, 8], calc='dftbp'):
         copyfile(folder + '/1-optimization/CONTCAR', folder + '/2-phonons/POSCAR')
     elif calc == 'chimes':
         copyfile(folder + '/1-optimization/geo_end.gen', folder + '/2-phonons/geo.gen')
+    elif calc == 'castep':
+        unitcell = read(folder + '/1-optimization/relax.geom')
+        write(folder + '/2-phonons/unitcell.cell', unitcell, positions_frac=True)
+
     else:
         raise NotImplementedError('{} calculator not implemented' .format(calc))
     

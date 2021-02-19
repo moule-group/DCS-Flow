@@ -14,8 +14,6 @@ from datetime import *
 from subprocess import call
 
 def main():
-    """main function
-    """
     parser = argparse.ArgumentParser(description='Least-squares force matching based on output of chimes_lsq')
     # Arguments supported by the lsq code.
     # Decided to use underscore rather than - for parameter word separator character.
