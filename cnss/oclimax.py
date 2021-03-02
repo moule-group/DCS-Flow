@@ -109,7 +109,7 @@ def run_oclimax(params):
 
 def plot():
     """Creates plot using csv file (oclimax output with INS data) and saves as a png.
-        Plots energy (meV) versus Normalized intensity. [e]
+        Plots energy (meV) versus Normalized intensity. 
     """
     import pandas as pd
     import matplotlib.pyplot as plt
