@@ -96,8 +96,8 @@ def write_params(task, e_unit):
     
 
 def run_oclimax(params):
-    """If convert.done file doesn't exist, runs oclimax convert; converts input mesh to out.oclimax.
-        out.oclimax is the OCLIMAXformat for mesh type files.
+    """If convert.done file doesn't exist, runs OCLIMAX convert. Converts input mesh to out.oclimax;
+        out.oclimax is the OCLIMAX format for mesh type files. 
 
     Args:
         params (str): Oclimax parameters file name defined in write_params function.
@@ -129,7 +129,7 @@ def plot():
 
 
 def oclimax(params=None, task=0, e_unit=0):
-    """Creates folder 3-oclimax within wd and write params file using default values if no dict exist in folder
+    """Creates folder 3-oclimax within wd and write parameters file using default values if no dict exist in folder.
 
     Args:
         params (str, optional): Oclimax parameters file defined in write_params function. Defaults to None.

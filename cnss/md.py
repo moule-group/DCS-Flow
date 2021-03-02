@@ -147,11 +147,11 @@ def run_castep_md(atoms, T, steps, time_step, dump_interval):
 
 def md(optgeo=None, calc='vasp', T=300, md_size=[1,1,1],
        steps=5000, time_step=1, dump_interval=100):
-       """Runs md using vasp or castep; if other calculator specified, raises error.
+       """Runs md using 'vasp' or 'castep'; if other calculator specified, raises error.
 
     Args:
         optgeo (NoneType, optional): Optimized geometry file, only true if optgeo defined. Defaults to None.
-        calc (str, optional): Specifies calculator.Options are 'vasp' or 'castep'. Defaults to 'vasp'.
+        calc (str, optional): Specifies calculator. Options are 'vasp' or 'castep'. Defaults to 'vasp'.
         T (int, optional): Simulation temperature. Defaults to 300.
         md_size (list, optional): Size of supercell. Defaults to [1,1,1].
         steps (int, optional): Maximum number of ionic steps. Defaults to 5000.
@@ -159,7 +159,7 @@ def md(optgeo=None, calc='vasp', T=300, md_size=[1,1,1],
         dump_interval (int, optional): Step size. Defaults to 100. 
 
     Raises:
-        NotImplementedError: If calculator other than vasp specified.
+        NotImplementedError: If calculator other than vasp or castep specified. 
     """
     folder = os.getcwd()
 

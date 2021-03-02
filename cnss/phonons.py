@@ -93,7 +93,7 @@ def generate_supercell(dim, mode):
     phonon.save()
     
 def organize_folders(mode):
-    """Finds supercell displacement file and formatting the name. 
+    """Finds supercell displacement file and formats the name. 
         Creates directory with supercell displacement number, and moves supercell displacement file into created directory.
 
     Args:
@@ -221,7 +221,8 @@ def calculate_forces(kforce, mode, dir):
             done('forces')
                 
 def multi_forces(kforce, mode, mpi=False):
-    """Runs partial version of calculate_forces, calculates forces for specified mode. [q] purpose?
+    """Calls calculate_forces function using parallel processing,
+        calculates forces for specified mode. 
 
     Args:
         kforce (list): Number of k points for force calculations.

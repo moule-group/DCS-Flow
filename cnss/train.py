@@ -43,7 +43,7 @@ class CLICommand:
         train(dct)
 
 def train(dct=None):
-    """Calls all train functions with a timer using specified parameters, else with default parameters.
+    """Calls chosen calculator with a timer using specified parameters, else with default parameters.
 
     Args:
         dct (dict, optional): Specified parameters for relax, md, and chimes functions. Defaults to None.

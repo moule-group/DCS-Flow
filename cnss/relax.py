@@ -37,8 +37,8 @@ class CLICommand:
         relax(args.krelax, args.fmax, args.geo, args.calc)
 
 def relax_structure(krelax, fmax, geo, mode):
-    """Imports specified calculator and calculates optimized structure. [q] or just relaxes structure
-
+    """Defines arguments for specified calculator and optimizes the structure.
+    
     Args:
         krelax (list): Number of k points for relaxation. 
         fmax (float): Maximum allowed force for convergence between atoms.
@@ -46,7 +46,7 @@ def relax_structure(krelax, fmax, geo, mode):
         mode (str): Calculator used. Options are 'dftbp', 'chimes', 'vasp', or 'castep'. 
 
     Raises:
-        NotImplementedError: If specified calculator/mode is not one of the above three, error raised. 
+        NotImplementedError: If specified calculator is not an option for mode, error raised. 
     """
     if isdone('relax'):
         return
