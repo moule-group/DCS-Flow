@@ -10,6 +10,11 @@ class CLICommand:
 
     @staticmethod
     def add_arguments(parser):
+        """Sets up command line to run Chimes i.e. recognize arguments and commands.
+
+        Args:
+            parser (argparse): Arguments to be added. 
+        """
         add = parser.add_argument
         add('--trajfile',
             help='path to DFT-MD trajectory file',
@@ -26,10 +31,26 @@ class CLICommand:
 
     @staticmethod
     def run(args):
+        """Runs chimes functions using command line arguments. 
+
+        Args:
+            args (argparse): Command line arguments added to parser using the function add_arguments.
+        """
         chimes(args.trajfile, args.b2, args.b3, args.temp)
         
         
 def dftb_fmatch_input(T, frame):
+    """Runs DFTB force calculations using frame from DFT;
+        calculates the force difference between DFT and DFTB.
+        Creates a list with the chemical symbols, atomic positions, and force differences. 
+
+    Args:
+        T (int): Temperature for DFTB simulation.
+        frame (list): ASE atoms object with atomic positions, forces, energies, etc from DFT calculation.
+
+    Returns:
+        list: Contains the chemical symbols, atom positions, and difference in DFTB and DFT forces.
+    """
     from ase.calculators.dftb import Dftb
     from ase.units import Hartree, Bohr, GPa, mol, kcal
     import tempfile
@@ -80,6 +101,18 @@ def dftb_fmatch_input(T, frame):
     return frame_fmatch
 
 def multi_fmatch(T):
+    """Runs partial dftb_fmatch_input command for each trajectory, 4 processes at a time.
+        Returns tuple with trajectory information. 
+
+    Args:
+        T (int): Temperature for DFTB simulation. 
+
+    Returns:
+        tuple: (nframes, setsymbols, smax)
+                nframes (int) - Number of trajectories.
+                setsymbols (set) - Chemical symbols. 
+                smax (float) - Half of the minimum cell length. [q] check
+    """
     from ase.io import Trajectory
     from multiprocessing import Pool
     from functools import partial
@@ -102,6 +135,20 @@ def multi_fmatch(T):
     return nframes, setsymbols, smax 
 
 def rdf(smax, pair):
+    """Find the radial distribution function for elements defined in pair and their distances. 
+        Returns a tuple with information about the g function (max, min positions) [q] g func
+
+    Args:
+        smax (float): Half of the minimum cell length. [q] check
+        pair (list or tuple): Atomic numbers. 
+                [q] can also be a list, also can be a tuple/list of integers or strings- should I add this info? 
+
+    Returns:
+        tuple: (mlambda, rmin, rmax)
+            mlambda (float) - Morse lambda factor; Position where g function max occurs. 
+            rmin (float) - First position where average g function is above zero. [q] what exactly is the g func 
+            rmax (float) - First zero after peak or local minimum of smooth g function. 
+    """
     from ase.io import Trajectory
     from ase.geometry.analysis import Analysis
 
@@ -152,6 +199,15 @@ def rdf(smax, pair):
 
 
 def fm_setup_input(nframes, b2, b3, setsymbols, smax):
+    """[summary] 
+
+    Args:
+        nframes (int): Number of trajectories.
+        b2 (int): Second body order of Chebyshev polynomial. 
+        b3 (int): Third body order of Chebyshev polynomial.
+        setsymbols (set): Chemical symbols. 
+        smax (float): Half of the minimum cell length. [q] check 
+    """
     if os.path.exists('../../fm_setup.in'):
         copyfile('../../fm_setup.in', 'fm_setup.in')
     elif os.path.exists('../fm_setup.in'):
@@ -206,6 +262,14 @@ def fm_setup_input(nframes, b2, b3, setsymbols, smax):
                     '# ENDFILE #')
 
 def run_md_input(folder):
+    """[summary]
+
+    Args:
+        folder ([type]): [description]
+
+    Raises:
+        Exception: [description]
+    """
     if os.path.exists(folder + '/params.txt'):
         copyfile(folder + '/params.txt', 'params.txt')
     else:
@@ -270,11 +334,22 @@ def run_md_input(folder):
     
     
 def lsq():
+    """Writes [[q]what do these contain] into chimes.out and params.txt files, respectively. 
+    """
     os.system('chimes_lsq fm_setup.in >> chimes.out')
     os.system('lsq2.py --algorithm=lassolars > params.txt')
     
     
 def chimes(trajfile=None, b2=12, b3=8, T=5):
+    """Calls multi_fmatch (calculates force difference) and fm_setup_input () functions 
+        to create Chebyshev Interaction Model and creates 3-chimes folder. [e]
+
+    Args:
+        trajfile (list, optional): Trajectory file (ist of atoms objects) output from md simulation. Defaults to None.
+        b2 (int, optional): Second body order of Chebyshev polynomial. Defaults to 12.
+        b3 (int, optional): Third body order of Chebyshev polynomial. Defaults to 8.
+        T (int, optional): Temperature for simulation in Kevin. Defaults to 5.
+    """
     from cnss import mkdir, chdir, out, done, isdone
     import glob
 
