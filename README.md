@@ -190,7 +190,7 @@ Once the job has completed, the following files can be found in the TCNQ folder.
 
 Open the 3-oclimax folder and click on the png file to view to INS specta. 
 
-![alt text](TCNQ_DFTB_INS.png)
+![alt text](images/TCNQ_DFTB_INS.png)
 
 ---
 
@@ -265,7 +265,7 @@ Once the job has completed, the following files can be found in the TCNQ folder.
 
 Use a file transfer software like Globus to transfer the wanted files to your personal computer. Open the 3-oclimax folder and click on the png file to view to INS specta. 
 
-![alt text](TCNQ_DFTB_INS.png)
+![alt text](images/TCNQ_DFTB_INS.png)
  
 ---
 
