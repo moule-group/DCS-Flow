@@ -114,7 +114,6 @@ def relax_structure(krelax, fmax, geo, mode):
             calculator._set_atoms = True
             calculator.param.task = 'GeometryOptimization'
             calculator.param.xc_functional = 'PBE'
-            calculator.param.basis_precision = 'MEDIUM'
             calculator.param.geom_method = 'BFGS'
             calculator.param.cut_off_energy = 520
             calculator.param.num_dump_cycles = 0
