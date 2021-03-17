@@ -191,7 +191,7 @@ Once the job has completed, the following files can be found in the TCNQ folder.
 
 Open the 3-oclimax folder and click on the png file to view to INS specta. 
 
-![alt text](images/TCNQ_DFTB_INS.png =120x90)
+![alt text](images/TCNQ_DFTB_INS.png)
 
 ---
 
