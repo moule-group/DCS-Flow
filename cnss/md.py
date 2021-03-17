@@ -48,7 +48,7 @@ class CLICommand:
 
     @staticmethod
     def run(args):
-        """Runs md.py functions using command line arguments. 
+        """Runs md function using command line arguments. 
 
         Args:
             args (argparse): Command line arguments added to parser using the function add_arguments.
@@ -65,7 +65,7 @@ def run_vasp_md(atoms, T, steps, time_step, dump_interval):
         T (int): Initial and final simulation temperature.
         steps (int): Maximum number of ionic steps, defines the total simulation time.
         time_step (int): md time step in fs.
-        dump_interval (int): Ionic step size.
+        dump_interval (int): Step size of frames to be saved in the trajectory file.
     """
     if isdone('md'):
         return
@@ -107,7 +107,7 @@ def run_castep_md(atoms, T, steps, time_step, dump_interval):
         T (int): Initial and final simulation temperature.
         steps (int): Maximum number of ionic steps, defines the total simulation time.
         time_step (int): md time step in fs.
-        dump_interval (int): Ionic step size.
+        dump_interval (int): Step size of frames to be saved in the trajectory file.
     """
     if isdone('md'):
         return
@@ -147,7 +147,8 @@ def run_castep_md(atoms, T, steps, time_step, dump_interval):
 
 def md(optgeo=None, calc='vasp', T=300, md_size=[1,1,1],
        steps=5000, time_step=1, dump_interval=100):
-       """Runs md using 'vasp' or 'castep'; if other calculator specified, raises error.
+       """Runs molecular dynamics simulation using vasp or castep 
+       (Creates 2-molecular_dynamics folder inside 0-train)
 
     Args:
         optgeo (NoneType, optional): Optimized geometry file, only true if optgeo defined. Defaults to None.
@@ -156,7 +157,7 @@ def md(optgeo=None, calc='vasp', T=300, md_size=[1,1,1],
         md_size (list, optional): Size of supercell. Defaults to [1,1,1].
         steps (int, optional): Maximum number of ionic steps. Defaults to 5000.
         time_step (int, optional): Md time step in fs. Defaults to 1. 
-        dump_interval (int, optional): Step size. Defaults to 100. 
+        dump_interval (int, optional): Step size of frames to be saved in the trajectory file. Defaults to 100. 
 
     Raises:
         NotImplementedError: If calculator other than vasp or castep specified. 

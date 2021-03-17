@@ -38,7 +38,7 @@ class CLICommand:
 
     @staticmethod
     def run(args):
-        """Runs Phonopy functions using command line arguments. 
+        """Runs phonons function using command line arguments. 
 
         Args:
             args (argparse): Command line arguments added to parser using the function add_arguments.
@@ -93,8 +93,9 @@ def generate_supercell(dim, mode):
     phonon.save()
     
 def organize_folders(mode):
-    """Finds supercell displacement file and formats the name. 
-        Creates directory with supercell displacement number, and moves supercell displacement file into created directory.
+    """Finds supercell displacement files and formats the name. 
+        Creates directory with supercell displacement number, 
+    and moves supercell displacement file into created directory.
 
     Args:
         mode (str): Calculator used for task. Options are 'dftbp', 'chimes', 'vasp', or 'castep'. 
@@ -130,7 +131,7 @@ def organize_folders(mode):
 
 
 def calculate_forces(kforce, mode, dir):
-    """Runs md simulations using specified mode to calculate forces. Writes results into a file.
+    """Runs single point energy calculation.
 
     Args:
         kforce (list): Number of k points for force calculations.
@@ -280,7 +281,7 @@ def calculate_mesh(mesh, mode):
 
 
 def phonons(dim=[4, 4, 4], kforce=[1, 1, 1], mesh=[8, 8, 8], calc='dftbp'):
-    """Runs phonon supercell displacement calculations, populates 2-phonons file with results. 
+    """Runs phonon supercell displacement calculations, populates 2-phonons folder with results.
 
     Args:
         dim (list, optional): Dimensions of the supercell. Defaults to [4, 4, 4].

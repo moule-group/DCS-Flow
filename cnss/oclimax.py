@@ -26,7 +26,7 @@ class CLICommand:
 
     @staticmethod
     def run(args):
-        """Runs OCLIMAX functions using command line arguments. 
+        """Runs oclimax function using command line arguments. 
 
         Args:
             args (argparse): Command line arguments added to parser using the function add_arguments.
@@ -129,7 +129,7 @@ def plot():
 
 
 def oclimax(params=None, task=0, e_unit=0):
-    """Creates folder 3-oclimax within wd and write parameters file using default values if no dict exist in folder.
+    """Creates folder 3-oclimax, writes oclimax parameters file in folder and runs oclimax simulation.
 
     Args:
         params (str, optional): Oclimax parameters file defined in write_params function. Defaults to None.

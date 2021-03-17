@@ -98,7 +98,7 @@ cnss md --calc vasp --T 300 --md_size 1 1 1 --steps 5000 --time_step 1 --dump_in
 
 #### Chimes
 * ```chimes(trajfile=None, b2=12, b3=8, T=5):```
-    * Calculates force difference between DFT and DFTB (training set), and fits the Chebyshev polynomials coefficients. Creates 3-chimes folder and params.txt.
+    * Calculates force difference between DFT and DFTB (training set), and fits the Chebyshev polynomials coefficients. Creates 3-chimes folder (inside 0-train directory) and writes params.txt file.
     * The following inputs are required:
         * trajfile (list, optional): Trajectory file output from md simulation. Defaults to None.
         * b2 (int, optional): Second body order of Chebyshev polynomial. Defaults to 12.
@@ -111,7 +111,7 @@ cnss chimes --b2 12 --b3 8 --T 5
 
 #### Train
 * ```train(dct=None):```  
-    * Calls functions related to the training workflow (relax, md, chimes) with a timer using specified parameters in train_params.json, else with default parameters.
+    * Calls functions related to the training workflow (relax, md, chimes) with a timer using specified parameters in train_params.json, else with default parameters. Creates 0-train directory.
     * The following input is required:
         * dct (dict, optional): JSON file with specified parameters for relax, md, and chimes functions. Defaults to 'train_params.json'.
 
@@ -121,7 +121,7 @@ cnss train
 
 #### Workflow
 * ```workflow(dct=None):```
-    * Calls all workflow functions (relax, phonon, oclimax) with a timer using specified parameters in workflow_params.json, else with default parameters.
+    * Calls all workflow functions (relax, phonons, oclimax) with a timer using specified parameters in workflow_params.json, else with default parameters.
     * The following input dictionary is the workflow parameters files: 
         * dct (dict, optional): JSON file with specified parameters for relax, phonons, and oclimax functions. Defaults to 'workflow_params.json'.
 

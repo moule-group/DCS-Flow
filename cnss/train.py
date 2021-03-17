@@ -9,7 +9,7 @@ from ase.utils.timing import Timer
 from shutil import copy
 
 class CLICommand:
-    'Workflow to run VASP-MD and train ChIMES model'
+    'Workflow to run DFT-MD and train ChIMES model'
 
     @staticmethod
     def add_arguments(parser):
@@ -28,7 +28,7 @@ class CLICommand:
 
     @staticmethod
     def run(args):
-        """Runs train.py functions using command line arguments. 
+        """Runs train function using command line arguments. 
 
         Args:
             args (argparse): Command line arguments added to parser using the function add_arguments.
@@ -43,10 +43,10 @@ class CLICommand:
         train(dct)
 
 def train(dct=None):
-    """Calls relax, md, and chimes main functions with a timer using specified parameters, else with default parameters.
+    """Calls functions related to the training workflow (relax, md, chimes) with a timer using specified parameters in train_params.json, else with default parameters. Creates 0-train directory.
 
     Args:
-        dct (dict, optional): Specified parameters for relax, md, and chimes functions. Defaults to None.
+        dct (dict, optional): JSON file with specified parameters for relax, md, and chimes functions. Defaults to 'train_params.json'.
     """
     timer = Timer()
     folder = os.getcwd()

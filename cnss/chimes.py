@@ -31,7 +31,7 @@ class CLICommand:
 
     @staticmethod
     def run(args):
-        """Runs chimes functions using command line arguments. 
+        """Runs chimes function using command line arguments. 
 
         Args:
             args (argparse): Command line arguments added to parser using the function add_arguments.
@@ -101,7 +101,7 @@ def dftb_fmatch_input(T, frame):
     return frame_fmatch
 
 def multi_fmatch(T):
-    """Runs partial dftb_fmatch_input command for each trajectory, 4 processes at a time.
+    """Runs dftb_fmatch_input command for each trajectory, n processes at a time.
         Returns tuple with trajectory information. 
 
     Args:
@@ -109,9 +109,9 @@ def multi_fmatch(T):
 
     Returns:
         tuple: (nframes, setsymbols, smax)
-                nframes (int) - Number of trajectories.
+                nframes (int) - Number of ASE atoms object.
                 setsymbols (set) - Chemical symbols. 
-                smax (float) - Half of the minimum cell length. [q] check
+                smax (float) - Half of the minimum cell length.
     """
     from ase.io import Trajectory
     from multiprocessing import Pool
@@ -135,19 +135,19 @@ def multi_fmatch(T):
     return nframes, setsymbols, smax 
 
 def rdf(smax, pair):
-    """Find the radial distribution function for elements defined in pair and their distances. 
-        Returns a tuple with information about the g function (max, min positions) [q] g func
+    """Finds the radial distribution function for elements defined in pair. 
+       Analyses the RDF, and determines the min and max distances in a atomic pair interaction.
+       Returns a tuple with mlambda, rmin and rmax.
 
     Args:
-        smax (float): Half of the minimum cell length. [q] check
-        pair (list or tuple): Atomic numbers. 
-                [q] can also be a list, also can be a tuple/list of integers or strings- should I add this info? 
+        smax (float): Half of the minimum cell length.
+        pair (list): List with two chemical symbols of a pair interaction, e.g., ['C', 'H']
 
     Returns:
         tuple: (mlambda, rmin, rmax)
-            mlambda (float) - Morse lambda factor; Position where g function max occurs. 
-            rmin (float) - First position where average g function is above zero. [q] what exactly is the g func 
-            rmax (float) - First zero after peak or local minimum of smooth g function. 
+            mlambda (float) - Morse lambda factor
+            rmin (float) - Minimum distance considered in a atomic pair interaction.
+            rmax (float) - Maximum distance considered in a atomic pair interaction.
     """
     from ase.io import Trajectory
     from ase.geometry.analysis import Analysis
@@ -199,14 +199,14 @@ def rdf(smax, pair):
 
 
 def fm_setup_input(nframes, b2, b3, setsymbols, smax):
-    """[summary] 
+    """Writes force match setup input file (fm_setup.in) with given arguments.
 
     Args:
         nframes (int): Number of trajectories.
         b2 (int): Second body order of Chebyshev polynomial. 
         b3 (int): Third body order of Chebyshev polynomial.
         setsymbols (set): Chemical symbols. 
-        smax (float): Half of the minimum cell length. [q] check 
+        smax (float): Half of the minimum cell length.
     """
     if os.path.exists('../../fm_setup.in'):
         copyfile('../../fm_setup.in', 'fm_setup.in')
@@ -262,13 +262,13 @@ def fm_setup_input(nframes, b2, b3, setsymbols, smax):
                     '# ENDFILE #')
 
 def run_md_input(folder):
-    """[summary]
+    """Writes MD input file (run_md.in) if it does not exist in folder.
 
     Args:
-        folder ([type]): [description]
+        folder (str): Directory that contains params.txt file.
 
     Raises:
-        Exception: [description]
+        Exception: Raises exception if there is no params.txt file in folder.
     """
     if os.path.exists(folder + '/params.txt'):
         copyfile(folder + '/params.txt', 'params.txt')
@@ -334,15 +334,17 @@ def run_md_input(folder):
     
     
 def lsq():
-    """Writes [[q]what do these contain] into chimes.out and params.txt files, respectively. 
+    """Runs chimes_lsq binary and creates A and B matrices (A.txt, B.txt).
+       Runs lsq fitting process and writes ChIMES coefficients to params.txt.
     """
     os.system('chimes_lsq fm_setup.in >> chimes.out')
     os.system('lsq2.py --algorithm=lassolars > params.txt')
     
     
 def chimes(trajfile=None, b2=12, b3=8, T=5):
-    """Calls multi_fmatch (calculates force difference) and fm_setup_input () functions 
-        to create Chebyshev Interaction Model and creates 3-chimes folder. [e]
+    """Calculates force difference between DFT and DFTB (training set), 
+       and fits the Chebyshev polynomials coefficients.
+       Creates 3-chimes folder (inside 0-train directory) and writes params.txt file.
 
     Args:
         trajfile (list, optional): Trajectory file (ist of atoms objects) output from md simulation. Defaults to None.

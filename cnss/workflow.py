@@ -26,7 +26,7 @@ class CLICommand:
 
     @staticmethod
     def run(args):
-        """Runs workflow.py functions using command line arguments. 
+        """Runs workflow function using command line arguments. 
 
         Args:
             args (argparse): Command line arguments added to parser using the function add_arguments.
@@ -41,7 +41,7 @@ class CLICommand:
         workflow(dct)
 
 def workflow(dct=None):
-    """Calls all workflow functions with a timer using specified parameters, else with default parameters.
+    """Calls all workflow functions (relax, phonon, oclimax) with a timer using specified parameters in workflow_params.json, else with default parameters.
 
     Args:
         dct (dict, optional): Specified parameters for relax, phonons, and oclimax functions. Defaults to None.

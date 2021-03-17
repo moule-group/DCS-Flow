@@ -172,7 +172,8 @@ def find_geo(folder):
     return geo
         
 def relax(krelax=[6, 6, 6], fmax=0.05, geo=None, calc='dftbp'):
-    """Finds geo file and runs relax_structure funtion using specified calculator. 
+    """Finds the geometry file and optimizes the structure using the specified calculator 
+    (Populates 1-optimization folder with results). 
 
     Args:
         krelax (list, optional): Number of k points for relaxation. Defaults to [6, 6, 6].
