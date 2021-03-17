@@ -17,27 +17,29 @@
 
 ## Workflow Description
 
-![workflow image](images/workflow.png)
+The Davis Computational Spectroscopy workflow (DCS-Flow) was designed to connect and automate different material sciences tools which facilitate the use and comparison of electronic methods such as DFT, DFTB and machine learning to simulate the structure and dynamics of materials properties for improved structure property prediction. DCS-Flow provides an efficient workflow to create databases of Inelastic Neutron Scattering simulations ([DCS Discover Database](https://ins-dashboard.uc.r.appspot.com/)).
 
-Experimental and simulated INS spectra and other molecule information for orsganic molecule can be found on the [UCD Organic INS Database](https://ins-dashboard.uc.r.appspot.com/).
+![workflow image](images/flowchart.eps)
+
+In the figure above, we present an overview of the complete workflow of the DCS-Flow method. The main part of it is composed by steps in blue or that contain a blue gradient. With the experimental crystal structure file and a set of workflow parameters as inputs, we optimize the structure, simulate the lattice dynamics with the supercell method and calculate the INS spectrum. This is called the main workflow.
+
+In the other hand, the red boxes represent the training workflow, in which the ChIMES model is employed. It starts with the optimization of the structure, followed by a DFT-MD simulation from which a training set of forces, stress tensors and energies is extracted. Finally, the ChIMES model is trained to this set creating coefficients that correct the DFTB calculations. The possibility of correcting the main workflow is represented by a red gradient.
+
 
 ## Documentation
-Summary of DCS purpose [e]
-- calculates phonon modes using corrected form of DFT+
-- Plots INS spectra for comparison
+DCS-Flow is a collection of the following scripts: 
+* Relax: Optimizes structure.
+* Phonons: Calculates phonons modes with the supercell method
+* Oclimax: Runs oclimax simulation creating a INS sprectrum. 
+* MD: Runs molecular dynamics simulations.
+* Chimes: Creates the coefficients for the Chebyshev Interaction Model for Efficient Simulation. 
+* Train: Automated workflow that calls the functions necessary to create the Chimes coefficients.
+* Workflow: Automates the main workflow functions to relax structure, calculate phonons, and calculate the INS spectrum. 
 
 DCS Flow has a command line interface implemented. Examples for how to use it are included under each main function. 
 
-DCS is a collection of the following scripts: 
-* Relax: Optimizes structure. 
-* MD: Runs molecular dynamics simulations.
-* Chimes: Creates Chebyshev model. 
-* Train: Training workflow functions to create polynomial fit.
-* Phonons: Calculates phonons. 
-* Oclimax: Runs oclimax simulation. 
-* Workflow: Main workflow functions to relax structure, calculate phonons, and calculate the INS spectrum. 
-
 ### Main Functions
+
 #### Relax 
 * ```relax(krelax=[6, 6, 6], fmax=0.05, geo=None, calc='dftbp'):```
     * Finds the geometry file and optimizes the structure using the specified calculator. 
@@ -50,45 +52,6 @@ DCS is a collection of the following scripts:
 
 ```
 cnss relax --krelax 6 6 6 --fmax 0.05 --geo TCNQ.cif --calc dftbp
-```
-
-#### Train
-* ```train(dct=None):```  
-    * Calls chosen calculator with a timer using specified parameters, else with default parameters.
-    * The following input is required:
-        * dct (dict, optional): Specified parameters for relax, md, and chimes functions. Defaults to None.
-
-``` 
-cnss train
-```
-
-#### Chimes
-* ```chimes(trajfile=None, b2=12, b3=8, T=5):``` [e] 
-    * Calls multi_fmatch (calculates force difference) and fm_setup_input () functions to create Chebyshev Interaction Model and creates 3-chimes folder. [e]
-    * The following inputs are required:
-        * trajfile (list, optional): Trajectory file output from md simulation. Defaults to None.
-        * b2 (int, optional): Second body order of Chebyshev polynomial. Defaults to 12.
-        * b3 (int, optional): Third body order of Chebyshev polynomial. Defaults to 8.
-        * T (int, optional): Temperature for simulation in Kevin. Defaults to 5.
-
-``` 
-cnss chimes --b2 12 --b3 8 --T 5
-```
-
-#### md
-*  ```md(optgeo=None, calc='vasp', T=300, md_size=[1,1,1], steps=5000, time_step=1, dump_interval=100):```
-    * Runs md using vasp or castep; if other calculator specified, raises error.
-    * The following inputs are defined in the training parameters file (train_params.json): 
-        * optgeo (NoneType, optional): Optimized geometry file, only true if optgeo defined. Defaults to None.
-        * calc (str, optional): Specifies calculator.Options are 'vasp' or 'castep'. Defaults to 'vasp'.
-        * T (int, optional): Simulation temperature. Defaults to 300.
-        * md_size (list, optional): Size of supercell. Defaults to [1,1,1].
-        * steps (int, optional): Maximum number of ionic steps. Defaults to 5000.
-        * time_step (int, optional): Md time step in fs. Defaults to 1. 
-        * dump_interval (int, optional): Step size. Defaults to 100. 
-
-``` 
-cnss md --calc vasp --T 300 --md_size 1 1 1 --steps 5000 --time_step 1 --dump_interval 100
 ```
 
 #### Phonons
@@ -117,6 +80,45 @@ cnss phonons --dim 4 4 4 --kforce 1 1 1 --mesh 8 8 8 --calc dftbp
 cnss oclimax --task 0 --e_unit 0
 ```
 
+#### MD
+*  ```md(optgeo=None, calc='vasp', T=300, md_size=[1,1,1], steps=5000, time_step=1, dump_interval=100):```
+    * Runs md using vasp or castep; if other calculator specified, raises error.
+    * The following inputs are defined in the training parameters file (train_params.json): 
+        * optgeo (NoneType, optional): Optimized geometry file, only true if optgeo defined. Defaults to None.
+        * calc (str, optional): Specifies calculator.Options are 'vasp' or 'castep'. Defaults to 'vasp'.
+        * T (int, optional): Simulation temperature. Defaults to 300.
+        * md_size (list, optional): Size of supercell. Defaults to [1,1,1].
+        * steps (int, optional): Maximum number of ionic steps. Defaults to 5000.
+        * time_step (int, optional): Md time step in fs. Defaults to 1. 
+        * dump_interval (int, optional): Step size. Defaults to 100. 
+
+``` 
+cnss md --calc vasp --T 300 --md_size 1 1 1 --steps 5000 --time_step 1 --dump_interval 100
+```
+
+#### Chimes
+* ```chimes(trajfile=None, b2=12, b3=8, T=5):``` [e] 
+    * Calls multi_fmatch (calculates force difference) and fm_setup_input () functions to create Chebyshev Interaction Model and creates 3-chimes folder. [e]
+    * The following inputs are required:
+        * trajfile (list, optional): Trajectory file output from md simulation. Defaults to None.
+        * b2 (int, optional): Second body order of Chebyshev polynomial. Defaults to 12.
+        * b3 (int, optional): Third body order of Chebyshev polynomial. Defaults to 8.
+        * T (int, optional): Temperature for simulation in Kevin. Defaults to 5.
+
+``` 
+cnss chimes --b2 12 --b3 8 --T 5
+```
+
+#### Train
+* ```train(dct=None):```  
+    * Calls chosen calculator with a timer using specified parameters, else with default parameters.
+    * The following input is required:
+        * dct (dict, optional): Specified parameters for relax, md, and chimes functions. Defaults to None.
+
+``` 
+cnss train
+```
+
 #### Workflow
 * ```workflow(dct=None):```
     * Calls all workflow functions with a timer using specified parameters, else with default parameters.
@@ -127,13 +129,12 @@ cnss oclimax --task 0 --e_unit 0
 cnss workflow
 ```
 
+
 ## Examples
 
-More examples are available on the [add documentation website link](). [e] 
+__Main Workflow using DFTB+ for TCNQ on PC__:  
 
-__DFTB+ and Main Workflow for TCNQ on PC__:  
-
-The following example shows the primary workflow using only dftb+ as the calculator run on a personal terminal (as opposed to a super computer).  
+The following example shows the primary workflow using dftb+ as the calculator run on a personal terminal (as opposed to a super computer). 
 
 First, create a folder containing the geometry file (.cif, .gen, .sdf, or .xyz). The folder used in this example, named TCNQ, can be downloaded here: [e]  
 
@@ -179,7 +180,7 @@ Edit the workflow parameters file to match the following values. Check the [Work
 The TCNQ folder, or current directory, now has the structure file (tcnq.cif) and the edited parameters file (workflow_params.json). Use the following command to begin the calculation: 
 
 ``` python
-cnss -T workflow
+cnss workflow
 ```  
 
 Once the job has completed, the following files can be found in the TCNQ folder.  
@@ -194,21 +195,24 @@ Open the 3-oclimax folder and click on the png file to view to INS specta.
 
 ---
 
-__DFTB+ and Main Workflow for TCNQ on NERSC__:  
+__Main Workflow using DFTB+ for TCNQ on NERSC__:  
 
-The following example shows the primary workflow using only dftb+ as the calculator on NERSC.  
+The following example shows the primary workflow using dftb+ as the calculator on NERSC.  
 
-First, create a folder containing the geometry file (.cif, .gen, .sdf, or .xyz) and a run_tcnq.py file (for NERSC). This folder, named TCNQ, can be downloaded here: [e]  
-
-Upload the TCNQ folder to NERSC using a file transfer software like Globus.
-
-Access the super computer via the terminal and login. Load the CNSS module using the following commands: 
+First, there is no need of installation of the DCS-Flow package and its dependencies. Just access the super computer via the terminal, and load the CNSS module using the following commands:\
 
 ``` python
 module use /global/common/software/m2734/cnss/modulefiles
 module load cnss
 ```  
-Inside the TCNQ file, create the workflow parameters file, ```workflow_params.json```, using the following commands.  
+
+You can add these commands to your bashrc file in your NERSC home folder to load the CNSS module every time you access NERSC.
+
+Create a folder containing the geometry file (.cif, .gen, .sdf, or .xyz) and a run_tcnq.py bash script (for NERSC). This folder, named TCNQ, can be downloaded here: [e]  
+
+Upload the TCNQ folder to NERSC using a file transfer software like Globus.
+
+Inside the TCNQ directory, create the workflow parameters file, ```workflow_params.json```, using the following commands.  
 
 ``` python
 cd TCNQ
@@ -248,7 +252,7 @@ Edit the workflow parameters file to match the following values. Check the [Work
 }
 ```  
 
-The TCNQ folder, or current directory, now has the structure file (tcnq.cif), the edited parameters file (workflow_params.json), and the run script (run_tcnq.py.). The run_tcnq.py file contains information for the NERSC super computer. The final lines contain the commands to be evaluated, in this case ```eval $'cnss -T workflow'```.  
+The TCNQ folder, or current directory, now has the structure file (tcnq.cif), the edited parameters file (workflow_params.json), and the run script (run_tcnq.py.). The run_tcnq.py bash script contains information for the NERSC super computer such as number of allocated nodes, processors and run hours. The final lines contain the commands to be evaluated, in this case ```eval $'cnss workflow'```.  
 
 Submit the job and check it's progress using the following commands:
 
@@ -263,9 +267,7 @@ Once the job has completed, the following files can be found in the TCNQ folder.
 2-phonons		PREFIX.out		out.out			workflow_params.json
 ```  
 
-Use a file transfer software like Globus to transfer the wanted files to your personal computer. Open the 3-oclimax folder and click on the png file to view to INS specta. 
-
-![alt text](images/TCNQ_DFTB_INS.png)
+Use a file transfer software like Globus to transfer the wanted files to your personal computer. Open the 3-oclimax folder and click on the png file to view to INS specta. The resulted INS spectrum will be the same as simulated in the example before.
  
 ---
 
