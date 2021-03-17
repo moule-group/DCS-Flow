@@ -199,7 +199,7 @@ __Main Workflow using DFTB+ for TCNQ on NERSC__:
 
 The following example shows the primary workflow using dftb+ as the calculator on NERSC.  
 
-First, there is no need of installation of the DCS-Flow package and its dependencies. Just access the super computer via the terminal, and load the CNSS module using the following commands:\
+First, there is no need of installation of the DCS-Flow package and its dependencies. Just access the super computer via the terminal, and load the CNSS module using the following commands:
 
 ``` python
 module use /global/common/software/m2734/cnss/modulefiles
