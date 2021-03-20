@@ -19,7 +19,7 @@
 
 The Davis Computational Spectroscopy workflow (DCS-Flow) was designed to connect and automate different material sciences tools which facilitate the use and comparison of electronic methods such as DFT, DFTB and machine learning to simulate the structure and dynamics of materials properties for improved structure property prediction. DCS-Flow provides an efficient workflow to create databases of Inelastic Neutron Scattering simulations ([DCS Discover Database](https://ins-dashboard.uc.r.appspot.com/)).
 
-![alt text](images/flowchart.png)
+![alt text](Uploads/images/flowchart.png)
 
 In the figure above, we present an overview of the complete workflow of the DCS-Flow method. The main part of it is composed by steps in blue or that contain a blue gradient. With the experimental crystal structure file and a set of workflow parameters as inputs, we optimize the structure, simulate the lattice dynamics with the supercell method and calculate the INS spectrum. This is called the main workflow.
 
@@ -136,7 +136,7 @@ __Main Workflow using DFTB+ for TCNQ on PC__:
 
 The following example shows the primary workflow using dftb+ as the calculator run on a personal terminal (as opposed to a super computer). 
 
-First, create a folder containing the geometry file (.cif, .gen, .sdf, or .xyz). The folder used in this example, named TCNQ, can be downloaded here: [e]  
+First, create a folder containing the geometry file (.cif, .gen, .sdf, or .xyz). The folder used in this example, named TCNQ, can be downloaded from the [Uploads Folder](https://gitlab.com/lucassamir1/adam-moule/-/tree/MacOSInstall/Uploads).  
 
 In the TCNQ folder, create the workflow parameters file, ```workflow_params.json```, using the following command.  
 
@@ -144,8 +144,7 @@ In the TCNQ folder, create the workflow parameters file, ```workflow_params.json
 cnss workflow --get-params
 ```  
 
-Edit the workflow parameters file to match the following values. Check the [Workflow Parameters Selection](https://gitlab.com/lucassamir1/adam-moule/-/blob/MacOSInstall/README.md#workflow-parameters-selection) for information on how values can be selected. 
-
+Edit the workflow parameters file to match the following values.
 ```
 {
     "krelax": [
@@ -186,12 +185,13 @@ cnss workflow
 Once the job has completed, the following files can be found in the TCNQ folder.  
 ```
 1-optimization		3-oclimax		err.out			run_tcnq.py
-2-phonons		PREFIX.out		out.out			workflow_params.json
+2-phonons		out.out			workflow_params.json
 ```  
 
 Open the 3-oclimax folder and click on the png file to view to INS specta. 
 
-![alt text](images/TCNQ_DFTB_INS.png)
+![alt text](Uploads/images/TCNQ_DFTB_INS.png)
+<img src="/Uploads/images/TCNQ_DFTB_INS.png"  width="600" height="455">
 
 ---
 
@@ -199,7 +199,7 @@ __Main Workflow using DFTB+ for TCNQ on NERSC__:
 
 The following example shows the primary workflow using dftb+ as the calculator on NERSC.  
 
-First, there is no need of installation of the DCS-Flow package and its dependencies. Just access the super computer via the terminal, and load the CNSS module using the following commands:
+First, there is no need to install the DCS-Flow package and its dependencies. Just access the super computer via the terminal, and load the CNSS module using the following commands:
 
 ``` python
 module use /global/common/software/m2734/cnss/modulefiles
@@ -208,7 +208,7 @@ module load cnss
 
 You can add these commands to your bashrc file in your NERSC home folder to load the CNSS module every time you access NERSC.
 
-Create a folder containing the geometry file (.cif, .gen, .sdf, or .xyz) and a run_tcnq.py bash script (for NERSC). This folder, named TCNQ, can be downloaded here: [e]  
+Create a folder containing the geometry file (.cif, .gen, .sdf, or .xyz) and a run_tcnq.py bash script (for NERSC). This folder, named TCNQ, can be downloaded from the [Uploads Folder](https://gitlab.com/lucassamir1/adam-moule/-/tree/MacOSInstall/Uploads).  
 
 Upload the TCNQ folder to NERSC using a file transfer software like Globus.
 
@@ -219,7 +219,7 @@ cd TCNQ
 cnss workflow --get-params
 ```  
 
-Edit the workflow parameters file to match the following values. Check the [Workflow Parameters Selection](https://gitlab.com/lucassamir1/adam-moule/-/blob/MacOSInstall/README.md#workflow-parameters-selection) for information on how values can be selected. 
+Edit the workflow parameters file to match the following values.
 
 ```
 {
@@ -264,27 +264,133 @@ sqs
 Once the job has completed, the following files can be found in the TCNQ folder.  
 ```
 1-optimization		3-oclimax		err.out			run_tcnq.py
-2-phonons		PREFIX.out		out.out			workflow_params.json
+2-phonons		out.out			workflow_params.json
 ```  
 
 Use a file transfer software like Globus to transfer the wanted files to your personal computer. Open the 3-oclimax folder and click on the png file to view to INS specta. The resulted INS spectrum will be the same as simulated in the example before.
  
 ---
 
-__Training and Main Workflow for TCNQ-TTF__:  [e] 
-- explain how to start
-1. generate a parameters train_params.json - edit so it says castep + other params
-2. run --> params.txt
-3. change workflow params to chimes 
-4. run main workflow with params.txt --> generate INS spectra 
+__Training and Main Workflow for TTF-TCNQ__:  
 
-- after running training workflow, can run main workflow - but change calculator to chimes
-make sure params.txt in folder, change workflow_params.json calc to 'chimes' 
+The following example walks through the training workflow, with chimes, using NERSC. 
 
-file params.txt (chimes parameters type file created) 
+First access the super computer via the terminal, and load the CNSS module using the following commands:
 
-### Workflow Parameters Selection
-- add in guidance for how to choose krelax, fmax, geo, dim, kforce, mesh, task, e_unit values [e]
-- consider adding training params file info [e] 
+``` python
+module use /global/common/software/m2734/cnss/modulefiles
+module load cnss
+```  
 
-- add example folder (TCNQ_PC, TCNQ_NERSC, TCNQ-TTF_Train) 
+Create a folder containing the geometry file (.cif, .gen, .sdf, or .xyz) and a run_tcnq.py bash script (for NERSC). This folder, named TTF-TCNQ, can be downloaded from the [Uploads Folder](https://gitlab.com/lucassamir1/adam-moule/-/tree/MacOSInstall/Uploads).  
+
+Upload the TTF-TCNQ folder to NERSC using a file transfer software like Globus.
+
+Inside the TTF-TCNQ directory, generate the training parameters file, ```train_params.json```, using the following commands.  
+
+``` python
+cd TTF-TCNQ
+cnss train --get-params
+```  
+
+Edit the training parameters file to match the following values.
+```
+{
+    "krelax": [
+        6,
+        6,
+        6
+    ],
+    "fmax": 0.05,
+    "geo": null,
+    "calc": "castep",
+    "optgeo": null,
+    "T": 5,
+    "md_size": [
+        1,
+        1,
+        1
+    ],
+    "steps": 5000,
+    "time_step": 1,
+    "dump_interval": 100,
+    "trajfile": null,
+    "b2": 12,
+    "b3": 8
+}
+```
+
+The TCNQ folder, or current directory, now has the structure file (TTF-TCNQ.cif), the edited parameters file (train_params.json), and the run script (run_ttf-tcnq.py.). The run_ttf-tcnq.py bash script contains information for the NERSC super computer such as number of allocated nodes, processors and run hours. The final lines contain the commands to be evaluated, in this case ```eval $'cnss train```.  
+
+Submit the job and check it's progress using the following commands:
+
+``` python
+sbatch run_ttf-tcnq.py
+sqs
+```  
+
+Once the job has completed, the following files can be found in the TTF-TCNQ folder.  
+```
+[e] with actual 
+run_ttf-tcnq.py
+train_params.json
+params.txt
+```  
+
+Once the training has successfuly run, create a workflow parameters file in the TTF-TCNQ folder using the following commands.  
+
+``` python
+cd TTF-TCNQ
+cnss workflow --get-params
+```  
+In the workflow parameters, edit the calculator to chimes. [e] edit to actual values
+
+```
+{
+    "krelax": [
+        4,
+        4,
+        2
+    ],
+    "fmax": 0.05,
+    "geo": null,
+    "calc": "chimes",
+    "dim": [
+        2,
+        2,
+        1
+    ],
+    "kforce": [
+        1,
+        1,
+        1
+    ],
+    "mesh": [
+        8,
+        8,
+        8
+    ],
+    "params": null,
+    "task": 0,
+    "e_unit": 0
+}
+```  
+The TTF-TCNQ folder, or current directory, now has the structure file (TTF-TCNQ.cif), the chimes output (params.txt), the edited parameters file (workflow_params.json) and the run script (run_ttf-tcnq.py.). The run_ttf-tcnq.py bash script contains information for the NERSC super computer such as number of allocated nodes, processors and run hours. The final lines contain the commands to be evaluated, in this case ```eval $'cnss workflow'```.
+
+Submit the job and using the following commands:
+
+``` python
+sbatch run_ttf-tcnq.py
+```  
+
+Once the job has completed, the following files can be found in the TTF-TCNQ folder. [e] update  
+```
+1-optimization		3-oclimax		err.out			run_ttf-tcnq.py
+2-phonons		out.out			workflow_params.json
+```   
+
+Use a file transfer software like Globus to transfer the wanted files to your personal computer. Open the 3-oclimax folder and click on the png file to view to INS specta.  
+
+![alt text](Uploads/images/TTF-TCNQ_INS.png)[e] 
+<img src="Uploads/images/TTF-TCNQ_INS.png"  width="600" height="455">
+

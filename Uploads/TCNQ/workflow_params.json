@@ -1,0 +1,28 @@
+{
+    "krelax": [
+        4,
+        4,
+        2
+    ],
+    "fmax": 0.05,
+    "geo": null,
+    "calc": "dftbp",
+    "dim": [
+        2,
+        2,
+        1
+    ],
+    "kforce": [
+        1,
+        1,
+        1
+    ],
+    "mesh": [
+        8,
+        8,
+        8
+    ],
+    "params": null,
+    "task": 0,
+    "e_unit": 0
+}
