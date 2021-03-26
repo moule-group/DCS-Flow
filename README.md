@@ -132,7 +132,7 @@ cnss workflow
 
 ## Examples
 
-__Main Workflow using DFTB+ for TCNQ on PC__:  
+__EX 1: Main Workflow using DFTB+ for TCNQ on PC__:  
 
 The following example shows the primary workflow using dftb+ as the calculator run on a personal terminal (as opposed to a super computer). 
 
@@ -190,14 +190,13 @@ Once the job has completed, the following files can be found in the TCNQ folder.
 
 Open the 3-oclimax folder and click on the png file to view to INS specta. 
 
-![alt text](Uploads/images/TCNQ_DFTB_INS.png)
 <img src="/Uploads/images/TCNQ_DFTB_INS.png"  width="600" height="455">
 
 ---
 
-__Main Workflow using DFTB+ for TCNQ on NERSC__:  
+__EX 2: Main Workflow using DFTB+ for TCNQ on NERSC__:  
 
-The following example shows the primary workflow using dftb+ as the calculator on NERSC.  
+The following example shows the primary workflow using dftb+ as the calculator using the NERSC super computer.  
 
 First, there is no need to install the DCS-Flow package and its dependencies. Just access the super computer via the terminal, and load the CNSS module using the following commands:
 
@@ -271,9 +270,9 @@ Use a file transfer software like Globus to transfer the wanted files to your pe
  
 ---
 
-__Training and Main Workflow for TTF-TCNQ__:  
+__EX 3: Training and Main Workflow for TTF-TCNQ__:  
 
-The following example walks through the training workflow, with chimes, using NERSC. 
+The following example walks through the training workflow, with ChIMES, using the NERSC super computer. 
 
 First access the super computer via the terminal, and load the CNSS module using the following commands:
 
@@ -286,7 +285,7 @@ Create a folder containing the geometry file (.cif, .gen, .sdf, or .xyz) and a r
 
 Upload the TTF-TCNQ folder to NERSC using a file transfer software like Globus.
 
-Inside the TTF-TCNQ directory, generate the training parameters file, ```train_params.json```, using the following commands.  
+Inside the TTF-TCNQ directory, generate the training parameters file, ```train_params.json```, using the following commands:  
 
 ``` python
 cd TTF-TCNQ
@@ -322,7 +321,7 @@ Edit the training parameters file to match the following values.
 
 The TCNQ folder, or current directory, now has the structure file (TTF-TCNQ.cif), the edited parameters file (train_params.json), and the run script (run_ttf-tcnq.py.). The run_ttf-tcnq.py bash script contains information for the NERSC super computer such as number of allocated nodes, processors and run hours. The final lines contain the commands to be evaluated, in this case ```eval $'cnss train```.  
 
-Submit the job and check it's progress using the following commands:
+Submit the job and check it's progress using the following commands:  
 
 ``` python
 sbatch run_ttf-tcnq.py
@@ -331,10 +330,8 @@ sqs
 
 Once the job has completed, the following files can be found in the TTF-TCNQ folder.  
 ```
-[e] with actual 
-run_ttf-tcnq.py
-train_params.json
-params.txt
+0-train			err.out			run_ttf-tcnq.py			params.txt
+TTF-TCNQ.cif		out.out			train_params.json
 ```  
 
 Once the training has successfuly run, create a workflow parameters file in the TTF-TCNQ folder using the following commands.  
@@ -343,7 +340,7 @@ Once the training has successfuly run, create a workflow parameters file in the 
 cd TTF-TCNQ
 cnss workflow --get-params
 ```  
-In the workflow parameters, edit the calculator to chimes. [e] edit to actual values
+In the workflow parameters, edit the calculator to chimes.
 
 ```
 {
@@ -383,7 +380,7 @@ Submit the job and using the following commands:
 sbatch run_ttf-tcnq.py
 ```  
 
-Once the job has completed, the following files can be found in the TTF-TCNQ folder. [e] update  
+Once the job has completed, the following files can be found in the TTF-TCNQ folder.
 ```
 1-optimization		3-oclimax		err.out			run_ttf-tcnq.py
 2-phonons		out.out			workflow_params.json
@@ -391,6 +388,5 @@ Once the job has completed, the following files can be found in the TTF-TCNQ fol
 
 Use a file transfer software like Globus to transfer the wanted files to your personal computer. Open the 3-oclimax folder and click on the png file to view to INS specta.  
 
-![alt text](Uploads/images/TTF-TCNQ_INS.png)[e] 
 <img src="Uploads/images/TTF-TCNQ_INS.png"  width="600" height="455">
 
