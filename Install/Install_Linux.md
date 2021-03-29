@@ -48,7 +48,7 @@ pip install --upgrade --user phonopy
 * Installing DCS-Flow
 
 ```
-git clone https://gitlab.com/lucassamir1/adam-moule.git
+git clone https://gitlab.com/lucassamir1/DCS-Flow.git
 ```
 
 ### Set environment variables
@@ -59,8 +59,8 @@ Add these lines to your configuration file (.bashrc for Linux, ~/.bash_profile f
 export DFTB_PREFIX=/my_disk/my_name/slako/mio/mio-1-1/ # (path to Slako files)
 export ASE_DFTB_COMMAND=/my_disk/my_name/dftbplus-20.1/bin/dftb+ > PREFIX.out # (path to dftb+)
 export PATH=/my_disk/my_name/dftbplus-20.1/bin:$PATH (path to dftb+ files)
-export PYTHONPATH=/my_disk/my_name/adam-moule:$PYTHONPATH #(path to DCS file)
-export PATH=/my_disk/my_name/adam-moule/dcs:$PATH #(path to file within DCS folder)
+export PYTHONPATH=/my_disk/my_name/DCS-Flow:$PYTHONPATH #(path to DCS file)
+export PATH=/my_disk/my_name/DCS-Flow/dcs:$PATH #(path to file within DCS folder)
 ```
 
 ### Usage
