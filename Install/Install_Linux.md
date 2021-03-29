@@ -51,9 +51,11 @@ pip install --upgrade --user phonopy
 git clone https://gitlab.com/lucassamir1/DCS-Flow.git
 ```
 
+  There are three ChIMES related files (chimes_lsq, chimes_md, lsq2.py) that require permission from Nir Goldman (goldman14@llnl.gov) to be distributed. Please send an email to us. Put these files inside the git directory DCS-Flow/dcs/.
+
 ### Set environment variables
 
-Add these lines to your configuration file (.bashrc for Linux, ~/.bash_profile for macOS). The following code uses example paths and must be edited according to your system.
+Add these lines to your configuration file (.bashrc). The following code uses example paths and must be edited according to your system.
 
 ```
 export DFTB_PREFIX=/my_disk/my_name/slako/mio/mio-1-1/ # (path to Slako files)
