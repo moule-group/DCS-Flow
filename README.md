@@ -2,10 +2,10 @@
 
 ## Contents
 
-* [Installation](https://gitlab.com/lucassamir1/adam-moule/-/tree/MacOSInstall#installation) 
-* [Workflow](https://gitlab.com/lucassamir1/adam-moule/-/tree/MacOSInstall#workflow)
-* [Documentation](https://gitlab.com/lucassamir1/adam-moule/-/tree/MacOSInstall#documentation)
-* [Examples](https://gitlab.com/lucassamir1/adam-moule/-/tree/MacOSInstall#examples)
+* [Installation](https://gitlab.com/lucassamir1/adam-moule/-/tree/master#installation) 
+* [Workflow](https://gitlab.com/lucassamir1/adam-moule/-/tree/master#workflow)
+* [Documentation](https://gitlab.com/lucassamir1/adam-moule/-/tree/master#documentation)
+* [Examples](https://gitlab.com/lucassamir1/adam-moule/-/tree/master#examples)
 
 
 ## Installation 
@@ -136,7 +136,7 @@ __EX 1: Main Workflow using DFTB+ for TCNQ on PC__:
 
 The following example shows the primary workflow using dftb+ as the calculator run on a personal terminal (as opposed to a super computer). 
 
-First, create a folder containing the geometry file (.cif, .gen, .sdf, or .xyz). The folder used in this example, named TCNQ, can be downloaded from the [Uploads Folder](https://gitlab.com/lucassamir1/adam-moule/-/tree/MacOSInstall/Uploads).  
+First, create a folder containing the geometry file (.cif, .gen, .sdf, or .xyz). The folder used in this example, named TCNQ, can be downloaded from the [Uploads Folder](https://gitlab.com/lucassamir1/adam-moule/-/tree/master/Uploads).  
 
 In the TCNQ folder, create the workflow parameters file, ```workflow_params.json```, using the following command.  
 
@@ -207,7 +207,7 @@ module load cnss
 
 You can add these commands to your bashrc file in your NERSC home folder to load the CNSS module every time you access NERSC.
 
-Create a folder containing the geometry file (.cif, .gen, .sdf, or .xyz) and a run_tcnq.py bash script (for NERSC). This folder, named TCNQ, can be downloaded from the [Uploads Folder](https://gitlab.com/lucassamir1/adam-moule/-/tree/MacOSInstall/Uploads).  
+Create a folder containing the geometry file (.cif, .gen, .sdf, or .xyz) and a run_tcnq.py bash script (for NERSC). This folder, named TCNQ, can be downloaded from the [Uploads Folder](https://gitlab.com/lucassamir1/adam-moule/-/tree/master/Uploads).  
 
 Upload the TCNQ folder to NERSC using a file transfer software like Globus.
 
@@ -281,7 +281,7 @@ module use /global/common/software/m2734/cnss/modulefiles
 module load cnss
 ```  
 
-Create a folder containing the geometry file (.cif, .gen, .sdf, or .xyz) and a run_tcnq.py bash script (for NERSC). This folder, named TTF-TCNQ, can be downloaded from the [Uploads Folder](https://gitlab.com/lucassamir1/adam-moule/-/tree/MacOSInstall/Uploads).  
+Create a folder containing the geometry file (.cif, .gen, .sdf, or .xyz) and a run_tcnq.py bash script (for NERSC). This folder, named TTF-TCNQ, can be downloaded from the [Uploads Folder](https://gitlab.com/lucassamir1/adam-moule/-/tree/master/Uploads).  
 
 Upload the TTF-TCNQ folder to NERSC using a file transfer software like Globus.
 
