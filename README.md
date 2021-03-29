@@ -2,17 +2,17 @@
 
 ## Contents
 
-* [Installation](https://gitlab.com/lucassamir1/adam-moule/-/tree/master#installation) 
-* [Workflow](https://gitlab.com/lucassamir1/adam-moule/-/tree/master#workflow)
-* [Documentation](https://gitlab.com/lucassamir1/adam-moule/-/tree/master#documentation)
-* [Examples](https://gitlab.com/lucassamir1/adam-moule/-/tree/master#examples)
+* [Installation](https://gitlab.com/lucassamir1/DCS-Flow/-/tree/master#installation) 
+* [Workflow](https://gitlab.com/lucassamir1/DCS-Flow/-/tree/master#workflow)
+* [Documentation](https://gitlab.com/lucassamir1/DCS-Flow/-/tree/master#documentation)
+* [Examples](https://gitlab.com/lucassamir1/DCS-Flow/-/tree/master#examples)
 
 
 ## Installation 
 
-* [Linux Installation](https://gitlab.com/lucassamir1/adam-moule/-/blob/MacOSInstall/Install/Install_Linux.md)
+* [Linux Installation](https://gitlab.com/lucassamir1/DCS-Flow/-/blob/master/Install/Install_Linux.md)
 
-* [MacOS Installation](https://gitlab.com/lucassamir1/adam-moule/-/blob/MacOSInstall/Install/Install_MacOS.md)
+* [MacOS Installation](https://gitlab.com/lucassamir1/DCS-Flow/-/blob/dcs/Install/Install_MacOS.md)
 
 
 ## Workflow Description
@@ -136,7 +136,7 @@ __EX 1: Main Workflow using DFTB+ for TCNQ on PC__:
 
 The following example shows the primary workflow using dftb+ as the calculator run on a personal terminal (as opposed to a super computer). 
 
-First, create a folder containing the geometry file (.cif, .gen, .sdf, or .xyz). The folder used in this example, named TCNQ, can be downloaded from the [Uploads Folder](https://gitlab.com/lucassamir1/adam-moule/-/tree/master/Uploads).  
+First, create a folder containing the geometry file (.cif, .gen, .sdf, or .xyz). The folder used in this example, named TCNQ, can be downloaded from the [Uploads Folder](https://gitlab.com/lucassamir1/DCS-Flow/-/tree/master/Uploads).  
 
 In the TCNQ folder, create the workflow parameters file, ```workflow_params.json```, using the following command.  
 
@@ -207,7 +207,7 @@ module load dcs
 
 You can add these commands to your bashrc file in your NERSC home folder to load the DCS module every time you access NERSC.
 
-Create a folder containing the geometry file (.cif, .gen, .sdf, or .xyz) and a run_tcnq.py bash script (for NERSC). This folder, named TCNQ, can be downloaded from the [Uploads Folder](https://gitlab.com/lucassamir1/adam-moule/-/tree/master/Uploads).  
+Create a folder containing the geometry file (.cif, .gen, .sdf, or .xyz) and a run_tcnq.py bash script (for NERSC). This folder, named TCNQ, can be downloaded from the [Uploads Folder](https://gitlab.com/lucassamir1/DCS-Flow/-/tree/master/Uploads).  
 
 Upload the TCNQ folder to NERSC using a file transfer software like Globus.
 
@@ -281,7 +281,7 @@ module use /global/common/software/m2734/dcs/modulefiles
 module load dcs
 ```  
 
-Create a folder containing the geometry file (.cif, .gen, .sdf, or .xyz) and a run_tcnq.py bash script (for NERSC). This folder, named TTF-TCNQ, can be downloaded from the [Uploads Folder](https://gitlab.com/lucassamir1/adam-moule/-/tree/master/Uploads).  
+Create a folder containing the geometry file (.cif, .gen, .sdf, or .xyz) and a run_tcnq.py bash script (for NERSC). This folder, named TTF-TCNQ, can be downloaded from the [Uploads Folder](https://gitlab.com/lucassamir1/DCS-Flow/-/tree/master/Uploads).  
 
 Upload the TTF-TCNQ folder to NERSC using a file transfer software like Globus.
 
