@@ -1,9 +1,9 @@
-# Computational Neutron Scattering Simulation
+# Davis Computational Spectroscopy workflow (DCS-Flow)
 
-CNSS is a software that automates simulations of ineslatic neutron scattering starting from ab-initio and ab-initio based calculations.
+DCS-Flow is a software that automates simulations of ineslatic neutron scattering starting from ab-initio and ab-initio based calculations.
 
 
-### CNSS Requirements
+### DCS-Flow Requirements
 
 * [Atomic Simulation Environment](https://wiki.fysik.dtu.dk/ase/)
 * [DFTB+](https://www.dftbplus.org/)
@@ -45,7 +45,7 @@ pip install --upgrade --user phonopy
   oclimax pull
   ```
 
-* Installing CNSS
+* Installing DCS-Flow
 
 ```
 git clone https://gitlab.com/lucassamir1/adam-moule.git
@@ -56,11 +56,11 @@ git clone https://gitlab.com/lucassamir1/adam-moule.git
 Add these lines to your configuration file (.bashrc for Linux, ~/.bash_profile for macOS). The following code uses example paths and must be edited according to your system.
 
 ```
-export DFTB_PREFIX=/my_disk/my_name/slako/mio/mio-0-1/ # (path to Slako files)
+export DFTB_PREFIX=/my_disk/my_name/slako/mio/mio-1-1/ # (path to Slako files)
 export ASE_DFTB_COMMAND=/my_disk/my_name/dftbplus-20.1/bin/dftb+ > PREFIX.out # (path to dftb+)
 export PATH=/my_disk/my_name/dftbplus-20.1/bin:$PATH (path to dftb+ files)
-export PYTHONPATH=/my_disk/my_name/adam-moule/cnss:$PYTHONPATH #(path to CNSS file)
-export PATH=/my_disk/my_name/adam-moule/cnss/cnss:$PATH #(path to file within CNSS folder)
+export PYTHONPATH=/my_disk/my_name/adam-moule:$PYTHONPATH #(path to DCS file)
+export PATH=/my_disk/my_name/adam-moule/dcs:$PATH #(path to file within DCS folder)
 ```
 
 ### Usage
@@ -72,7 +72,7 @@ The workflow will relax the structure, create supercell displacements, calculate
   1. Get the parameters file
    
   ```
-  cnss workflow --get-params
+  dcs workflow --get-params
   ```
 
   2. Define parameters in the file
@@ -80,7 +80,7 @@ The workflow will relax the structure, create supercell displacements, calculate
   3. Run workflow
 
   ```
-  cnss workflow
+  dcs workflow
   ```
 
 

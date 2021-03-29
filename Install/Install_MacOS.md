@@ -1,9 +1,9 @@
-# Computational Neutron Scattering Simulation
+# Davis Computational Spectroscopy workflow (DCS-Flow)
 
-CNSS is a software that automates simulations of ineslatic neutron scattering starting from ab-initio and ab-initio based calculations.
+DCS-Flow is a software that automates simulations of ineslatic neutron scattering starting from ab-initio and ab-initio based calculations.
 
 
-### CNSS Requirements
+### DCS-Flow Requirements
 
 * [Atomic Simulation Environment](https://wiki.fysik.dtu.dk/ase/)
 * [DFTB+](https://www.dftbplus.org/)
@@ -80,7 +80,7 @@ pip3 install --upgrade --user phonopy
   oclimax pull
   ```
 
-* Install CNSS
+* Install DCS-Flow
 
 ```
 git clone https://gitlab.com/lucassamir1/adam-moule.git
@@ -96,8 +96,8 @@ export DFTB_PREFIX=/Users/my_name/slako/mio/mio-1-1/                            
 export ASE_DFTB_COMMAND=/Users/my_name/dftbplus/build/install/bin/dftb+ >PREFIX.out #(Path to dftb+)
 export PATH=/Users/my_name/dftbplus/build/install/bin:$PATH                         #(Path to dftb+)
 export PYTHONPATH=/Users/my_name/dftbplus/build/install/bin/dftb+:$PYTHONPATH       #(Python path to dftb+)
-export PATH=/Users/my_name/adam-moule/cnss/cnss:$PATH                               #(Path to CNSS file)
-export PYTHONPATH=/Users/my_name/adam-moule/cnss:$PYTHONPATH                        #(Python path to CNSS file)
+export PATH=/Users/my_name/adam-moule/dcs:$PATH                               #(Path to DCS-Flow file)
+export PYTHONPATH=/Users/my_name/adam-moule:$PYTHONPATH                        #(Python path to DCS-Flow file)
 export PATH=/Users/my_name/.local/bin:$PATH                                         #(Path to ase file)
 export PYTHONPATH=/Users/my_name/.local/bin/ase:$PYTHONPATH                         #(Python path to ase file)
 
@@ -112,21 +112,15 @@ The workflow will relax the structure, create supercell displacements, calculate
   1. Get the parameters file
    
   ```
-  cnss workflow --get-params
+  dcs workflow --get-params
   ```
 
   2. Define parameters in the file
   
-  3. !! Should mention having to run 
-  
-  ```
-  python3 build_molecule.py
-  ```
-
-  4. Run workflow
+  3. Run workflow
 
   ```
-  cnss workflow
+  dcs workflow
   ```
 
 

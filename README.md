@@ -51,7 +51,7 @@ DCS-Flow has a command line interface implemented. Examples for how to use it ar
         * calc (str, optional): Calculator used. Options are 'dftbp', 'chimes', 'castep', or 'vasp'. Defaults to 'dftbp'.  
 
 ```
-cnss relax --krelax 6 6 6 --fmax 0.05 --geo TCNQ.cif --calc dftbp
+dcs relax --krelax 6 6 6 --fmax 0.05 --geo TCNQ.cif --calc dftbp
 ```
 
 #### Phonons
@@ -64,7 +64,7 @@ cnss relax --krelax 6 6 6 --fmax 0.05 --geo TCNQ.cif --calc dftbp
         * calc (str, optional): Calculator used for task. Options are 'dftbp', 'chimes', 'vasp', or 'castep'. Defaults to 'dftbp'.
 
 ``` 
-cnss phonons --dim 4 4 4 --kforce 1 1 1 --mesh 8 8 8 --calc dftbp
+dcs phonons --dim 4 4 4 --kforce 1 1 1 --mesh 8 8 8 --calc dftbp
 ```
 
 #### Oclimax
@@ -77,7 +77,7 @@ cnss phonons --dim 4 4 4 --kforce 1 1 1 --mesh 8 8 8 --calc dftbp
         * e_unit (int, optional): Defines energy unit. Defaults to 0.
 
 ```
-cnss oclimax --task 0 --e_unit 0
+dcs oclimax --task 0 --e_unit 0
 ```
 
 #### MD
@@ -93,7 +93,7 @@ cnss oclimax --task 0 --e_unit 0
         * dump_interval (int, optional): Step size of frames to be saved in the trajectory file. Defaults to 100. 
 
 ``` 
-cnss md --calc vasp --T 300 --md_size 1 1 1 --steps 5000 --time_step 1 --dump_interval 100
+dcs md --calc vasp --T 300 --md_size 1 1 1 --steps 5000 --time_step 1 --dump_interval 100
 ```
 
 #### Chimes
@@ -106,7 +106,7 @@ cnss md --calc vasp --T 300 --md_size 1 1 1 --steps 5000 --time_step 1 --dump_in
         * T (int, optional): Temperature for simulation in Kevin. Defaults to 5.
 
 ``` 
-cnss chimes --b2 12 --b3 8 --T 5
+dcs chimes --b2 12 --b3 8 --T 5
 ```
 
 #### Train
@@ -116,7 +116,7 @@ cnss chimes --b2 12 --b3 8 --T 5
         * dct (dict, optional): JSON file with specified parameters for relax, md, and chimes functions. Defaults to 'train_params.json'.
 
 ``` 
-cnss train
+dcs train
 ```
 
 #### Workflow
@@ -126,7 +126,7 @@ cnss train
         * dct (dict, optional): JSON file with specified parameters for relax, phonons, and oclimax functions. Defaults to 'workflow_params.json'.
 
 ```
-cnss workflow
+dcs workflow
 ```
 
 
@@ -141,7 +141,7 @@ First, create a folder containing the geometry file (.cif, .gen, .sdf, or .xyz).
 In the TCNQ folder, create the workflow parameters file, ```workflow_params.json```, using the following command.  
 
 ``` python
-cnss workflow --get-params
+dcs workflow --get-params
 ```  
 
 Edit the workflow parameters file to match the following values.
@@ -179,7 +179,7 @@ Edit the workflow parameters file to match the following values.
 The TCNQ folder, or current directory, now has the structure file (tcnq.cif) and the edited parameters file (workflow_params.json). Use the following command to begin the calculation: 
 
 ``` python
-cnss workflow
+dcs workflow
 ```  
 
 Once the job has completed, the following files can be found in the TCNQ folder.  
@@ -198,14 +198,14 @@ __EX 2: Main Workflow using DFTB+ for TCNQ on NERSC__:
 
 The following example shows the primary workflow using dftb+ as the calculator using the NERSC super computer.  
 
-First, there is no need to install the DCS-Flow package and its dependencies. Just access the super computer via the terminal, and load the CNSS module using the following commands:
+First, there is no need to install the DCS-Flow package and its dependencies. Just access the super computer via the terminal, and load the DCS module using the following commands:
 
 ``` python
-module use /global/common/software/m2734/cnss/modulefiles
-module load cnss
+module use /global/common/software/m2734/dcs/modulefiles
+module load dcs
 ```  
 
-You can add these commands to your bashrc file in your NERSC home folder to load the CNSS module every time you access NERSC.
+You can add these commands to your bashrc file in your NERSC home folder to load the DCS module every time you access NERSC.
 
 Create a folder containing the geometry file (.cif, .gen, .sdf, or .xyz) and a run_tcnq.py bash script (for NERSC). This folder, named TCNQ, can be downloaded from the [Uploads Folder](https://gitlab.com/lucassamir1/adam-moule/-/tree/master/Uploads).  
 
@@ -215,7 +215,7 @@ Inside the TCNQ directory, create the workflow parameters file, ```workflow_para
 
 ``` python
 cd TCNQ
-cnss workflow --get-params
+dcs workflow --get-params
 ```  
 
 Edit the workflow parameters file to match the following values.
@@ -251,7 +251,7 @@ Edit the workflow parameters file to match the following values.
 }
 ```  
 
-The TCNQ folder, or current directory, now has the structure file (tcnq.cif), the edited parameters file (workflow_params.json), and the run script (run_tcnq.py.). The run_tcnq.py bash script contains information for the NERSC super computer such as number of allocated nodes, processors and run hours. The final lines contain the commands to be evaluated, in this case ```eval $'cnss workflow'```.  
+The TCNQ folder, or current directory, now has the structure file (tcnq.cif), the edited parameters file (workflow_params.json), and the run script (run_tcnq.py.). The run_tcnq.py bash script contains information for the NERSC super computer such as number of allocated nodes, processors and run hours. The final lines contain the commands to be evaluated, in this case ```eval $'dcs workflow'```.  
 
 Submit the job and check it's progress using the following commands:
 
@@ -274,11 +274,11 @@ __EX 3: Training and Main Workflow for TTF-TCNQ__:
 
 The following example walks through the training workflow, with ChIMES, using the NERSC super computer. 
 
-First access the super computer via the terminal, and load the CNSS module using the following commands:
+First access the super computer via the terminal, and load the DCS module using the following commands:
 
 ``` python
-module use /global/common/software/m2734/cnss/modulefiles
-module load cnss
+module use /global/common/software/m2734/dcs/modulefiles
+module load dcs
 ```  
 
 Create a folder containing the geometry file (.cif, .gen, .sdf, or .xyz) and a run_tcnq.py bash script (for NERSC). This folder, named TTF-TCNQ, can be downloaded from the [Uploads Folder](https://gitlab.com/lucassamir1/adam-moule/-/tree/master/Uploads).  
@@ -289,7 +289,7 @@ Inside the TTF-TCNQ directory, generate the training parameters file, ```train_p
 
 ``` python
 cd TTF-TCNQ
-cnss train --get-params
+dcs train --get-params
 ```  
 
 Edit the training parameters file to match the following values.
@@ -319,7 +319,7 @@ Edit the training parameters file to match the following values.
 }
 ```
 
-The TCNQ folder, or current directory, now has the structure file (TTF-TCNQ.cif), the edited parameters file (train_params.json), and the run script (run_ttf-tcnq.py.). The run_ttf-tcnq.py bash script contains information for the NERSC super computer such as number of allocated nodes, processors and run hours. The final lines contain the commands to be evaluated, in this case ```eval $'cnss train```.  
+The TCNQ folder, or current directory, now has the structure file (TTF-TCNQ.cif), the edited parameters file (train_params.json), and the run script (run_ttf-tcnq.py.). The run_ttf-tcnq.py bash script contains information for the NERSC super computer such as number of allocated nodes, processors and run hours. The final lines contain the commands to be evaluated, in this case ```eval $'dcs train```.  
 
 Submit the job and check it's progress using the following commands:  
 
@@ -337,7 +337,7 @@ TTF-TCNQ.cif		out.out			train_params.json
 Once the training has successfuly run, create a workflow parameters file in the TTF-TCNQ folder using the following commands.  
 
 ``` python
-cnss workflow --get-params
+dcs workflow --get-params
 ```  
 In the workflow parameters, edit the calculator to chimes and change the default parameters as follows:
 
@@ -371,7 +371,7 @@ In the workflow parameters, edit the calculator to chimes and change the default
     "e_unit": 0
 }
 ```  
-The TTF-TCNQ folder, or current directory, now has the structure file (TTF-TCNQ.cif), the chimes output (params.txt), the edited parameters file (workflow_params.json) and the run script (run_ttf-tcnq.py.). The final lines of the run script should contain the commands to be evaluated, in this case ```eval $'cnss workflow'```.
+The TTF-TCNQ folder, or current directory, now has the structure file (TTF-TCNQ.cif), the chimes output (params.txt), the edited parameters file (workflow_params.json) and the run script (run_ttf-tcnq.py.). The final lines of the run script should contain the commands to be evaluated, in this case ```eval $'dcs workflow'```.
 
 Submit the job and using the following commands:
 

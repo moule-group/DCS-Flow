@@ -13,4 +13,4 @@ export OMP_NUM_THREADS=4
 export KMP_AFFINITY=disabled
 export PYTHONUNBUFFERED=1
 
-eval $'cnss -T train'
+eval $'dcs -T train'
