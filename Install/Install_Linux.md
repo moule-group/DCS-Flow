@@ -2,22 +2,23 @@
 
 CNSS is a software that automates simulations of ineslatic neutron scattering starting from ab-initio and ab-initio based calculations.
 
-### Requirements
+
+### CNSS Requirements
 
 * [Atomic Simulation Environment](https://wiki.fysik.dtu.dk/ase/)
 * [DFTB+](https://www.dftbplus.org/)
 * [Phonopy](https://phonopy.github.io/phonopy/)
 * [Oclimax](https://neutrons.ornl.gov/sites/default/files/2018-NXS_Lecture_YQCheng_2.pdf)
    
-### Installation (Linux)
+### Linux Installation
 
-* Installing ASE:
+* Install ASE:
 
 ```
 pip install --upgrade --user ase
 ```
 
-* Installing DFTB+:
+* Install DFTB+:
 
   1. [Download Slater-Koster files (parameters files for the DFTB method)](http://www.dftb.org/fileadmin/DFTB/public/slako-unpacked.tar.xz)
 
@@ -52,14 +53,14 @@ git clone https://gitlab.com/lucassamir1/adam-moule.git
 
 ### Set environment variables
 
-Add these lines to your configuration file (.bashrc)
+Add these lines to your configuration file (.bashrc for Linux, ~/.bash_profile for macOS). The following code uses example paths and must be edited according to your system.
 
 ```
-export DFTB_PREFIX=/my_disk/my_name/slako/mio/mio-0-1/ (an example)
-export ASE_DFTB_COMMAND='/my_disk/my_name/dftbplus-20.1/bin/dftb+ > PREFIX.out' (an example)
-export PATH=/my_disk/my_name/dftbplus-20.1/bin:$PATH (an example)
-export PYTHONPATH=/my_disk/my_name/cnss:$PYTHONPATH (an example)
-export PATH=/my_disk/my_name/cnss/cnss:$PATH (an example)
+export DFTB_PREFIX=/my_disk/my_name/slako/mio/mio-0-1/ # (path to Slako files)
+export ASE_DFTB_COMMAND=/my_disk/my_name/dftbplus-20.1/bin/dftb+ > PREFIX.out # (path to dftb+)
+export PATH=/my_disk/my_name/dftbplus-20.1/bin:$PATH (path to dftb+ files)
+export PYTHONPATH=/my_disk/my_name/adam-moule/cnss:$PYTHONPATH #(path to CNSS file)
+export PATH=/my_disk/my_name/adam-moule/cnss/cnss:$PATH #(path to file within CNSS folder)
 ```
 
 ### Usage
@@ -81,7 +82,5 @@ The workflow will relax the structure, create supercell displacements, calculate
   ```
   cnss workflow
   ```
-
-
 
 

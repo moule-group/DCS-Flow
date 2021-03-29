@@ -10,6 +10,11 @@ class CLICommand:
 
     @staticmethod
     def add_arguments(parser):
+        """Sets up command line to run phonopy i.e. recognize arguments and commands.
+
+        Args:
+            parser (argparse): Arguments to be added. 
+        """
         add = parser.add_argument
         add('--calc',
             help='Calculator used. Options are dftbp, vasp or castep',
@@ -33,10 +38,21 @@ class CLICommand:
 
     @staticmethod
     def run(args):
+        """Runs phonons function using command line arguments. 
+
+        Args:
+            args (argparse): Command line arguments added to parser using the function add_arguments.
+        """
         phonons(args.dim, args.kforce, args.mesh, args.calc)
 
 
 def generate_supercell(dim, mode):
+    """Reads in the molecule structure file and creates displacements.
+
+    Args:
+        dim (list): Dimensions of the supercell. 
+        mode (str): Calculator used for the task. Options are 'dftbp' or 'chimes'. 
+    """
     from phonopy.cui.collect_cell_info import collect_cell_info
     from phonopy.interface.calculator import (write_supercells_with_displacements,
                                               get_default_physical_units,
@@ -77,6 +93,13 @@ def generate_supercell(dim, mode):
     phonon.save()
     
 def organize_folders(mode):
+    """Finds supercell displacement files and formats the name. 
+        Creates directory with supercell displacement number, 
+    and moves supercell displacement file into created directory.
+
+    Args:
+        mode (str): Calculator used for task. Options are 'dftbp', 'chimes', 'vasp', or 'castep'. 
+    """
 
     if mode == 'dftbp':
         for filename in os.listdir('.'):
@@ -108,7 +131,13 @@ def organize_folders(mode):
 
 
 def calculate_forces(kforce, mode, dir):
+    """Runs single point energy calculation.
 
+    Args:
+        kforce (list): Number of k points for force calculations.
+        mode (str): Calculator used for task. Options are 'dftbp', 'chimes', 'vasp', or 'castep'. 
+        dir (str): Directory to change to and run calculator in.
+    """
     with chdir(dir):
         if isdone('forces'):
             return
@@ -128,7 +157,6 @@ def calculate_forces(kforce, mode, dir):
                                   Hamiltonian_MaxAngularMomentum_H='s',
                                   Hamiltonian_MaxAngularMomentum_N='p',
                                   Hamiltonian_MaxAngularMomentum_S='d',
-                                  Hamiltonian_MaxAngularMomentum_Si='d',
                                   Analysis_='',
                                   Analysis_CalculateForces='Yes',
                                   Options_WriteResultsTag='Yes')
@@ -147,7 +175,6 @@ def calculate_forces(kforce, mode, dir):
                                   Hamiltonian_MaxAngularMomentum_H='s',
                                   Hamiltonian_MaxAngularMomentum_N='p',
                                   Hamiltonian_MaxAngularMomentum_S='d',
-                                  Hamiltonian_MaxAngularMomentum_Si='d',
                                   Analysis_='',
                                   Analysis_CalculateForces='Yes')
                 calculator.write_dftb_in(filename='dftb_in.hsd')
@@ -195,6 +222,14 @@ def calculate_forces(kforce, mode, dir):
             done('forces')
                 
 def multi_forces(kforce, mode, mpi=False):
+    """Calls calculate_forces function using parallel processing,
+        calculates forces for specified mode. 
+
+    Args:
+        kforce (list): Number of k points for force calculations.
+        mode (str): Calculator used for task. Options are 'dftbp', 'chimes', 'vasp', or 'castep'. 
+        mpi (bool, optional): Not currently implemented. Defaults to False. 
+    """
     from functools import partial
     command = partial(calculate_forces, kforce, mode)
     
@@ -215,6 +250,12 @@ def multi_forces(kforce, mode, mpi=False):
 
     
 def calculate_mesh(mesh, mode):
+    """Creates Phonopy force sets for specified calculator and runs mesh sampling phonon calculation. 
+
+    Args:
+        mesh (list): Uniform meshes for each axis. 
+        mode (str): Calculator used for task. Options are 'dftbp', 'chimes', 'vasp', or 'castep'.
+    """
     import phonopy
     from phonopy.cui.create_force_sets import create_FORCE_SETS
     
@@ -240,6 +281,17 @@ def calculate_mesh(mesh, mode):
 
 
 def phonons(dim=[4, 4, 4], kforce=[1, 1, 1], mesh=[8, 8, 8], calc='dftbp'):
+    """Runs phonon supercell displacement calculations, populates 2-phonons folder with results.
+
+    Args:
+        dim (list, optional): Dimensions of the supercell. Defaults to [4, 4, 4].
+        kforce (list, optional): Number of k points for force calculations. Defaults to [1, 1, 1].
+        mesh (list, optional): Uniform meshes for each axis. Defaults to [8, 8, 8].
+        calc (str, optional): Calculator used for task. Options are 'dftbp', 'chimes', 'vasp', or 'castep'. Defaults to 'dftbp'.
+
+    Raises:
+        NotImplementedError: Raised if 'calc' specified is not available. 
+    """
     folder = os.getcwd()
     mkdir(folder + '/2-phonons')
     if calc == 'dftbp':

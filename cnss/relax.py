@@ -8,6 +8,11 @@ class CLICommand:
 
     @staticmethod
     def add_arguments(parser):
+        """Sets up command line to run relax script i.e. recognize arguments and commands.
+
+        Args:
+            parser (argparse): Arguments to be added. 
+        """
         add = parser.add_argument
         add('--calc', help='Calculator used. Options are dftbp, vasp or castep', default='dftbp')
         add('--geo', help='Name of geometry file for structure (cif or gen extensions)')
@@ -24,9 +29,25 @@ class CLICommand:
 
     @staticmethod
     def run(args):
+        """Runs relax.py functions using command line arguments. 
+
+        Args:
+            args (argparse): Command line arguments added to parser using the function add_arguments.
+        """
         relax(args.krelax, args.fmax, args.geo, args.calc)
 
 def relax_structure(krelax, fmax, geo, mode):
+    """Defines arguments for specified calculator and optimizes the structure.
+    
+    Args:
+        krelax (list): Number of k points for relaxation. 
+        fmax (float): Maximum allowed force for convergence between atoms.
+        geo (str): Geometry file or structure. Allowed file types are .cif, .gen, .sdf, or .xyz. 
+        mode (str): Calculator used. Options are 'dftbp', 'chimes', 'vasp', or 'castep'. 
+
+    Raises:
+        NotImplementedError: If specified calculator is not an option for mode, error raised. 
+    """
     if isdone('relax'):
         return
     else:
@@ -52,8 +73,7 @@ def relax_structure(krelax, fmax, geo, mode):
                               Hamiltonian_MaxAngularMomentum_O='p',
                               Hamiltonian_MaxAngularMomentum_H='s',
                               Hamiltonian_MaxAngularMomentum_N='p',
-                              Hamiltonian_MaxAngularMomentum_S='d',
-                              Hamiltonian_MaxAngularMomentum_Si='d')
+                              Hamiltonian_MaxAngularMomentum_S='d')
 
         elif mode == 'chimes':
             from ase.calculators.dftb import Dftb
@@ -78,8 +98,7 @@ def relax_structure(krelax, fmax, geo, mode):
                               Hamiltonian_MaxAngularMomentum_O='p',
                               Hamiltonian_MaxAngularMomentum_H='s',
                               Hamiltonian_MaxAngularMomentum_N='p',
-                              Hamiltonian_MaxAngularMomentum_S='d',
-                              Hamiltonian_MaxAngularMomentum_Si='d')
+                              Hamiltonian_MaxAngularMomentum_S='d')
 
         elif mode == 'vasp':
             from ase.calculators.vasp import Vasp
@@ -114,6 +133,7 @@ def relax_structure(krelax, fmax, geo, mode):
             calculator._set_atoms = True
             calculator.param.task = 'GeometryOptimization'
             calculator.param.xc_functional = 'PBE'
+            calculator.param.basis_precision = 'MEDIUM'
             calculator.param.geom_method = 'BFGS'
             calculator.param.cut_off_energy = 520
             calculator.param.num_dump_cycles = 0
@@ -132,6 +152,15 @@ def relax_structure(krelax, fmax, geo, mode):
         done('relax')
 
 def find_geo(folder):
+    """Searches the current working directory for the molecular structure file. 
+        Allowed file types are .cif, .gen, .sdf, or .xyz. 
+
+    Args:
+        folder (str): The current working directory.
+
+    Returns:
+        str: Molecular structure file. 
+    """
     import glob
     
     geo = glob.glob(folder + '/*.cif') + \
@@ -143,6 +172,16 @@ def find_geo(folder):
     return geo
         
 def relax(krelax=[6, 6, 6], fmax=0.05, geo=None, calc='dftbp'):
+    """Finds the geometry file and optimizes the structure using the specified calculator 
+    (Populates 1-optimization folder with results). 
+
+    Args:
+        krelax (list, optional): Number of k points for relaxation. Defaults to [6, 6, 6].
+        fmax (float, optional): Maximum allowed force for convergence between atoms. Defaults to 0.01.
+        geo (str, optional): Geometry file or structure. 
+            Allowed file types are .cif, .gen, .sdf, or .xyz. Defaults to None.
+        calc (str, optional): Calculator used. Options are 'dftbp', 'chimes', or 'vasp'. Defaults to 'dftbp'.
+    """
     folder = os.getcwd()
 
     if geo:

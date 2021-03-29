@@ -1,6 +1,6 @@
 from ase.cli.main import main as ase_main
 
-version = '0.0.4'
+version = '0.0.5'
 
 commands = [
     ('relax', 'cnss.relax'),
@@ -12,4 +12,6 @@ commands = [
     ('train', 'cnss.train')]
 
 def main():
+    """Looks up ase_main function, sets up command line.
+    """
     ase_main('cnss', 'CNSS command-line tool', version=version, commands=commands)

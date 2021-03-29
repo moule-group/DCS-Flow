@@ -11,6 +11,11 @@ class CLICommand:
 
     @staticmethod
     def add_arguments(parser):
+        """Sets up command line to run workflow script i.e. recognize arguments and commands.
+
+        Args:
+            parser (argparse): Arguments to be added. 
+        """
         add = parser.add_argument
         add('--params',
             help='JSON file with parameters for workflow',
@@ -21,6 +26,11 @@ class CLICommand:
 
     @staticmethod
     def run(args):
+        """Runs workflow function using command line arguments. 
+
+        Args:
+            args (argparse): Command line arguments added to parser using the function add_arguments.
+        """
         if args.get_params:
             write_params()
             return
@@ -31,6 +41,11 @@ class CLICommand:
         workflow(dct)
 
 def workflow(dct=None):
+    """Calls all workflow functions (relax, phonon, oclimax) with a timer using specified parameters in workflow_params.json, else with default parameters.
+
+    Args:
+        dct (dict, optional): Specified parameters for relax, phonons, and oclimax functions. Defaults to None.
+    """
     timer = Timer()
     
     if dct:
@@ -56,6 +71,8 @@ def workflow(dct=None):
         timer.write()
 
 def write_params():
+    """Writes json file with default arguments from relax, phonons, and oclimax scripts. 
+    """
     relax_params = get_default_parameters(relax)
     phonons_params = get_default_parameters(phonons)
     oclimax_params = get_default_parameters(oclimax)
