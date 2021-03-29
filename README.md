@@ -337,10 +337,9 @@ TTF-TCNQ.cif		out.out			train_params.json
 Once the training has successfuly run, create a workflow parameters file in the TTF-TCNQ folder using the following commands.  
 
 ``` python
-cd TTF-TCNQ
 cnss workflow --get-params
 ```  
-In the workflow parameters, edit the calculator to chimes.
+In the workflow parameters, edit the calculator to chimes and change the default parameters as follows:
 
 ```
 {
@@ -372,7 +371,7 @@ In the workflow parameters, edit the calculator to chimes.
     "e_unit": 0
 }
 ```  
-The TTF-TCNQ folder, or current directory, now has the structure file (TTF-TCNQ.cif), the chimes output (params.txt), the edited parameters file (workflow_params.json) and the run script (run_ttf-tcnq.py.). The run_ttf-tcnq.py bash script contains information for the NERSC super computer such as number of allocated nodes, processors and run hours. The final lines contain the commands to be evaluated, in this case ```eval $'cnss workflow'```.
+The TTF-TCNQ folder, or current directory, now has the structure file (TTF-TCNQ.cif), the chimes output (params.txt), the edited parameters file (workflow_params.json) and the run script (run_ttf-tcnq.py.). The final lines of the run script should contain the commands to be evaluated, in this case ```eval $'cnss workflow'```.
 
 Submit the job and using the following commands:
 
@@ -380,10 +379,10 @@ Submit the job and using the following commands:
 sbatch run_ttf-tcnq.py
 ```  
 
-Once the job has completed, the following files can be found in the TTF-TCNQ folder.
+Once the job has completed, the following files will be added to the TTF-TCNQ folder.
 ```
-1-optimization		3-oclimax		err.out			run_ttf-tcnq.py
-2-phonons		out.out			workflow_params.json
+1-optimization		3-oclimax
+2-phonons		
 ```   
 
 Use a file transfer software like Globus to transfer the wanted files to your personal computer. Open the 3-oclimax folder and click on the png file to view to INS specta.  
