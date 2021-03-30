@@ -86,7 +86,13 @@ pip3 install --upgrade --user phonopy
 git clone https://gitlab.com/lucassamir1/DCS-Flow.git
 ```
 
-  There are three ChIMES related files (chimes_lsq, chimes_md, lsq2.py) that require permission from Nir\Goldman (goldman14@llnl.gov) to be distributed. Please send an email to us. Put these files inside the git directory DCS-Flow/dcs/.
+* Installing ChIMES
+
+  If you want to use the machine learning method called ChIMES, please contact Nir Goldman (goldman14@llnl.gov) in order to receive the following files:
+
+  1. DFTB+_ChIMES. This is a version of the DFTB+ package that has an interface to ChIMES. It should substitute the standart DFTB+ package.
+
+  2. ChIMES binaries (chimes_lsq, chimes_md, lsq2.py). Put these files inside the git directory DCS-Flow/dcs/.
 
 ### Set environment variables
 
