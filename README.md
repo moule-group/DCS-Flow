@@ -201,7 +201,7 @@ The following example shows the primary workflow using dftb+ as the calculator u
 First, there is no need to install the DCS-Flow package and its dependencies. Just access the super computer via the terminal, and load the DCS module using the following commands:
 
 ``` python
-module use /global/common/software/m2734/dcs/modulefiles
+module use /global/common/software/m2734/DCS/modulefiles
 module load dcs
 ```  
 
@@ -277,7 +277,7 @@ The following example walks through the training workflow, with ChIMES, using th
 First access the super computer via the terminal, and load the DCS module using the following commands:
 
 ``` python
-module use /global/common/software/m2734/dcs/modulefiles
+module use /global/common/software/m2734/DCS/modulefiles
 module load dcs
 ```  
 
