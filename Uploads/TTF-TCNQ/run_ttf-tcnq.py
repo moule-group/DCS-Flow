@@ -12,5 +12,6 @@
 export OMP_NUM_THREADS=4
 export KMP_AFFINITY=disabled
 export PYTHONUNBUFFERED=1
+export CASTEP_COMMAND='srun -n256 -c1 --cpu_bind=cores castep.mpi'
 
 eval $'dcs -T train'
