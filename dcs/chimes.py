@@ -169,6 +169,11 @@ def rdf(smax, pair):
     for i in range(len(traj)):
         g.append(rdf[i][0])
     aveg = np.average(g, axis=0)
+
+    import matplotlib.pyplot as plt
+    plt.figure(pair[0] + '-' + pair[1])
+    plt.plot(r, aveg)
+    plt.savefig(pair[0] + '-' + pair[1] + '.png', dpi=300, bbox_inches='tight', pad_inches=0)
     
     # choose rmin as the first position where aveg is greater than zero          
     i = np.where(aveg > 0)
