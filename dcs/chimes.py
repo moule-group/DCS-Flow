@@ -75,7 +75,10 @@ def dftb_fmatch_input(T, frame):
                         Hamiltonian_SCC='Yes',
                         Hamiltonian_MaxAngularMomentum_='',
                         Hamiltonian_MaxAngularMomentum_C='p',
+                        Hamiltonian_MaxAngularMomentum_O='p',
                         Hamiltonian_MaxAngularMomentum_H='s',
+                        Hamiltonian_MaxAngularMomentum_N='p',
+                        Hamiltonian_MaxAngularMomentum_S='d',
                         Hamiltonian_Filling='Fermi {{Temperature [Kelvin] = {T} }}' .format(T=T))
             # calc.calculate(frame, properties=['energy', 'forces', 'stress'])
             calc.calculate(frame, properties=['energy', 'forces'])
