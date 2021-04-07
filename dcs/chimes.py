@@ -126,7 +126,7 @@ def multi_fmatch(T):
     traj = Trajectory('dft.traj')
 
     command = partial(dftb_fmatch_input, T)
-    with Pool(processes=4) as pool:
+    with Pool(processes=16) as pool:
         results = pool.map(command, list(traj))
 
     with open('dft-dftb.xyzf', 'a') as file:
@@ -161,7 +161,7 @@ def rdf(smax, pair):
     traj = Trajectory('dft.traj')
     ana = Analysis(list(traj))
 
-    rdf = ana.get_rdf(smax - 0.5, 100, elements=pair, return_dists=True)
+    rdf = ana.get_rdf(smax, 100, elements=pair, return_dists=True)
     r = rdf[0][1]
 
     # get average g function                                                                            
