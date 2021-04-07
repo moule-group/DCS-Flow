@@ -113,7 +113,7 @@ def run_castep_md(atoms, T, steps, time_step, dump_interval):
         return
     else:
         import ase.calculators.castep
-        calculator = ase.calculators.castep.Castep()
+        calculator = ase.calculators.castep.Castep(kpts={'size':[1,1,1], 'gamma':True})
         directory = '../2-molecular_dynamics'
         calculator._export_settings = True
         calculator._directory = directory
@@ -123,7 +123,7 @@ def run_castep_md(atoms, T, steps, time_step, dump_interval):
         calculator._set_atoms = True
         calculator.param.task = 'MolecularDynamics'
         calculator.param.xc_functional = 'PBE'
-        calculator.param.cut_off_energy = 520
+        calculator.param.cut_off_energy = 800
         calculator.param.opt_strategy = 'speed'
         calculator.param.calculate_stress = True
         calculator.param.md_sample_iter = dump_interval
@@ -135,9 +135,10 @@ def run_castep_md(atoms, T, steps, time_step, dump_interval):
         calculator.param.md_temperature = str(T) + ' K'
         calculator.param.md_thermostat = 'nose-hoover'
         calculator.param.md_elec_energy_tol = 1e-6
-        calculator.cell.kpoint_mp_grid = '1 1 1'
+        calculator.param.devel_code = 'PARALLEL: bands=4 kpoints=1 gvectors=64 :ENDPARALLEL'
         calculator.cell.fix_com = True
         calculator.cell.fix_all_cell = True
+        calculator.cell.symmetry_generate = True
         atoms.set_calculator(calculator)
         atoms.get_potential_energy()
         casteptraj = read('md.md', index=slice(0, steps, dump_interval))

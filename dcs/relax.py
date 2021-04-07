@@ -123,7 +123,7 @@ def relax_structure(krelax, fmax, geo, mode):
         elif mode == 'castep':
             import ase.calculators.castep
 
-            calculator = ase.calculators.castep.Castep()
+            calculator = ase.calculators.castep.Castep(kpts={'size':krelax, 'gamma':True})
             directory = '../1-optimization'
             calculator._export_settings = True
             calculator._directory = directory
@@ -133,16 +133,19 @@ def relax_structure(krelax, fmax, geo, mode):
             calculator._set_atoms = True
             calculator.param.task = 'GeometryOptimization'
             calculator.param.xc_functional = 'PBE'
-            calculator.param.basis_precision = 'MEDIUM'
-            calculator.param.geom_method = 'BFGS'
-            calculator.param.cut_off_energy = 520
+            calculator.param.geom_method = 'LBFGS'
+            calculator.param.cut_off_energy = 800
             calculator.param.num_dump_cycles = 0
             calculator.param.geom_force_tol = fmax
             calculator.param.geom_energy_tol = 1e-5
             calculator.param.geom_disp_tol = 1e-3
-            calculator.param.elec_energy_tol = 1e-8
+            calculator.param.geom_stress_tol = 0.05
+            calculator.param.elec_energy_tol = 1e-6
             calculator.param.geom_max_iter = 1000
-            calculator.cell.kpoint_mp_grid = krelax            
+            calculator.param.max_scf_cycles = 100
+            calculator.param.opt_strategy = 'speed'
+            calculator.param.devel_code = 'PARALLEL: bands=4 kpoints=1 gvectors=64 :ENDPARALLEL'
+            calculator.cell.symmetry_generate = True
             
         else:
             raise NotImplementedError('{} calculator not implemented' .format(mode))

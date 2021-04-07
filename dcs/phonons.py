@@ -203,7 +203,7 @@ def calculate_forces(kforce, mode, dir):
                 import ase.calculators.castep
 
                 atoms = read('supercell.cell')
-                calculator = ase.calculators.castep.Castep()
+                calculator = ase.calculators.castep.Castep(kpts={'size':kforce, 'gamma':True})
                 directory = '../' + dir
                 calculator._export_settings = True
                 calculator._directory = directory
@@ -212,10 +212,11 @@ def calculate_forces(kforce, mode, dir):
                 calculator._label = 'phonons'
                 calculator.param.task = 'SinglePoint'
                 calculator.param.xc_functional = 'PBE'
-                calculator.param.cut_off_energy = 520
+                calculator.param.cut_off_energy = 800
                 calculator.param.elec_energy_tol = 1e-8
                 calculator.param.num_dump_cycles = 0
-                calculator.cell.kpoint_mp_grid = kforce
+                calculator.param.devel_code = 'PARALLEL: bands=4 kpoints=1 gvectors=64 :ENDPARALLEL'
+                calculator.param.opt_strategy = 'speed'
 
                 calculator.calculate(atoms)
                 
