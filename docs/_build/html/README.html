@@ -1,0 +1,502 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to the DCS-Flow repository &#8212; DCS-Flow  documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="welcome-to-the-dcs-flow-repository">
+<h1>Welcome to the DCS-Flow repository<a class="headerlink" href="#welcome-to-the-dcs-flow-repository" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="contents">
+<h2>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://gitlab.com/lucassamir1/DCS-Flow/-/tree/master#installation">Installation</a></p></li>
+<li><p><a class="reference external" href="https://gitlab.com/lucassamir1/DCS-Flow/-/tree/master#workflow">Workflow</a></p></li>
+<li><p><a class="reference external" href="https://gitlab.com/lucassamir1/DCS-Flow/-/tree/master#documentation">Documentation</a></p></li>
+<li><p><a class="reference external" href="https://gitlab.com/lucassamir1/DCS-Flow/-/tree/master#examples">Examples</a></p></li>
+</ul>
+</div>
+<div class="section" id="id1">
+<h2>Installation<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://gitlab.com/lucassamir1/DCS-Flow/-/blob/master/Install/Install_Linux.md">Linux Installation</a></p></li>
+<li><p><a class="reference external" href="https://gitlab.com/lucassamir1/DCS-Flow/-/blob/dcs/Install/Install_MacOS.md">MacOS Installation</a></p></li>
+</ul>
+</div>
+<div class="section" id="workflow-description">
+<h2>Workflow Description<a class="headerlink" href="#workflow-description" title="Permalink to this headline">¶</a></h2>
+<p>The Davis Computational Spectroscopy workflow (DCS-Flow) was designed to connect and automate different material sciences tools which facilitate the use and comparison of electronic methods such as DFT, DFTB and machine learning to simulate the structure and dynamics of materials properties for improved structure property prediction. DCS-Flow provides an efficient workflow to create databases of Inelastic Neutron Scattering simulations (<a class="reference external" href="https://ins-dashboard.uc.r.appspot.com/">DCS Discover Database</a>).</p>
+<a class="reference external image-reference" href="Uploads/images/flowchart.png"><img alt="alt text" src="Uploads/images/flowchart.png" /></a>
+<p>In the figure above, we present an overview of the complete workflow of the DCS-Flow method. The main part of it is composed by steps in blue or that contain a blue gradient. With the experimental crystal structure file and a set of workflow parameters as inputs, we optimize the structure, simulate the lattice dynamics with the supercell method and calculate the INS spectrum. This is called the main workflow.</p>
+<p>In the other hand, the red boxes represent the training workflow, in which the ChIMES model is employed. It starts with the optimization of the structure, followed by a DFT-MD simulation from which a training set of forces, stress tensors and energies is extracted. Finally, the ChIMES model is trained to this set creating coefficients that correct the DFTB calculations. The possibility of correcting the main workflow is represented by a red gradient.</p>
+</div>
+<div class="section" id="id2">
+<h2>Documentation<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<p>DCS-Flow is a collection of the following scripts:</p>
+<ul class="simple">
+<li><p>Relax: Optimizes structure.</p></li>
+<li><p>Phonons: Calculates phonons modes with the supercell method.</p></li>
+<li><p>Oclimax: Runs oclimax simulation creating a INS sprectrum.</p></li>
+<li><p>MD: Runs molecular dynamics simulations.</p></li>
+<li><p>Chimes: Creates the coefficients for the Chebyshev Interaction Model for Efficient Simulation.</p></li>
+<li><p>Train: Automated workflow that calls the functions necessary to create the ChIMES coefficients.</p></li>
+<li><p>Workflow: Automates the main workflow functions to relax structure, calculate phonons, and calculate the INS spectrum.</p></li>
+</ul>
+<p>DCS-Flow has a command line interface implemented. Examples for how to use it are included under each main function.</p>
+<div class="section" id="main-functions">
+<h3>Main Functions<a class="headerlink" href="#main-functions" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="relax">
+<h4>Relax<a class="headerlink" href="#relax" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">relax(krelax=[6,</span> <span class="pre">6,</span> <span class="pre">6],</span> <span class="pre">fmax=0.05,</span> <span class="pre">geo=None,</span> <span class="pre">calc='dftbp'):</span></code></p>
+<ul>
+<li><p>Finds the geometry file and optimizes the structure using the specified calculator (Populates 1-optimization folder with results).</p></li>
+<li><p>The following input args are defined in the workflow parameters file:</p>
+<ul>
+<li><p>krelax (list, optional): Number of k points for relaxation. Defaults to [6, 6, 6].</p></li>
+<li><p>fmax (float, optional): Maximum allowed force for convergence between atoms. Defaults to 0.01.</p></li>
+<li><dl class="simple">
+<dt>geo (str, optional): Geometry file or structure.</dt><dd><p>Allowed file types are .cif, .gen, .sdf, or .xyz. Defaults to None.</p>
+</dd>
+</dl>
+</li>
+<li><p>calc (str, optional): Calculator used. Options are ‘dftbp’, ‘chimes’, ‘castep’, or ‘vasp’. Defaults to ‘dftbp’.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dcs</span> <span class="n">relax</span> <span class="o">--</span><span class="n">krelax</span> <span class="mi">6</span> <span class="mi">6</span> <span class="mi">6</span> <span class="o">--</span><span class="n">fmax</span> <span class="mf">0.05</span> <span class="o">--</span><span class="n">geo</span> <span class="n">TCNQ</span><span class="o">.</span><span class="n">cif</span> <span class="o">--</span><span class="n">calc</span> <span class="n">dftbp</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="phonons">
+<h4>Phonons<a class="headerlink" href="#phonons" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">phonons(dim=[4,</span> <span class="pre">4,</span> <span class="pre">4],</span> <span class="pre">kforce=[1,</span> <span class="pre">1,</span> <span class="pre">1],</span> <span class="pre">mesh=[8,</span> <span class="pre">8,</span> <span class="pre">8],</span> <span class="pre">calc='dftbp'):</span></code></p>
+<ul>
+<li><p>Runs phonon supercell displacement calculations, populates 2-phonons folder with results.</p></li>
+<li><p>The following input args are defined in the workflow parameters file:</p>
+<ul>
+<li><p>dim (list, optional): Dimensions of the supercell. Defaults to [4, 4, 4].</p></li>
+<li><p>kforce (list, optional): Number of k points for force calculations. Defaults to [1, 1, 1].</p></li>
+<li><p>mesh (list, optional): Uniform meshes for each axis. Defaults to [8, 8, 8].</p></li>
+<li><p>calc (str, optional): Calculator used for task. Options are ‘dftbp’, ‘chimes’, ‘vasp’, or ‘castep’. Defaults to ‘dftbp’.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dcs</span> <span class="n">phonons</span> <span class="o">--</span><span class="n">dim</span> <span class="mi">4</span> <span class="mi">4</span> <span class="mi">4</span> <span class="o">--</span><span class="n">kforce</span> <span class="mi">1</span> <span class="mi">1</span> <span class="mi">1</span> <span class="o">--</span><span class="n">mesh</span> <span class="mi">8</span> <span class="mi">8</span> <span class="mi">8</span> <span class="o">--</span><span class="n">calc</span> <span class="n">dftbp</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="oclimax">
+<h4>Oclimax<a class="headerlink" href="#oclimax" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">oclimax(params=None,</span> <span class="pre">task=0,</span> <span class="pre">e_unit=0):</span></code></p>
+<ul>
+<li><p>Creates folder 3-oclimax, writes oclimax parameters file in folder and runs oclimax simulation.</p></li>
+<li><p>The following input args are defined in the workflow parameters file:</p>
+<ul>
+<li><p>params (str, optional): Oclimax parameters file name if exists. Otherwise, it will be created in write_params function. Defaults to None.</p></li>
+<li><dl class="simple">
+<dt>task (int, optional): Defines approximation method.</dt><dd><p>0:inc approx. 1:coh+inc. 2:single-xtal Q-E. 3:single-xtal Q-Q. Defaults to 0.</p>
+</dd>
+</dl>
+</li>
+<li><p>e_unit (int, optional): Defines energy unit. Defaults to 0.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dcs</span> <span class="n">oclimax</span> <span class="o">--</span><span class="n">task</span> <span class="mi">0</span> <span class="o">--</span><span class="n">e_unit</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="md">
+<h4>MD<a class="headerlink" href="#md" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">md(optgeo=None,</span> <span class="pre">calc='vasp',</span> <span class="pre">T=300,</span> <span class="pre">md_size=[1,1,1],</span> <span class="pre">steps=5000,</span> <span class="pre">time_step=1,</span> <span class="pre">dump_interval=100):</span></code></p>
+<ul>
+<li><p>Runs molecular dynamics simulation using vasp or castep (Creates 2-molecular_dynamics folder inside 0-train).</p></li>
+<li><p>The following inputs are defined in the training parameters file (train_params.json):</p>
+<ul>
+<li><p>optgeo (NoneType, optional): Optimized geometry file, only true if optgeo defined. Defaults to None.</p></li>
+<li><p>calc (str, optional): Specifies calculator.Options are ‘vasp’ or ‘castep’. Defaults to ‘vasp’.</p></li>
+<li><p>T (int, optional): Simulation temperature. Defaults to 300.</p></li>
+<li><p>md_size (list, optional): Size of supercell. Defaults to [1,1,1].</p></li>
+<li><p>steps (int, optional): Maximum number of ionic steps. Defaults to 5000.</p></li>
+<li><p>time_step (int, optional): Md time step in fs. Defaults to 1.</p></li>
+<li><p>dump_interval (int, optional): Step size of frames to be saved in the trajectory file. Defaults to 100.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dcs</span> <span class="n">md</span> <span class="o">--</span><span class="n">calc</span> <span class="n">vasp</span> <span class="o">--</span><span class="n">T</span> <span class="mi">300</span> <span class="o">--</span><span class="n">md_size</span> <span class="mi">1</span> <span class="mi">1</span> <span class="mi">1</span> <span class="o">--</span><span class="n">steps</span> <span class="mi">5000</span> <span class="o">--</span><span class="n">time_step</span> <span class="mi">1</span> <span class="o">--</span><span class="n">dump_interval</span> <span class="mi">100</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="chimes">
+<h4>Chimes<a class="headerlink" href="#chimes" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">chimes(trajfile=None,</span> <span class="pre">b2=12,</span> <span class="pre">b3=8,</span> <span class="pre">T=5):</span></code></p>
+<ul>
+<li><p>Calculates force difference between DFT and DFTB (training set), and fits the Chebyshev polynomials coefficients. Creates 3-chimes folder (inside 0-train directory) and writes params.txt file.</p></li>
+<li><p>The following inputs are required:</p>
+<ul>
+<li><p>trajfile (list, optional): Trajectory file output from md simulation. Defaults to None.</p></li>
+<li><p>b2 (int, optional): Second body order of Chebyshev polynomial. Defaults to 12.</p></li>
+<li><p>b3 (int, optional): Third body order of Chebyshev polynomial. Defaults to 8.</p></li>
+<li><p>T (int, optional): Temperature for simulation in Kevin. Defaults to 5.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dcs</span> <span class="n">chimes</span> <span class="o">--</span><span class="n">b2</span> <span class="mi">12</span> <span class="o">--</span><span class="n">b3</span> <span class="mi">8</span> <span class="o">--</span><span class="n">T</span> <span class="mi">5</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="train">
+<h4>Train<a class="headerlink" href="#train" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">train(dct=None):</span></code></p>
+<ul>
+<li><p>Calls functions related to the training workflow (relax, md, chimes) with a timer using specified parameters in train_params.json, else with default parameters. Creates 0-train directory.</p></li>
+<li><p>The following input is required:</p>
+<ul>
+<li><p>dct (dict, optional): JSON file with specified parameters for relax, md, and chimes functions. Defaults to ‘train_params.json’.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dcs</span> <span class="n">train</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id3">
+<h4>Workflow<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">workflow(dct=None):</span></code></p>
+<ul>
+<li><p>Calls all workflow functions (relax, phonons, oclimax) with a timer using specified parameters in workflow_params.json, else with default parameters.</p></li>
+<li><p>The following input dictionary is the workflow parameters files:</p>
+<ul>
+<li><p>dct (dict, optional): JSON file with specified parameters for relax, phonons, and oclimax functions. Defaults to ‘workflow_params.json’.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dcs</span> <span class="n">workflow</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="id4">
+<h2>Examples<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
+<p><strong>EX 1: Main Workflow using DFTB+ for TCNQ on PC</strong>:</p>
+<p>The following example shows the primary workflow using dftb+ as the calculator run on a personal terminal (as opposed to a super computer).</p>
+<p>First, create a folder containing the geometry file (.cif, .gen, .sdf, or .xyz). The folder used in this example, named TCNQ, can be downloaded from the <a class="reference external" href="https://gitlab.com/lucassamir1/DCS-Flow/-/tree/master/Uploads">Uploads Folder</a>.</p>
+<p>In the TCNQ folder, create the workflow parameters file, <code class="docutils literal notranslate"><span class="pre">workflow_params.json</span></code>, using the following command.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dcs</span> <span class="n">workflow</span> <span class="o">--</span><span class="n">get</span><span class="o">-</span><span class="n">params</span>
+</pre></div>
+</div>
+<p>Edit the workflow parameters file to match the following values.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;krelax&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="mi">4</span><span class="p">,</span>
+        <span class="mi">4</span><span class="p">,</span>
+        <span class="mi">2</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;fmax&quot;</span><span class="p">:</span> <span class="mf">0.05</span><span class="p">,</span>
+    <span class="s2">&quot;geo&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+    <span class="s2">&quot;calc&quot;</span><span class="p">:</span> <span class="s2">&quot;dftbp&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;dim&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="mi">2</span><span class="p">,</span>
+        <span class="mi">2</span><span class="p">,</span>
+        <span class="mi">1</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;kforce&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="mi">1</span><span class="p">,</span>
+        <span class="mi">1</span><span class="p">,</span>
+        <span class="mi">1</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;mesh&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="mi">8</span><span class="p">,</span>
+        <span class="mi">8</span><span class="p">,</span>
+        <span class="mi">8</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+    <span class="s2">&quot;task&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="s2">&quot;e_unit&quot;</span><span class="p">:</span> <span class="mi">0</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The TCNQ folder, or current directory, now has the structure file (tcnq.cif) and the edited parameters file (workflow_params.json). Use the following command to begin the calculation:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dcs</span> <span class="n">workflow</span>
+</pre></div>
+</div>
+<p>Once the job has completed, the following files can be found in the TCNQ folder.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">1</span><span class="o">-</span><span class="n">optimization</span>      <span class="mi">3</span><span class="o">-</span><span class="n">oclimax</span>       <span class="n">err</span><span class="o">.</span><span class="n">out</span>         <span class="n">run_tcnq</span><span class="o">.</span><span class="n">py</span>
+<span class="mi">2</span><span class="o">-</span><span class="n">phonons</span>       <span class="n">out</span><span class="o">.</span><span class="n">out</span>         <span class="n">workflow_params</span><span class="o">.</span><span class="n">json</span>
+</pre></div>
+</div>
+<p>Open the 3-oclimax folder and click on the png file to view to INS specta.</p>
+<p><span class="raw-html-m2r"><img src="/Uploads/images/TCNQ_DFTB_INS.png"  width="600" height="455"></span></p>
+<hr class="docutils" />
+<p><strong>EX 2: Main Workflow using DFTB+ for TCNQ on NERSC</strong>:</p>
+<p>The following example shows the primary workflow using dftb+ as the calculator using the NERSC super computer.</p>
+<p>First, there is no need to install the DCS-Flow package and its dependencies. Just access the super computer via the terminal, and load the DCS module using the following commands:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">module</span> <span class="n">use</span> <span class="o">/</span><span class="k">global</span><span class="o">/</span><span class="n">common</span><span class="o">/</span><span class="n">software</span><span class="o">/</span><span class="n">m2734</span><span class="o">/</span><span class="n">DCS</span><span class="o">/</span><span class="n">modulefiles</span>
+<span class="n">module</span> <span class="n">load</span> <span class="n">dcs</span>
+</pre></div>
+</div>
+<p>You can add these commands to your bashrc file in your NERSC home folder to load the DCS module every time you access NERSC.</p>
+<p>Create a folder containing the geometry file (.cif, .gen, .sdf, or .xyz) and a run_tcnq.py bash script (for NERSC). This folder, named TCNQ, can be downloaded from the <a class="reference external" href="https://gitlab.com/lucassamir1/DCS-Flow/-/tree/master/Uploads">Uploads Folder</a>.</p>
+<p>Upload the TCNQ folder to NERSC using a file transfer software like Globus.</p>
+<p>Inside the TCNQ directory, create the workflow parameters file, <code class="docutils literal notranslate"><span class="pre">workflow_params.json</span></code>, using the following commands.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">TCNQ</span>
+<span class="n">dcs</span> <span class="n">workflow</span> <span class="o">--</span><span class="n">get</span><span class="o">-</span><span class="n">params</span>
+</pre></div>
+</div>
+<p>Edit the workflow parameters file to match the following values.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;krelax&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="mi">4</span><span class="p">,</span>
+        <span class="mi">4</span><span class="p">,</span>
+        <span class="mi">2</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;fmax&quot;</span><span class="p">:</span> <span class="mf">0.05</span><span class="p">,</span>
+    <span class="s2">&quot;geo&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+    <span class="s2">&quot;calc&quot;</span><span class="p">:</span> <span class="s2">&quot;dftbp&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;dim&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="mi">2</span><span class="p">,</span>
+        <span class="mi">2</span><span class="p">,</span>
+        <span class="mi">1</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;kforce&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="mi">1</span><span class="p">,</span>
+        <span class="mi">1</span><span class="p">,</span>
+        <span class="mi">1</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;mesh&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="mi">8</span><span class="p">,</span>
+        <span class="mi">8</span><span class="p">,</span>
+        <span class="mi">8</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+    <span class="s2">&quot;task&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="s2">&quot;e_unit&quot;</span><span class="p">:</span> <span class="mi">0</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The TCNQ folder, or current directory, now has the structure file (tcnq.cif), the edited parameters file (workflow_params.json), and the run script (run_tcnq.py.). The run_tcnq.py bash script contains information for the NERSC super computer such as number of allocated nodes, processors and run hours. The final lines contain the commands to be evaluated, in this case <code class="docutils literal notranslate"><span class="pre">eval</span> <span class="pre">$'dcs</span> <span class="pre">workflow'</span></code>.</p>
+<p>Submit the job and check it’s progress using the following commands:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sbatch</span> <span class="n">run_tcnq</span><span class="o">.</span><span class="n">py</span>
+<span class="n">sqs</span>
+</pre></div>
+</div>
+<p>Once the job has completed, the following files can be found in the TCNQ folder.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">1</span><span class="o">-</span><span class="n">optimization</span>      <span class="mi">3</span><span class="o">-</span><span class="n">oclimax</span>       <span class="n">err</span><span class="o">.</span><span class="n">out</span>         <span class="n">run_tcnq</span><span class="o">.</span><span class="n">py</span>
+<span class="mi">2</span><span class="o">-</span><span class="n">phonons</span>       <span class="n">out</span><span class="o">.</span><span class="n">out</span>         <span class="n">workflow_params</span><span class="o">.</span><span class="n">json</span>
+</pre></div>
+</div>
+<p>Use a file transfer software like Globus to transfer the wanted files to your personal computer. Open the 3-oclimax folder and click on the png file to view to INS specta. The resulted INS spectrum will be the same as simulated in the example before.</p>
+<hr class="docutils" />
+<p><strong>EX 3: Training and Main Workflow for TTF-TCNQ</strong>:</p>
+<p>The following example walks through the training workflow, with ChIMES, using the NERSC super computer.</p>
+<p>First access the super computer via the terminal, and load the DCS module using the following commands:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">module</span> <span class="n">use</span> <span class="o">/</span><span class="k">global</span><span class="o">/</span><span class="n">common</span><span class="o">/</span><span class="n">software</span><span class="o">/</span><span class="n">m2734</span><span class="o">/</span><span class="n">DCS</span><span class="o">/</span><span class="n">modulefiles</span>
+<span class="n">module</span> <span class="n">load</span> <span class="n">dcs</span>
+</pre></div>
+</div>
+<p>Create a folder containing the geometry file (.cif, .gen, .sdf, or .xyz) and a run_tcnq.py bash script (for NERSC). This folder, named TTF-TCNQ, can be downloaded from the <a class="reference external" href="https://gitlab.com/lucassamir1/DCS-Flow/-/tree/master/Uploads">Uploads Folder</a>.</p>
+<p>Upload the TTF-TCNQ folder to NERSC using a file transfer software like Globus.</p>
+<p>Inside the TTF-TCNQ directory, generate the training parameters file, <code class="docutils literal notranslate"><span class="pre">train_params.json</span></code>, using the following commands:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">TTF</span><span class="o">-</span><span class="n">TCNQ</span>
+<span class="n">dcs</span> <span class="n">train</span> <span class="o">--</span><span class="n">get</span><span class="o">-</span><span class="n">params</span>
+</pre></div>
+</div>
+<p>Edit the training parameters file to match the following values.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;krelax&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="mi">6</span><span class="p">,</span>
+        <span class="mi">6</span><span class="p">,</span>
+        <span class="mi">6</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;fmax&quot;</span><span class="p">:</span> <span class="mf">0.05</span><span class="p">,</span>
+    <span class="s2">&quot;geo&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+    <span class="s2">&quot;calc&quot;</span><span class="p">:</span> <span class="s2">&quot;castep&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;optgeo&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+    <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+    <span class="s2">&quot;md_size&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="mi">1</span><span class="p">,</span>
+        <span class="mi">1</span><span class="p">,</span>
+        <span class="mi">1</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;steps&quot;</span><span class="p">:</span> <span class="mi">5000</span><span class="p">,</span>
+    <span class="s2">&quot;time_step&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;dump_interval&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+    <span class="s2">&quot;trajfile&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+    <span class="s2">&quot;b2&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span>
+    <span class="s2">&quot;b3&quot;</span><span class="p">:</span> <span class="mi">8</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The TCNQ folder, or current directory, now has the structure file (TTF-TCNQ.cif), the edited parameters file (train_params.json), and the run script (run_ttf-tcnq.py.). The run_ttf-tcnq.py bash script contains information for the NERSC super computer such as number of allocated nodes, processors and run hours. The final lines contain the commands to be evaluated, in this case <code class="docutils literal notranslate"><span class="pre">eval</span> <span class="pre">$'dcs</span> <span class="pre">train</span></code>.</p>
+<p>Submit the job and check it’s progress using the following commands:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sbatch</span> <span class="n">run_ttf</span><span class="o">-</span><span class="n">tcnq</span><span class="o">.</span><span class="n">py</span>
+<span class="n">sqs</span>
+</pre></div>
+</div>
+<p>Once the job has completed, the following files can be found in the TTF-TCNQ folder.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">0</span><span class="o">-</span><span class="n">train</span>         <span class="n">err</span><span class="o">.</span><span class="n">out</span>         <span class="n">run_ttf</span><span class="o">-</span><span class="n">tcnq</span><span class="o">.</span><span class="n">py</span>         <span class="n">params</span><span class="o">.</span><span class="n">txt</span>
+<span class="n">TTF</span><span class="o">-</span><span class="n">TCNQ</span><span class="o">.</span><span class="n">cif</span>        <span class="n">out</span><span class="o">.</span><span class="n">out</span>         <span class="n">train_params</span><span class="o">.</span><span class="n">json</span>
+</pre></div>
+</div>
+<p>Once the training has successfuly run, create a workflow parameters file in the TTF-TCNQ folder using the following commands.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dcs</span> <span class="n">workflow</span> <span class="o">--</span><span class="n">get</span><span class="o">-</span><span class="n">params</span>
+</pre></div>
+</div>
+<p>In the workflow parameters, edit the calculator to chimes and change the default parameters as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;krelax&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="mi">4</span><span class="p">,</span>
+        <span class="mi">4</span><span class="p">,</span>
+        <span class="mi">2</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;fmax&quot;</span><span class="p">:</span> <span class="mf">0.05</span><span class="p">,</span>
+    <span class="s2">&quot;geo&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+    <span class="s2">&quot;calc&quot;</span><span class="p">:</span> <span class="s2">&quot;chimes&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;dim&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="mi">2</span><span class="p">,</span>
+        <span class="mi">2</span><span class="p">,</span>
+        <span class="mi">1</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;kforce&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="mi">1</span><span class="p">,</span>
+        <span class="mi">1</span><span class="p">,</span>
+        <span class="mi">1</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;mesh&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="mi">8</span><span class="p">,</span>
+        <span class="mi">8</span><span class="p">,</span>
+        <span class="mi">8</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+    <span class="s2">&quot;task&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="s2">&quot;e_unit&quot;</span><span class="p">:</span> <span class="mi">0</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The TTF-TCNQ folder, or current directory, now has the structure file (TTF-TCNQ.cif), the chimes output (params.txt), the edited parameters file (workflow_params.json) and the run script (run_ttf-tcnq.py.). The final lines of the run script should contain the commands to be evaluated, in this case <code class="docutils literal notranslate"><span class="pre">eval</span> <span class="pre">$'dcs</span> <span class="pre">workflow'</span></code>.</p>
+<p>Submit the job and using the following commands:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sbatch</span> <span class="n">run_ttf</span><span class="o">-</span><span class="n">tcnq</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p>Once the job has completed, the following files will be added to the TTF-TCNQ folder.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">1</span><span class="o">-</span><span class="n">optimization</span>      <span class="mi">3</span><span class="o">-</span><span class="n">oclimax</span>
+<span class="mi">2</span><span class="o">-</span><span class="n">phonons</span>
+</pre></div>
+</div>
+<p>Use a file transfer software like Globus to transfer the wanted files to your personal computer. Open the 3-oclimax folder and click on the png file to view to INS specta.</p>
+<p><span class="raw-html-m2r"><img src="Uploads/images/TTF-TCNQ_INS.png"  width="600" height="455"></span></p>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">DCS-Flow</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Lucas Samir Ramalho Cavalcante.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/README.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

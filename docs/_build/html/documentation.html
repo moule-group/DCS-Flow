@@ -1,0 +1,292 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation &#8212; DCS-Flow  documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Examples" href="examples.html" />
+    <link rel="prev" title="Install" href="install.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="documentation">
+<h1>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h1>
+<p>DCS-Flow is a collection of the following scripts:</p>
+<ul class="simple">
+<li><p>Relax: Optimizes structure.</p></li>
+<li><p>Phonons: Calculates phonons modes with the supercell method.</p></li>
+<li><p>Oclimax: Runs oclimax simulation creating a INS sprectrum.</p></li>
+<li><p>MD: Runs molecular dynamics simulations.</p></li>
+<li><p>Chimes: Creates the coefficients for the Chebyshev Interaction Model for Efficient Simulation.</p></li>
+<li><p>Train: Automated workflow that calls the functions necessary to create the ChIMES coefficients.</p></li>
+<li><p>Workflow: Automates the main workflow functions to relax structure, calculate phonons, and calculate the INS spectrum.</p></li>
+</ul>
+<p>DCS-Flow has a command line interface implemented. Examples for how to use it are included under each main function.</p>
+<div class="section" id="main-functions">
+<h2>Main Functions<a class="headerlink" href="#main-functions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="relax">
+<h3>Relax<a class="headerlink" href="#relax" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">relax(krelax=[6,</span> <span class="pre">6,</span> <span class="pre">6],</span> <span class="pre">fmax=0.05,</span> <span class="pre">geo=None,</span> <span class="pre">calc='dftbp'):</span></code></p>
+<ul>
+<li><p>Finds the geometry file and optimizes the structure using the specified calculator (Populates 1-optimization folder with results).</p></li>
+<li><p>The following input args are defined in the workflow parameters file:</p>
+<ul>
+<li><p>krelax (list, optional): Number of k points for relaxation. Defaults to [6, 6, 6].</p></li>
+<li><p>fmax (float, optional): Maximum allowed force for convergence between atoms. Defaults to 0.01.</p></li>
+<li><dl class="simple">
+<dt>geo (str, optional): Geometry file or structure.</dt><dd><p>Allowed file types are .cif, .gen, .sdf, or .xyz. Defaults to None.</p>
+</dd>
+</dl>
+</li>
+<li><p>calc (str, optional): Calculator used. Options are ‘dftbp’, ‘chimes’, ‘castep’, or ‘vasp’. Defaults to ‘dftbp’.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dcs</span> <span class="n">relax</span> <span class="o">--</span><span class="n">krelax</span> <span class="mi">6</span> <span class="mi">6</span> <span class="mi">6</span> <span class="o">--</span><span class="n">fmax</span> <span class="mf">0.05</span> <span class="o">--</span><span class="n">geo</span> <span class="n">TCNQ</span><span class="o">.</span><span class="n">cif</span> <span class="o">--</span><span class="n">calc</span> <span class="n">dftbp</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="phonons">
+<h3>Phonons<a class="headerlink" href="#phonons" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">phonons(dim=[4,</span> <span class="pre">4,</span> <span class="pre">4],</span> <span class="pre">kforce=[1,</span> <span class="pre">1,</span> <span class="pre">1],</span> <span class="pre">mesh=[8,</span> <span class="pre">8,</span> <span class="pre">8],</span> <span class="pre">calc='dftbp'):</span></code></p>
+<ul>
+<li><p>Runs phonon supercell displacement calculations, populates 2-phonons folder with results.</p></li>
+<li><p>The following input args are defined in the workflow parameters file:</p>
+<ul>
+<li><p>dim (list, optional): Dimensions of the supercell. Defaults to [4, 4, 4].</p></li>
+<li><p>kforce (list, optional): Number of k points for force calculations. Defaults to [1, 1, 1].</p></li>
+<li><p>mesh (list, optional): Uniform meshes for each axis. Defaults to [8, 8, 8].</p></li>
+<li><p>calc (str, optional): Calculator used for task. Options are ‘dftbp’, ‘chimes’, ‘vasp’, or ‘castep’. Defaults to ‘dftbp’.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dcs</span> <span class="n">phonons</span> <span class="o">--</span><span class="n">dim</span> <span class="mi">4</span> <span class="mi">4</span> <span class="mi">4</span> <span class="o">--</span><span class="n">kforce</span> <span class="mi">1</span> <span class="mi">1</span> <span class="mi">1</span> <span class="o">--</span><span class="n">mesh</span> <span class="mi">8</span> <span class="mi">8</span> <span class="mi">8</span> <span class="o">--</span><span class="n">calc</span> <span class="n">dftbp</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="oclimax">
+<h3>Oclimax<a class="headerlink" href="#oclimax" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">oclimax(params=None,</span> <span class="pre">task=0,</span> <span class="pre">e_unit=0):</span></code></p>
+<ul>
+<li><p>Creates folder 3-oclimax, writes oclimax parameters file in folder and runs oclimax simulation.</p></li>
+<li><p>The following input args are defined in the workflow parameters file:</p>
+<ul>
+<li><p>params (str, optional): Oclimax parameters file name if exists. Otherwise, it will be created in write_params function. Defaults to None.</p></li>
+<li><dl class="simple">
+<dt>task (int, optional): Defines approximation method.</dt><dd><p>0:inc approx. 1:coh+inc. 2:single-xtal Q-E. 3:single-xtal Q-Q. Defaults to 0.</p>
+</dd>
+</dl>
+</li>
+<li><p>e_unit (int, optional): Defines energy unit. Defaults to 0.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dcs</span> <span class="n">oclimax</span> <span class="o">--</span><span class="n">task</span> <span class="mi">0</span> <span class="o">--</span><span class="n">e_unit</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="md">
+<h3>MD<a class="headerlink" href="#md" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">md(optgeo=None,</span> <span class="pre">calc='vasp',</span> <span class="pre">T=300,</span> <span class="pre">md_size=[1,1,1],</span> <span class="pre">steps=5000,</span> <span class="pre">time_step=1,</span> <span class="pre">dump_interval=100):</span></code></p>
+<ul>
+<li><p>Runs molecular dynamics simulation using vasp or castep (Creates 2-molecular_dynamics folder inside 0-train).</p></li>
+<li><p>The following inputs are defined in the training parameters file (train_params.json):</p>
+<ul>
+<li><p>optgeo (NoneType, optional): Optimized geometry file, only true if optgeo defined. Defaults to None.</p></li>
+<li><p>calc (str, optional): Specifies calculator.Options are ‘vasp’ or ‘castep’. Defaults to ‘vasp’.</p></li>
+<li><p>T (int, optional): Simulation temperature. Defaults to 300.</p></li>
+<li><p>md_size (list, optional): Size of supercell. Defaults to [1,1,1].</p></li>
+<li><p>steps (int, optional): Maximum number of ionic steps. Defaults to 5000.</p></li>
+<li><p>time_step (int, optional): Md time step in fs. Defaults to 1.</p></li>
+<li><p>dump_interval (int, optional): Step size of frames to be saved in the trajectory file. Defaults to 100.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dcs</span> <span class="n">md</span> <span class="o">--</span><span class="n">calc</span> <span class="n">vasp</span> <span class="o">--</span><span class="n">T</span> <span class="mi">300</span> <span class="o">--</span><span class="n">md_size</span> <span class="mi">1</span> <span class="mi">1</span> <span class="mi">1</span> <span class="o">--</span><span class="n">steps</span> <span class="mi">5000</span> <span class="o">--</span><span class="n">time_step</span> <span class="mi">1</span> <span class="o">--</span><span class="n">dump_interval</span> <span class="mi">100</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="chimes">
+<h3>Chimes<a class="headerlink" href="#chimes" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">chimes(trajfile=None,</span> <span class="pre">b2=12,</span> <span class="pre">b3=8,</span> <span class="pre">T=5):</span></code></p>
+<ul>
+<li><p>Calculates force difference between DFT and DFTB (training set), and fits the Chebyshev polynomials coefficients. Creates 3-chimes folder (inside 0-train directory) and writes params.txt file.</p></li>
+<li><p>The following inputs are required:</p>
+<ul>
+<li><p>trajfile (list, optional): Trajectory file output from md simulation. Defaults to None.</p></li>
+<li><p>b2 (int, optional): Second body order of Chebyshev polynomial. Defaults to 12.</p></li>
+<li><p>b3 (int, optional): Third body order of Chebyshev polynomial. Defaults to 8.</p></li>
+<li><p>T (int, optional): Temperature for simulation in Kevin. Defaults to 5.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dcs</span> <span class="n">chimes</span> <span class="o">--</span><span class="n">b2</span> <span class="mi">12</span> <span class="o">--</span><span class="n">b3</span> <span class="mi">8</span> <span class="o">--</span><span class="n">T</span> <span class="mi">5</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="train">
+<h3>Train<a class="headerlink" href="#train" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">train(dct=None):</span></code></p>
+<ul>
+<li><p>Calls functions related to the training workflow (relax, md, chimes) with a timer using specified parameters in train_params.json, else with default parameters. Creates 0-train directory.</p></li>
+<li><p>The following input is required:</p>
+<ul>
+<li><p>dct (dict, optional): JSON file with specified parameters for relax, md, and chimes functions. Defaults to ‘train_params.json’.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dcs</span> <span class="n">train</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="workflow">
+<h3>Workflow<a class="headerlink" href="#workflow" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">workflow(dct=None):</span></code></p>
+<ul>
+<li><p>Calls all workflow functions (relax, phonons, oclimax) with a timer using specified parameters in workflow_params.json, else with default parameters.</p></li>
+<li><p>The following input dictionary is the workflow parameters files:</p>
+<ul>
+<li><p>dct (dict, optional): JSON file with specified parameters for relax, phonons, and oclimax functions. Defaults to ‘workflow_params.json’.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dcs</span> <span class="n">workflow</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo.png" alt="Logo"/>
+            </a></p>
+<h1 class="logo"><a href="index.html">DCS-Flow</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="install.html">Install</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#main-functions">Main Functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#relax">Relax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#phonons">Phonons</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#oclimax">Oclimax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#md">MD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#chimes">Chimes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#train">Train</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#workflow">Workflow</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">DCS-Flow</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="install.html" title="previous chapter">Install</a></li>
+      <li>Next: <a href="examples.html" title="next chapter">Examples</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Lucas Samir Ramalho Cavalcante.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/documentation.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,325 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Install &#8212; DCS-Flow  documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Documentation" href="documentation.html" />
+    <link rel="prev" title="Welcome to DCS-Flow’s documentation!" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="install">
+<h1>Install<a class="headerlink" href="#install" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="dcs-flow-requirements">
+<h2>DCS-Flow Requirements<a class="headerlink" href="#dcs-flow-requirements" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://wiki.fysik.dtu.dk/ase/">Atomic Simulation Environment</a></p></li>
+<li><p><a class="reference external" href="https://www.dftbplus.org/">DFTB+</a></p></li>
+<li><p><a class="reference external" href="https://phonopy.github.io/phonopy/">Phonopy</a></p></li>
+<li><p><a class="reference external" href="https://neutrons.ornl.gov/sites/default/files/2018-NXS_Lecture_YQCheng_2.pdf">Oclimax</a></p></li>
+</ul>
+</div>
+<div class="section" id="linux-installation">
+<h2>Linux Installation<a class="headerlink" href="#linux-installation" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Install ASE:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">upgrade</span> <span class="o">--</span><span class="n">user</span> <span class="n">ase</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Install DFTB+:</p>
+<ol class="arabic simple">
+<li><p><a class="reference external" href="http://www.dftb.org/fileadmin/DFTB/public/slako-unpacked.tar.xz">Download Slater-Koster files (parameters files for the DFTB method)</a></p></li>
+<li><p><a class="reference external" href="https://dftbplus.org/download/dftb-stable">Download DFTB+ binaries</a></p></li>
+<li><p>Extract the file and put it in your home folder</p></li>
+</ol>
+</li>
+<li><p>Installing Phonopy</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">upgrade</span> <span class="o">--</span><span class="n">user</span> <span class="n">phonopy</span>
+</pre></div>
+</div>
+<ul>
+<li><p>Installing OCLIMAX</p>
+<ol class="arabic simple">
+<li><p>OCLIMAX uses the DOCKER platform to run the application.
+<a class="reference external" href="https://www.docker.com/">Please install it</a></p></li>
+<li><p>Now download OCLIMAX</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">sL</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">sites</span><span class="o">.</span><span class="n">google</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">site</span><span class="o">/</span><span class="n">ornliceman</span><span class="o">/</span><span class="n">getoclimax</span> <span class="o">|</span> <span class="n">bash</span>
+<span class="n">oclimax</span> <span class="n">pull</span>
+</pre></div>
+</div>
+</li>
+<li><p>Installing DCS-Flow</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">gitlab</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">lucassamir1</span><span class="o">/</span><span class="n">DCS</span><span class="o">-</span><span class="n">Flow</span><span class="o">.</span><span class="n">git</span>
+</pre></div>
+</div>
+<ul>
+<li><p>Installing ChIMES</p>
+<p>If you want to use the machine learning method called ChIMES, please contact Nir Goldman (<a class="reference external" href="mailto:goldman14&#37;&#52;&#48;llnl&#46;gov">goldman14<span>&#64;</span>llnl<span>&#46;</span>gov</a>) in order to receive the following files:</p>
+<ol class="arabic simple">
+<li><p>DFTB+_ChIMES. This is a version of the DFTB+ package that has an interface to ChIMES. It should substitute the standart DFTB+ package.</p></li>
+<li><p>ChIMES binaries (chimes_lsq, chimes_md, lsq2.py). Put these files inside the git directory DCS-Flow/dcs/.</p></li>
+</ol>
+</li>
+</ul>
+</div>
+<div class="section" id="set-environment-variables">
+<h2>Set environment variables<a class="headerlink" href="#set-environment-variables" title="Permalink to this headline">¶</a></h2>
+<p>Add these lines to your configuration file (.bashrc). The following code uses example paths and must be edited according to your system.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>export DFTB_PREFIX=/my_disk/my_name/slako/mio/mio-1-1/ # (path to Slako files)
+export ASE_DFTB_COMMAND=/my_disk/my_name/dftbplus-20.1/bin/dftb+ &gt; PREFIX.out # (path to dftb+)
+export PATH=/my_disk/my_name/dftbplus-20.1/bin:$PATH (path to dftb+ files)
+export PYTHONPATH=/my_disk/my_name/DCS-Flow:$PYTHONPATH #(path to DCS file)
+export PATH=/my_disk/my_name/DCS-Flow/dcs:$PATH #(path to file within DCS folder)
+</pre></div>
+</div>
+</div>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Workflow</p></li>
+</ul>
+<p>The workflow will relax the structure, create supercell displacements, calculate forces, run oclimax. The easiest way to start is through the command line interface</p>
+<ol class="arabic">
+<li><p>Get the parameters file</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dcs</span> <span class="n">workflow</span> <span class="o">--</span><span class="n">get</span><span class="o">-</span><span class="n">params</span>
+</pre></div>
+</div>
+</li>
+<li><p>Define parameters in the file</p></li>
+<li><p>Run workflow</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dcs</span> <span class="n">workflow</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</div>
+<div class="section" id="macos-installation">
+<span id="installmac"></span><h2>MacOS Installation<a class="headerlink" href="#macos-installation" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Install ASE:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip3</span> <span class="n">install</span> <span class="o">--</span><span class="n">upgrade</span> <span class="o">--</span><span class="n">user</span> <span class="n">ase</span>
+</pre></div>
+</div>
+<ul>
+<li><p>Install DFTB+:</p>
+<ol class="arabic simple">
+<li><p><a class="reference external" href="http://www.dftb.org/fileadmin/DFTB/public/slako-unpacked.tar.xz">Download Slater-Koster files (parameters files for the DFTB method)</a></p></li>
+<li><p>Download DFTB+</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">dftbplus</span><span class="o">/</span><span class="n">dftbplus</span><span class="o">.</span><span class="n">git</span>
+<span class="n">cd</span> <span class="n">dftbplus</span>
+<span class="n">git</span> <span class="n">submodule</span> <span class="n">update</span> <span class="o">--</span><span class="n">init</span> <span class="o">--</span><span class="n">recursive</span>
+</pre></div>
+</div>
+<p>_ Debugging Step: If getting an error related to WITH_OMP, open CMakeLists.txt file and add in the following line of code before if(WITH_OMP):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">option</span><span class="p">(</span><span class="n">WITH_OMP</span> <span class="n">FALSE</span><span class="p">)</span>
+</pre></div>
+</div>
+<ol class="arabic simple">
+<li><p>Build DFTB+ (make sure to use your specific Fortran and C compilers)</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="n">build</span>
+<span class="n">cd</span> <span class="n">build</span>
+<span class="n">FC</span><span class="o">=</span><span class="n">gfortran</span> <span class="n">CC</span><span class="o">=</span><span class="n">gcc</span> <span class="n">cmake</span> <span class="o">..</span>
+</pre></div>
+</div>
+<p>If configuration was successful</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">dftb</span><span class="o">+</span>
+<span class="n">make</span> <span class="o">-</span><span class="n">j</span>
+</pre></div>
+</div>
+<p>Test it</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ctest</span>
+</pre></div>
+</div>
+<ol class="arabic simple">
+<li><p>Install DFTB+</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">install</span>
+</pre></div>
+</div>
+</li>
+<li><p>Install Phonopy</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip3</span> <span class="n">install</span> <span class="o">--</span><span class="n">upgrade</span> <span class="o">--</span><span class="n">user</span> <span class="n">phonopy</span>
+</pre></div>
+</div>
+<ul>
+<li><p>Install OCLIMAX</p>
+<ol class="arabic simple">
+<li><p>OCLIMAX uses the DOCKER platform to run the application.
+<a class="reference external" href="https://www.docker.com/">Please install it</a></p></li>
+<li><p>Download OCLIMAX</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">sL</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">sites</span><span class="o">.</span><span class="n">google</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">site</span><span class="o">/</span><span class="n">ornliceman</span><span class="o">/</span><span class="n">getoclimax</span> <span class="o">|</span> <span class="n">bash</span>
+<span class="n">oclimax</span> <span class="n">pull</span>
+</pre></div>
+</div>
+</li>
+<li><p>Install DCS-Flow</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">gitlab</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">lucassamir1</span><span class="o">/</span><span class="n">DCS</span><span class="o">-</span><span class="n">Flow</span><span class="o">.</span><span class="n">git</span>
+</pre></div>
+</div>
+<ul>
+<li><p>Installing ChIMES</p>
+<p>If you want to use the machine learning method called ChIMES, please contact Nir Goldman (<a class="reference external" href="mailto:goldman14&#37;&#52;&#48;llnl&#46;gov">goldman14<span>&#64;</span>llnl<span>&#46;</span>gov</a>) in order to receive the following files:</p>
+<ol class="arabic simple">
+<li><p>DFTB+_ChIMES. This is a version of the DFTB+ package that has an interface to ChIMES. It should substitute the standart DFTB+ package.</p></li>
+<li><p>ChIMES binaries (chimes_lsq, chimes_md, lsq2.py). Put these files inside the git directory DCS-Flow/dcs/.</p></li>
+</ol>
+</li>
+</ul>
+</div>
+<div class="section" id="id3">
+<h2>Set environment variables<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
+<p>Add these lines to your configuration file (~/.bash_profile). The following code uses example paths and must be edited according to your system.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>export DFTB_PREFIX=/Users/my_name/slako/mio/mio-1-1/                                #(Path to Slako files)
+export ASE_DFTB_COMMAND=/Users/my_name/dftbplus/build/install/bin/dftb+ &gt;PREFIX.out #(Path to dftb+)
+export PATH=/Users/my_name/dftbplus/build/install/bin:$PATH                         #(Path to dftb+)
+export PYTHONPATH=/Users/my_name/dftbplus/build/install/bin/dftb+:$PYTHONPATH       #(Python path to dftb+)
+export PATH=/Users/my_name/DCS-Flow/dcs:$PATH                               #(Path to DCS-Flow file)
+export PYTHONPATH=/Users/my_name/DCS-Flow:$PYTHONPATH                        #(Python path to DCS-Flow file)
+export PATH=/Users/my_name/.local/bin:$PATH                                         #(Path to ase file)
+export PYTHONPATH=/Users/my_name/.local/bin/ase:$PYTHONPATH                         #(Python path to ase file)
+</pre></div>
+</div>
+</div>
+<div class="section" id="id4">
+<h2>Usage<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Workflow</p></li>
+</ul>
+<p>The workflow will relax the structure, create supercell displacements, calculate forces, run oclimax. The easiest way to start is through the command line interface</p>
+<ol class="arabic">
+<li><p>Get the parameters file</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dcs</span> <span class="n">workflow</span> <span class="o">--</span><span class="n">get</span><span class="o">-</span><span class="n">params</span>
+</pre></div>
+</div>
+</li>
+<li><p>Define parameters in the file</p></li>
+<li><p>Run workflow</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dcs</span> <span class="n">workflow</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo.png" alt="Logo"/>
+            </a></p>
+<h1 class="logo"><a href="index.html">DCS-Flow</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Install</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#dcs-flow-requirements">DCS-Flow Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#linux-installation">Linux Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#set-environment-variables">Set environment variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#macos-installation">MacOS Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">Set environment variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="documentation.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">DCS-Flow</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Welcome to DCS-Flow’s documentation!</a></li>
+      <li>Next: <a href="documentation.html" title="next chapter">Documentation</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Lucas Samir Ramalho Cavalcante.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/install.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
