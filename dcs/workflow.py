@@ -50,10 +50,10 @@ def workflow(dct=None):
     
     if dct:
         with timer('relaxation'):
-            relax(dct['krelax'], dct['fmax'], dct['geo'], dct['calc'])
+            relax(dct['krelax'], dct['fmax'], dct['geo'], dct['calc'], dct['T'])
         timer.write()
         with timer('phonon calculation'):
-            phonons(dct['dim'], dct['kforce'], dct['mesh'], dct['calc'])
+            phonons(dct['dim'], dct['kforce'], dct['mesh'], dct['calc'], dct['T'])
         timer.write()
         with timer('oclimax calculation'):
             oclimax(dct['params'], dct['task'], dct['e_unit'])

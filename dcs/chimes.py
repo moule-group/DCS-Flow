@@ -126,7 +126,7 @@ def multi_fmatch(T):
     traj = Trajectory('dft.traj')
 
     command = partial(dftb_fmatch_input, T)
-    with Pool(processes=16) as pool:
+    with Pool(processes=4) as pool:
         results = pool.map(command, list(traj))
 
     with open('dft-dftb.xyzf', 'a') as file:
@@ -161,7 +161,7 @@ def rdf(smax, pair):
     traj = Trajectory('dft.traj')
     ana = Analysis(list(traj))
 
-    rdf = ana.get_rdf(smax, 100, elements=pair, return_dists=True)
+    rdf = ana.get_rdf(smax-0.4, 100, elements=pair, return_dists=True)
     r = rdf[0][1]
 
     # get average g function                                                                            
@@ -195,7 +195,10 @@ def rdf(smax, pair):
             imax = (np.where(ilocal == True))[0][0]
             rmax = r[imax]
         except:
-            rmax = 2 * rmin
+            if smax < 2 * rmin:
+                rmax = smax - 0.4
+            else:
+                rmax = 2 * rmin
 
     # choose position of max value of aveg as morse lambda factor                                       
     igmax = np.argmax(aveg)
@@ -306,9 +309,9 @@ def run_md_input(folder):
                     '# N_MDSTP # ! Total number of MD steps \n'
 	            '        10000 \n'
                     '# NLAYERS # ! x,y, and z supercells.. small unit cell should have >= 1 \n'
-	            '        1 \n'
+	            '        0 \n'
                     '# USENEIG # ! Use a neighbor list? HIGHLY reccommended when NLAYERS > 0 \n'
-	            '        true \n'
+	            '        false \n'
                     '# PRMFILE # ! Parameter file (i.e. params.txt) \n'
 	            '        params.txt \n'
                     '# CRDFILE # ! Coordinate file (.xyz) or force file (.xyzf) \n'
