@@ -146,6 +146,7 @@ def calculate_forces(kforce, mode, T, dir):
         if isdone('forces'):
             return
         else:
+            print(dir)
             if mode == 'chimes':
                 from ase.calculators.dftb import Dftb
                 from dcs.chimes import run_md_input
@@ -240,7 +241,10 @@ def multi_forces(kforce, mode, T, mpi=False):
     
     dirlist = np.array(sorted([x.name for x in os.scandir() if x.is_dir()]))
 
-    if mode == 'vasp' or 'castep':
+    if mode == 'vasp':
+        for dir in dirlist:
+            command(dir)
+    elif mode == 'castep':
         for dir in dirlist:
             command(dir)
     else:
