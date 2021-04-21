@@ -70,7 +70,8 @@ def dftb_fmatch_input(T, frame):
             # dft_stress = frame.get_stress()
             dft_energy = frame.get_total_energy()
 
-            calc = Dftb(kpts=(1,1,1),
+            calc = Dftb(label='dftb',
+                        kpts=(1,1,1),
                         Hamiltonian_SCC='Yes',
                         Hamiltonian_MaxAngularMomentum_='',
                         Hamiltonian_MaxAngularMomentum_C='p',
@@ -81,6 +82,10 @@ def dftb_fmatch_input(T, frame):
                         Hamiltonian_Filling='Fermi {{Temperature [Kelvin] = {T} }}' .format(T=T))
             # calc.calculate(frame, properties=['energy', 'forces', 'stress'])
             calc.calculate(frame, properties=['energy', 'forces'])
+
+            # saving output from DFTB+ to chimes.out
+            with open('dftb.out') as f:
+                print(f.read())
 
             dftb_forces = calc.results['forces']
             # dftb_stress = calc.results['stress']
