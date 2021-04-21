@@ -56,7 +56,6 @@ def dftb_fmatch_input(T, frame):
     """
     from ase.calculators.dftb import Dftb
     from ase.units import Hartree, Bohr, GPa, mol, kcal
-    import tempfile
     from dcs import mktempdir, chdir
 
     with mktempdir() as temp_dir:

@@ -61,7 +61,7 @@ def relax_structure(krelax, fmax, geo, mode, T):
 
         if mode == 'dftbp':
             from ase.calculators.dftb import Dftb
-            calculator = Dftb(label=formula,
+            calculator = Dftb(label='relax',
                               atoms=atoms,
                               Driver_='LBFGS',
                               Driver_MovedAtoms='1:-1',
@@ -85,7 +85,7 @@ def relax_structure(krelax, fmax, geo, mode, T):
             from dcs.chimes import run_md_input
             folder = os.getcwd()            
             run_md_input(folder + '/..')
-            calculator = Dftb(label=formula,
+            calculator = Dftb(label='relax',
                               atoms=atoms,
                               Driver_='LBFGS',
                               Driver_MovedAtoms='1:-1',
