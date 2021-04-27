@@ -1,6 +1,6 @@
 from ase.cli.main import main as ase_main
 
-version = '1.0.0'
+version = '1.0.1'
 
 commands = [
     ('relax', 'dcs.relax'),
