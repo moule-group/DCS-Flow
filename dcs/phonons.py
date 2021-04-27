@@ -236,7 +236,10 @@ def multi_forces(kforce, mode, mpi=False):
     
     dirlist = np.array(sorted([x.name for x in os.scandir() if x.is_dir()]))
 
-    if mode == 'vasp' or 'castep':
+    if mode == 'vasp':
+        for dir in dirlist:
+            command(dir)
+    elif mode == 'castep':
         for dir in dirlist:
             command(dir)
     else:
