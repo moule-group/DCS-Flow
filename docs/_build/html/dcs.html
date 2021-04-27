@@ -1,0 +1,901 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>dcs package &mdash; DCS-Flow  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="DCS-Flow" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> DCS-Flow
+          
+
+          
+            
+            <img src="_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="install.html">Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">DCS-Flow</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">dcs package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-dcs.chimes">dcs.chimes module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-dcs.main">dcs.main module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-dcs.md">dcs.md module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-dcs.oclimax">dcs.oclimax module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-dcs.phonons">dcs.phonons module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-dcs.relax">dcs.relax module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-dcs.train">dcs.train module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-dcs.workflow">dcs.workflow module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-dcs">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">DCS-Flow</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="modules.html">DCS-Flow</a> &raquo;</li>
+        
+      <li>dcs package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/dcs.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="dcs-package">
+<h1>dcs package<a class="headerlink" href="#dcs-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-dcs.chimes">
+<span id="dcs-chimes-module"></span><h2>dcs.chimes module<a class="headerlink" href="#module-dcs.chimes" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="dcs.chimes.CLICommand">
+<em class="property">class </em><code class="sig-prename descclassname">dcs.chimes.</code><code class="sig-name descname">CLICommand</code><a class="headerlink" href="#dcs.chimes.CLICommand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Chebyshev Interaction Model for Efficient Simulation (ChIMES)</p>
+<dl class="py method">
+<dt id="dcs.chimes.CLICommand.add_arguments">
+<em class="property">static </em><code class="sig-name descname">add_arguments</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parser</span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcs.chimes.CLICommand.add_arguments" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets up command line to run Chimes i.e. recognize arguments and commands.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>parser (argparse): Arguments to be added.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dcs.chimes.CLICommand.run">
+<em class="property">static </em><code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcs.chimes.CLICommand.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs chimes function using command line arguments.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>args (argparse): Command line arguments added to parser using the function add_arguments.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="dcs.chimes.chimes">
+<code class="sig-prename descclassname">dcs.chimes.</code><code class="sig-name descname">chimes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">trajfile</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">b2</span><span class="o">=</span><span class="default_value">12</span></em>, <em class="sig-param"><span class="n">b3</span><span class="o">=</span><span class="default_value">8</span></em>, <em class="sig-param"><span class="n">T</span><span class="o">=</span><span class="default_value">5</span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcs.chimes.chimes" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Calculates force difference between DFT and DFTB (training set), </dt><dd><p>and fits the Chebyshev polynomials coefficients.
+Creates 3-chimes folder (inside 0-train directory) and writes params.txt file.</p>
+</dd>
+<dt>Args:</dt><dd><p>trajfile (list, optional): Trajectory file (ist of atoms objects) output from md simulation. Defaults to None.
+b2 (int, optional): Second body order of Chebyshev polynomial. Defaults to 12.
+b3 (int, optional): Third body order of Chebyshev polynomial. Defaults to 8.
+T (int, optional): Temperature for simulation in Kevin. Defaults to 5.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="dcs.chimes.dftb_fmatch_input">
+<code class="sig-prename descclassname">dcs.chimes.</code><code class="sig-name descname">dftb_fmatch_input</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">T</span></em>, <em class="sig-param"><span class="n">frame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcs.chimes.dftb_fmatch_input" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Runs DFTB force calculations using frame from DFT;</dt><dd><p>calculates the force difference between DFT and DFTB.
+Creates a list with the chemical symbols, atomic positions, and force differences.</p>
+</dd>
+<dt>Args:</dt><dd><p>T (int): Temperature for DFTB simulation.
+frame (list): ASE atoms object with atomic positions, forces, energies, etc from DFT calculation.</p>
+</dd>
+<dt>Returns:</dt><dd><p>list: Contains the chemical symbols, atom positions, and difference in DFTB and DFT forces.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="dcs.chimes.fm_setup_input">
+<code class="sig-prename descclassname">dcs.chimes.</code><code class="sig-name descname">fm_setup_input</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">nframes</span></em>, <em class="sig-param"><span class="n">b2</span></em>, <em class="sig-param"><span class="n">b3</span></em>, <em class="sig-param"><span class="n">setsymbols</span></em>, <em class="sig-param"><span class="n">smax</span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcs.chimes.fm_setup_input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes force match setup input file (fm_setup.in) with given arguments.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>nframes (int): Number of trajectories.
+b2 (int): Second body order of Chebyshev polynomial. 
+b3 (int): Third body order of Chebyshev polynomial.
+setsymbols (set): Chemical symbols. 
+smax (float): Half of the minimum cell length.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="dcs.chimes.lsq">
+<code class="sig-prename descclassname">dcs.chimes.</code><code class="sig-name descname">lsq</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dcs.chimes.lsq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs chimes_lsq binary and creates A and B matrices (A.txt, B.txt).
+Runs lsq fitting process and writes ChIMES coefficients to params.txt.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="dcs.chimes.multi_fmatch">
+<code class="sig-prename descclassname">dcs.chimes.</code><code class="sig-name descname">multi_fmatch</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">T</span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcs.chimes.multi_fmatch" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Runs dftb_fmatch_input command for each trajectory, n processes at a time.</dt><dd><p>Returns tuple with trajectory information.</p>
+</dd>
+<dt>Args:</dt><dd><p>T (int): Temperature for DFTB simulation.</p>
+</dd>
+<dt>Returns:</dt><dd><dl class="simple">
+<dt>tuple: (nframes, setsymbols, smax)</dt><dd><p>nframes (int) - Number of ASE atoms object.
+setsymbols (set) - Chemical symbols. 
+smax (float) - Half of the minimum cell length.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="dcs.chimes.rdf">
+<code class="sig-prename descclassname">dcs.chimes.</code><code class="sig-name descname">rdf</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">smax</span></em>, <em class="sig-param"><span class="n">pair</span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcs.chimes.rdf" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Finds the radial distribution function for elements defined in pair. </dt><dd><p>Analyses the RDF, and determines the min and max distances in a atomic pair interaction.
+Returns a tuple with mlambda, rmin and rmax.</p>
+</dd>
+<dt>Args:</dt><dd><p>smax (float): Half of the minimum cell length.
+pair (list): List with two chemical symbols of a pair interaction, e.g., [‘C’, ‘H’]</p>
+</dd>
+<dt>Returns:</dt><dd><dl class="simple">
+<dt>tuple: (mlambda, rmin, rmax)</dt><dd><p>mlambda (float) - Morse lambda factor
+rmin (float) - Minimum distance considered in a atomic pair interaction.
+rmax (float) - Maximum distance considered in a atomic pair interaction.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="dcs.chimes.run_md_input">
+<code class="sig-prename descclassname">dcs.chimes.</code><code class="sig-name descname">run_md_input</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">folder</span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcs.chimes.run_md_input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes MD input file (run_md.in) if it does not exist in folder.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>folder (str): Directory that contains params.txt file.</p>
+</dd>
+<dt>Raises:</dt><dd><p>Exception: Raises exception if there is no params.txt file in folder.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-dcs.main">
+<span id="dcs-main-module"></span><h2>dcs.main module<a class="headerlink" href="#module-dcs.main" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="dcs.main.main">
+<code class="sig-prename descclassname">dcs.main.</code><code class="sig-name descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dcs.main.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Looks up ase_main function, sets up command line.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-dcs.md">
+<span id="dcs-md-module"></span><h2>dcs.md module<a class="headerlink" href="#module-dcs.md" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="dcs.md.CLICommand">
+<em class="property">class </em><code class="sig-prename descclassname">dcs.md.</code><code class="sig-name descname">CLICommand</code><a class="headerlink" href="#dcs.md.CLICommand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Molecular dynamics with constant temperature</p>
+<dl class="py method">
+<dt id="dcs.md.CLICommand.add_arguments">
+<em class="property">static </em><code class="sig-name descname">add_arguments</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parser</span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcs.md.CLICommand.add_arguments" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets up command line to run molecular dynamics with constant temperature i.e. recognize arguments and commands.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>parser (argparse): Arguments to be added.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dcs.md.CLICommand.run">
+<em class="property">static </em><code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcs.md.CLICommand.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs md function using command line arguments.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>args (argparse): Command line arguments added to parser using the function add_arguments.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="dcs.md.md">
+<code class="sig-prename descclassname">dcs.md.</code><code class="sig-name descname">md</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">optgeo</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">calc</span><span class="o">=</span><span class="default_value">'vasp'</span></em>, <em class="sig-param"><span class="n">T</span><span class="o">=</span><span class="default_value">300</span></em>, <em class="sig-param"><span class="n">md_size</span><span class="o">=</span><span class="default_value">[1, 1, 1]</span></em>, <em class="sig-param"><span class="n">steps</span><span class="o">=</span><span class="default_value">5000</span></em>, <em class="sig-param"><span class="n">time_step</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">dump_interval</span><span class="o">=</span><span class="default_value">100</span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcs.md.md" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs molecular dynamics simulation using vasp or castep
+(Creates 2-molecular_dynamics folder inside 0-train)</p>
+<p>Args:
+optgeo (NoneType, optional): Optimized geometry file, only true if optgeo defined. 
+Defaults to None.
+calc (str, optional): Specifies calculator. Options are ‘vasp’ or ‘castep’. Defaults to ‘vasp’.
+T (int, optional): Simulation temperature. Defaults to 300.
+md_size (list, optional): Size of supercell. Defaults to [1,1,1].
+steps (int, optional): Maximum number of ionic steps. Defaults to 5000.
+time_step (int, optional): Md time step in fs. Defaults to 1. 
+dump_interval (int, optional): Step size of frames to be saved in the trajectory file. 
+Defaults to 100.</p>
+<p>Raises:
+NotImplementedError: If calculator other than vasp or castep specified.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="dcs.md.run_castep_md">
+<code class="sig-prename descclassname">dcs.md.</code><code class="sig-name descname">run_castep_md</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">atoms</span></em>, <em class="sig-param"><span class="n">T</span></em>, <em class="sig-param"><span class="n">steps</span></em>, <em class="sig-param"><span class="n">time_step</span></em>, <em class="sig-param"><span class="n">dump_interval</span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcs.md.run_castep_md" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs castep md calculation on atoms for specified intervals.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>atoms (list): Atoms object involved in calc from ASE.
+T (int): Initial and final simulation temperature.
+steps (int): Maximum number of ionic steps, defines the total simulation time.
+time_step (int): md time step in fs.
+dump_interval (int): Step size of frames to be saved in the trajectory file.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="dcs.md.run_vasp_md">
+<code class="sig-prename descclassname">dcs.md.</code><code class="sig-name descname">run_vasp_md</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">atoms</span></em>, <em class="sig-param"><span class="n">T</span></em>, <em class="sig-param"><span class="n">steps</span></em>, <em class="sig-param"><span class="n">time_step</span></em>, <em class="sig-param"><span class="n">dump_interval</span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcs.md.run_vasp_md" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs vasp md calculation on atoms for specified intervals.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>atoms (list): Atoms object involved in calc from ASE.
+T (int): Initial and final simulation temperature.
+steps (int): Maximum number of ionic steps, defines the total simulation time.
+time_step (int): md time step in fs.
+dump_interval (int): Step size of frames to be saved in the trajectory file.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-dcs.oclimax">
+<span id="dcs-oclimax-module"></span><h2>dcs.oclimax module<a class="headerlink" href="#module-dcs.oclimax" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="dcs.oclimax.CLICommand">
+<em class="property">class </em><code class="sig-prename descclassname">dcs.oclimax.</code><code class="sig-name descname">CLICommand</code><a class="headerlink" href="#dcs.oclimax.CLICommand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Run OCLIMAX simulations</p>
+<dl class="py method">
+<dt id="dcs.oclimax.CLICommand.add_arguments">
+<em class="property">static </em><code class="sig-name descname">add_arguments</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parser</span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcs.oclimax.CLICommand.add_arguments" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets up command line to run OCLIMAX i.e. recognize arguments and commands.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>parser (argparse): Arguments to be added.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dcs.oclimax.CLICommand.run">
+<em class="property">static </em><code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcs.oclimax.CLICommand.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs oclimax function using command line arguments.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>args (argparse): Command line arguments added to parser using the function add_arguments.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="dcs.oclimax.oclimax">
+<code class="sig-prename descclassname">dcs.oclimax.</code><code class="sig-name descname">oclimax</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">params</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">task</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">e_unit</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcs.oclimax.oclimax" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates folder 3-oclimax, writes oclimax parameters file in folder and runs oclimax simulation.</p>
+<dl>
+<dt>Args:</dt><dd><p>params (str, optional): Oclimax parameters file defined in write_params function. Defaults to None.
+task (int, optional): Defines approximation method.</p>
+<blockquote>
+<div><p>0:inc approx. 1:coh+inc. 2:single-xtal Q-E. 3:single-xtal Q-Q. Defaults to 0.</p>
+</div></blockquote>
+<p>e_unit (int, optional): Defines energy unit. Defaults to 0.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="dcs.oclimax.plot">
+<code class="sig-prename descclassname">dcs.oclimax.</code><code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dcs.oclimax.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates plot using csv file (oclimax output with INS data) and saves as a png.
+Plots energy (meV) versus Normalized intensity.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="dcs.oclimax.run_oclimax">
+<code class="sig-prename descclassname">dcs.oclimax.</code><code class="sig-name descname">run_oclimax</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">params</span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcs.oclimax.run_oclimax" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>If convert.done file doesn’t exist, runs OCLIMAX convert. Converts input mesh to out.oclimax;</dt><dd><p>out.oclimax is the OCLIMAX format for mesh type files.</p>
+</dd>
+<dt>Args:</dt><dd><p>params (str): Oclimax parameters file name defined in write_params function.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="dcs.oclimax.write_params">
+<code class="sig-prename descclassname">dcs.oclimax.</code><code class="sig-name descname">write_params</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">task</span></em>, <em class="sig-param"><span class="n">e_unit</span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcs.oclimax.write_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates parameters file for Oclimax.</p>
+<dl>
+<dt>Args:</dt><dd><dl class="simple">
+<dt>task (int): Defines approximation method where </dt><dd><p>0:inc approx. 1:coh+inc. 2:single-xtal Q-E. 3:single-xtal Q-Q.</p>
+</dd>
+</dl>
+<p>e_unit (int): Defines energy units such that 0:cm-1 1:meV 2:THz.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-dcs.phonons">
+<span id="dcs-phonons-module"></span><h2>dcs.phonons module<a class="headerlink" href="#module-dcs.phonons" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="dcs.phonons.CLICommand">
+<em class="property">class </em><code class="sig-prename descclassname">dcs.phonons.</code><code class="sig-name descname">CLICommand</code><a class="headerlink" href="#dcs.phonons.CLICommand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Calculate phonons</p>
+<dl class="py method">
+<dt id="dcs.phonons.CLICommand.add_arguments">
+<em class="property">static </em><code class="sig-name descname">add_arguments</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parser</span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcs.phonons.CLICommand.add_arguments" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets up command line to run phonopy i.e. recognize arguments and commands.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>parser (argparse): Arguments to be added.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dcs.phonons.CLICommand.run">
+<em class="property">static </em><code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcs.phonons.CLICommand.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs phonons function using command line arguments.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>args (argparse): Command line arguments added to parser using the function add_arguments.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="dcs.phonons.calculate_forces">
+<code class="sig-prename descclassname">dcs.phonons.</code><code class="sig-name descname">calculate_forces</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">kforce</span></em>, <em class="sig-param"><span class="n">mode</span></em>, <em class="sig-param"><span class="n">dir</span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcs.phonons.calculate_forces" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs single point energy calculation.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>kforce (list): Number of k points for force calculations.
+mode (str): Calculator used for task. Options are ‘dftbp’, ‘chimes’, ‘vasp’, or ‘castep’. 
+dir (str): Directory to change to and run calculator in.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="dcs.phonons.calculate_mesh">
+<code class="sig-prename descclassname">dcs.phonons.</code><code class="sig-name descname">calculate_mesh</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mesh</span></em>, <em class="sig-param"><span class="n">mode</span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcs.phonons.calculate_mesh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates Phonopy force sets for specified calculator and runs mesh sampling phonon calculation.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>mesh (list): Uniform meshes for each axis. 
+mode (str): Calculator used for task. Options are ‘dftbp’, ‘chimes’, ‘vasp’, or ‘castep’.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="dcs.phonons.generate_supercell">
+<code class="sig-prename descclassname">dcs.phonons.</code><code class="sig-name descname">generate_supercell</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dim</span></em>, <em class="sig-param"><span class="n">mode</span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcs.phonons.generate_supercell" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads in the molecule structure file and creates displacements.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>dim (list): Dimensions of the supercell. 
+mode (str): Calculator used for the task. Options are ‘dftbp’ or ‘chimes’.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="dcs.phonons.multi_forces">
+<code class="sig-prename descclassname">dcs.phonons.</code><code class="sig-name descname">multi_forces</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">kforce</span></em>, <em class="sig-param"><span class="n">mode</span></em>, <em class="sig-param"><span class="n">mpi</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcs.phonons.multi_forces" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Calls calculate_forces function using parallel processing,</dt><dd><p>calculates forces for specified mode.</p>
+</dd>
+<dt>Args:</dt><dd><p>kforce (list): Number of k points for force calculations.
+mode (str): Calculator used for task. Options are ‘dftbp’, ‘chimes’, ‘vasp’, or ‘castep’. 
+mpi (bool, optional): Not currently implemented. Defaults to False.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="dcs.phonons.organize_folders">
+<code class="sig-prename descclassname">dcs.phonons.</code><code class="sig-name descname">organize_folders</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mode</span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcs.phonons.organize_folders" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Finds supercell displacement files and formats the name. </dt><dd><p>Creates directory with supercell displacement number,</p>
+</dd>
+</dl>
+<p>and moves supercell displacement file into created directory.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>mode (str): Calculator used for task. Options are ‘dftbp’, ‘chimes’, ‘vasp’, or ‘castep’.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="dcs.phonons.phonons">
+<code class="sig-prename descclassname">dcs.phonons.</code><code class="sig-name descname">phonons</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dim</span><span class="o">=</span><span class="default_value">[4, 4, 4]</span></em>, <em class="sig-param"><span class="n">kforce</span><span class="o">=</span><span class="default_value">[1, 1, 1]</span></em>, <em class="sig-param"><span class="n">mesh</span><span class="o">=</span><span class="default_value">[8, 8, 8]</span></em>, <em class="sig-param"><span class="n">calc</span><span class="o">=</span><span class="default_value">'dftbp'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcs.phonons.phonons" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs phonon supercell displacement calculations, populates 2-phonons folder with results.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>dim (list, optional): Dimensions of the supercell. Defaults to [4, 4, 4].
+kforce (list, optional): Number of k points for force calculations. Defaults to [1, 1, 1].
+mesh (list, optional): Uniform meshes for each axis. Defaults to [8, 8, 8].
+calc (str, optional): Calculator used for task. Options are ‘dftbp’, ‘chimes’, ‘vasp’, or ‘castep’. Defaults to ‘dftbp’.</p>
+</dd>
+<dt>Raises:</dt><dd><p>NotImplementedError: Raised if ‘calc’ specified is not available.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-dcs.relax">
+<span id="dcs-relax-module"></span><h2>dcs.relax module<a class="headerlink" href="#module-dcs.relax" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="dcs.relax.CLICommand">
+<em class="property">class </em><code class="sig-prename descclassname">dcs.relax.</code><code class="sig-name descname">CLICommand</code><a class="headerlink" href="#dcs.relax.CLICommand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Optimize structure</p>
+<dl class="py method">
+<dt id="dcs.relax.CLICommand.add_arguments">
+<em class="property">static </em><code class="sig-name descname">add_arguments</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parser</span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcs.relax.CLICommand.add_arguments" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets up command line to run relax script i.e. recognize arguments and commands.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>parser (argparse): Arguments to be added.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dcs.relax.CLICommand.run">
+<em class="property">static </em><code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcs.relax.CLICommand.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs relax.py functions using command line arguments.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>args (argparse): Command line arguments added to parser using the function add_arguments.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="dcs.relax.find_geo">
+<code class="sig-prename descclassname">dcs.relax.</code><code class="sig-name descname">find_geo</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">folder</span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcs.relax.find_geo" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Searches the current working directory for the molecular structure file. </dt><dd><p>Allowed file types are .cif, .gen, .sdf, or .xyz.</p>
+</dd>
+<dt>Args:</dt><dd><p>folder (str): The current working directory.</p>
+</dd>
+<dt>Returns:</dt><dd><p>str: Molecular structure file.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="dcs.relax.relax">
+<code class="sig-prename descclassname">dcs.relax.</code><code class="sig-name descname">relax</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">krelax</span><span class="o">=</span><span class="default_value">[6, 6, 6]</span></em>, <em class="sig-param"><span class="n">fmax</span><span class="o">=</span><span class="default_value">0.05</span></em>, <em class="sig-param"><span class="n">geo</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">calc</span><span class="o">=</span><span class="default_value">'dftbp'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcs.relax.relax" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds the geometry file and optimizes the structure using the specified calculator 
+(Populates 1-optimization folder with results).</p>
+<dl>
+<dt>Args:</dt><dd><p>krelax (list, optional): Number of k points for relaxation. Defaults to [6, 6, 6].
+fmax (float, optional): Maximum allowed force for convergence between atoms. Defaults to 0.01.
+geo (str, optional): Geometry file or structure.</p>
+<blockquote>
+<div><p>Allowed file types are .cif, .gen, .sdf, or .xyz. Defaults to None.</p>
+</div></blockquote>
+<p>calc (str, optional): Calculator used. Options are ‘dftbp’, ‘chimes’, or ‘vasp’. Defaults to ‘dftbp’.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="dcs.relax.relax_structure">
+<code class="sig-prename descclassname">dcs.relax.</code><code class="sig-name descname">relax_structure</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">krelax</span></em>, <em class="sig-param"><span class="n">fmax</span></em>, <em class="sig-param"><span class="n">geo</span></em>, <em class="sig-param"><span class="n">mode</span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcs.relax.relax_structure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines arguments for specified calculator and optimizes the structure.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>krelax (list): Number of k points for relaxation. 
+fmax (float): Maximum allowed force for convergence between atoms.
+geo (str): Geometry file or structure. Allowed file types are .cif, .gen, .sdf, or .xyz. 
+mode (str): Calculator used. Options are ‘dftbp’, ‘chimes’, ‘vasp’, or ‘castep’.</p>
+</dd>
+<dt>Raises:</dt><dd><p>NotImplementedError: If specified calculator is not an option for mode, error raised.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-dcs.train">
+<span id="dcs-train-module"></span><h2>dcs.train module<a class="headerlink" href="#module-dcs.train" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="dcs.train.CLICommand">
+<em class="property">class </em><code class="sig-prename descclassname">dcs.train.</code><code class="sig-name descname">CLICommand</code><a class="headerlink" href="#dcs.train.CLICommand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Workflow to run DFT-MD and train ChIMES model</p>
+<dl class="py method">
+<dt id="dcs.train.CLICommand.add_arguments">
+<em class="property">static </em><code class="sig-name descname">add_arguments</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parser</span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcs.train.CLICommand.add_arguments" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets up command line to run train script i.e. recognize arguments and commands.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>parser (argparse): Arguments to be added.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dcs.train.CLICommand.run">
+<em class="property">static </em><code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcs.train.CLICommand.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs train function using command line arguments.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>args (argparse): Command line arguments added to parser using the function add_arguments.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="dcs.train.train">
+<code class="sig-prename descclassname">dcs.train.</code><code class="sig-name descname">train</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dct</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcs.train.train" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calls functions related to the training workflow (relax, md, chimes) with a timer using specified parameters in train_params.json, else with default parameters. Creates 0-train directory.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>dct (dict, optional): JSON file with specified parameters for relax, md, and chimes functions. Defaults to ‘train_params.json’.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="dcs.train.write_params">
+<code class="sig-prename descclassname">dcs.train.</code><code class="sig-name descname">write_params</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dcs.train.write_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes a json file with the arguments and default values for realx, md, and chimes functions.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-dcs.workflow">
+<span id="dcs-workflow-module"></span><h2>dcs.workflow module<a class="headerlink" href="#module-dcs.workflow" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="dcs.workflow.CLICommand">
+<em class="property">class </em><code class="sig-prename descclassname">dcs.workflow.</code><code class="sig-name descname">CLICommand</code><a class="headerlink" href="#dcs.workflow.CLICommand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Workflow to relax structure, calculate phonons and calculate INS spectrum</p>
+<dl class="py method">
+<dt id="dcs.workflow.CLICommand.add_arguments">
+<em class="property">static </em><code class="sig-name descname">add_arguments</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parser</span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcs.workflow.CLICommand.add_arguments" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets up command line to run workflow script i.e. recognize arguments and commands.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>parser (argparse): Arguments to be added.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dcs.workflow.CLICommand.run">
+<em class="property">static </em><code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcs.workflow.CLICommand.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs workflow function using command line arguments.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>args (argparse): Command line arguments added to parser using the function add_arguments.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="dcs.workflow.workflow">
+<code class="sig-prename descclassname">dcs.workflow.</code><code class="sig-name descname">workflow</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dct</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcs.workflow.workflow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calls all workflow functions (relax, phonon, oclimax) with a timer using specified parameters in workflow_params.json, else with default parameters.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>dct (dict, optional): Specified parameters for relax, phonons, and oclimax functions. Defaults to None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="dcs.workflow.write_params">
+<code class="sig-prename descclassname">dcs.workflow.</code><code class="sig-name descname">write_params</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dcs.workflow.write_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes json file with default arguments from relax, phonons, and oclimax scripts.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-dcs">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-dcs" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="dcs.chdir">
+<code class="sig-prename descclassname">dcs.</code><code class="sig-name descname">chdir</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">folder</span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcs.chdir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Changes the working directory to folder if not already current wd.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>folder (str): Name of folder to make wd.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="dcs.done">
+<code class="sig-prename descclassname">dcs.</code><code class="sig-name descname">done</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mode</span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcs.done" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create .done file for task as f and closes.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>mode (str): Name of task finished.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="dcs.get_default_parameters">
+<code class="sig-prename descclassname">dcs.</code><code class="sig-name descname">get_default_parameters</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">func</span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcs.get_default_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inspects function func for argument names and default arguments.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>func (func): Input function to inspect.</p>
+</dd>
+<dt>Returns:</dt><dd><p>dict: Keys are argumnent names, values are the default arguments.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="dcs.isdone">
+<code class="sig-prename descclassname">dcs.</code><code class="sig-name descname">isdone</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mode</span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcs.isdone" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks for .done file.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>mode (str): Calculator used for task/specified.</p>
+</dd>
+<dt>Returns:</dt><dd><p>bool: True if mode.done files exists, false if mode.done doesn’t exist.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="dcs.mkdir">
+<code class="sig-prename descclassname">dcs.</code><code class="sig-name descname">mkdir</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">folder</span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcs.mkdir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates folder in current wd unless OSError occurs.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>folder (str): Name of folder to create.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="dcs.mktempdir">
+<code class="sig-prename descclassname">dcs.</code><code class="sig-name descname">mktempdir</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dcs.mktempdir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a temporary directory.</p>
+<dl class="simple">
+<dt>Yields:</dt><dd><p>str: Temporary directory name.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="dcs.out">
+<code class="sig-prename descclassname">dcs.</code><code class="sig-name descname">out</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">task</span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcs.out" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates .out and .err files for specified task.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>task (str): Name of task.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="dcs.read_json">
+<code class="sig-prename descclassname">dcs.</code><code class="sig-name descname">read_json</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcs.read_json" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads specified json file.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>filename (str): Full name of json file.</p>
+</dd>
+<dt>Returns:</dt><dd><p>dict: Dictionary with data specified by json file.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="dcs.write_json">
+<code class="sig-prename descclassname">dcs.</code><code class="sig-name descname">write_json</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">data</span></em><span class="sig-paren">)</span><a class="headerlink" href="#dcs.write_json" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates json file with specified name and data.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>filename (string): Name of json file. Must include .json. 
+data (dict): Dictionary with data.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="modules.html" class="btn btn-neutral float-left" title="DCS-Flow" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Lucas Samir Ramalho Cavalcante.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

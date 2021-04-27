@@ -1,0 +1,186 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DCS-Flow Requirements &#8212; DCS-Flow  documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="dcs-flow-requirements">
+<span id="installlinux"></span><h1>DCS-Flow Requirements<a class="headerlink" href="#dcs-flow-requirements" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p><a class="reference external" href="https://wiki.fysik.dtu.dk/ase/">Atomic Simulation Environment</a></p></li>
+<li><p><a class="reference external" href="https://www.dftbplus.org/">DFTB+</a></p></li>
+<li><p><a class="reference external" href="https://phonopy.github.io/phonopy/">Phonopy</a></p></li>
+<li><p><a class="reference external" href="https://neutrons.ornl.gov/sites/default/files/2018-NXS_Lecture_YQCheng_2.pdf">Oclimax</a></p></li>
+</ul>
+</div>
+<div class="section" id="linux-installation">
+<h1>Linux Installation<a class="headerlink" href="#linux-installation" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Install ASE:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">upgrade</span> <span class="o">--</span><span class="n">user</span> <span class="n">ase</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Install DFTB+:</p>
+<ol class="arabic simple">
+<li><p><a class="reference external" href="http://www.dftb.org/fileadmin/DFTB/public/slako-unpacked.tar.xz">Download Slater-Koster files (parameters files for the DFTB method)</a></p></li>
+<li><p><a class="reference external" href="https://dftbplus.org/download/dftb-stable">Download DFTB+ binaries</a></p></li>
+<li><p>Extract the file and put it in your home folder</p></li>
+</ol>
+</li>
+<li><p>Installing Phonopy</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">upgrade</span> <span class="o">--</span><span class="n">user</span> <span class="n">phonopy</span>
+</pre></div>
+</div>
+<ul>
+<li><p>Installing OCLIMAX</p>
+<ol class="arabic simple">
+<li><p>OCLIMAX uses the DOCKER platform to run the application.
+<a class="reference external" href="https://www.docker.com/">Please install it</a></p></li>
+<li><p>Now download OCLIMAX</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">sL</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">sites</span><span class="o">.</span><span class="n">google</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">site</span><span class="o">/</span><span class="n">ornliceman</span><span class="o">/</span><span class="n">getoclimax</span> <span class="o">|</span> <span class="n">bash</span>
+<span class="n">oclimax</span> <span class="n">pull</span>
+</pre></div>
+</div>
+</li>
+<li><p>Installing DCS-Flow</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">gitlab</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">lucassamir1</span><span class="o">/</span><span class="n">DCS</span><span class="o">-</span><span class="n">Flow</span><span class="o">.</span><span class="n">git</span>
+</pre></div>
+</div>
+<ul>
+<li><p>Installing ChIMES</p>
+<p>If you want to use the machine learning method called ChIMES, please contact Nir Goldman (<a class="reference external" href="mailto:goldman14&#37;&#52;&#48;llnl&#46;gov">goldman14<span>&#64;</span>llnl<span>&#46;</span>gov</a>) in order to receive the following files:</p>
+<ol class="arabic simple">
+<li><p>DFTB+_ChIMES. This is a version of the DFTB+ package that has an interface to ChIMES. It should substitute the standart DFTB+ package.</p></li>
+<li><p>ChIMES binaries (chimes_lsq, chimes_md, lsq2.py). Put these files inside the git directory DCS-Flow/dcs/.</p></li>
+</ol>
+</li>
+</ul>
+</div>
+<div class="section" id="set-environment-variables">
+<h1>Set environment variables<a class="headerlink" href="#set-environment-variables" title="Permalink to this headline">¶</a></h1>
+<p>Add these lines to your configuration file (.bashrc). The following code uses example paths and must be edited according to your system.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>export DFTB_PREFIX=/my_disk/my_name/slako/mio/mio-1-1/ # (path to Slako files)
+export ASE_DFTB_COMMAND=/my_disk/my_name/dftbplus-20.1/bin/dftb+ &gt; PREFIX.out # (path to dftb+)
+export PATH=/my_disk/my_name/dftbplus-20.1/bin:$PATH (path to dftb+ files)
+export PYTHONPATH=/my_disk/my_name/DCS-Flow:$PYTHONPATH #(path to DCS file)
+export PATH=/my_disk/my_name/DCS-Flow/dcs:$PATH #(path to file within DCS folder)
+</pre></div>
+</div>
+</div>
+<div class="section" id="usage">
+<h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Workflow</p></li>
+</ul>
+<p>The workflow will relax the structure, create supercell displacements, calculate forces, run oclimax. The easiest way to start is through the command line interface</p>
+<ol class="arabic">
+<li><p>Get the parameters file</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dcs</span> <span class="n">workflow</span> <span class="o">--</span><span class="n">get</span><span class="o">-</span><span class="n">params</span>
+</pre></div>
+</div>
+</li>
+<li><p>Define parameters in the file</p></li>
+<li><p>Run workflow</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dcs</span> <span class="n">workflow</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">DCS-Flow</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Lucas Samir Ramalho Cavalcante.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/Install_Linux.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

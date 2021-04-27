@@ -25,7 +25,11 @@ class CLICommand:
             help='Convergence criteria for forces',
             default=0.01,
             type=float)
-
+        add('--temp',
+            help='Set the temperature in Kelvin',
+            default=5,
+            type=int)
+        
 
     @staticmethod
     def run(args):
@@ -34,9 +38,9 @@ class CLICommand:
         Args:
             args (argparse): Command line arguments added to parser using the function add_arguments.
         """
-        relax(args.krelax, args.fmax, args.geo, args.calc)
+        relax(args.krelax, args.fmax, args.geo, args.calc, args.temp)
 
-def relax_structure(krelax, fmax, geo, mode):
+def relax_structure(krelax, fmax, geo, mode, T):
     """Defines arguments for specified calculator and optimizes the structure.
     
     Args:
@@ -44,6 +48,7 @@ def relax_structure(krelax, fmax, geo, mode):
         fmax (float): Maximum allowed force for convergence between atoms.
         geo (str): Geometry file or structure. Allowed file types are .cif, .gen, .sdf, or .xyz. 
         mode (str): Calculator used. Options are 'dftbp', 'chimes', 'vasp', or 'castep'. 
+        T (int, optional): Simulation temperature. Defaults to 300.
 
     Raises:
         NotImplementedError: If specified calculator is not an option for mode, error raised. 
@@ -56,7 +61,7 @@ def relax_structure(krelax, fmax, geo, mode):
 
         if mode == 'dftbp':
             from ase.calculators.dftb import Dftb
-            calculator = Dftb(label=formula,
+            calculator = Dftb(label='relax',
                               atoms=atoms,
                               Driver_='LBFGS',
                               Driver_MovedAtoms='1:-1',
@@ -67,7 +72,7 @@ def relax_structure(krelax, fmax, geo, mode):
                               kpts=krelax,
                               Hamiltonian_SCC='Yes',
                               Hamiltonian_SCCTolerance=1e-7,
-                              Hamiltonian_Filling='Fermi {{Temperature [Kelvin] = {T} }}' .format(T=5),
+                              Hamiltonian_Filling='Fermi {{Temperature [Kelvin] = {T} }}' .format(T=T),
                               Hamiltonian_MaxAngularMomentum_='',
                               Hamiltonian_MaxAngularMomentum_C='p',
                               Hamiltonian_MaxAngularMomentum_O='p',
@@ -80,7 +85,7 @@ def relax_structure(krelax, fmax, geo, mode):
             from dcs.chimes import run_md_input
             folder = os.getcwd()            
             run_md_input(folder + '/..')
-            calculator = Dftb(label=formula,
+            calculator = Dftb(label='relax',
                               atoms=atoms,
                               Driver_='LBFGS',
                               Driver_MovedAtoms='1:-1',
@@ -92,7 +97,7 @@ def relax_structure(krelax, fmax, geo, mode):
                               Hamiltonian_ChIMES='Yes',
                               Hamiltonian_SCC='Yes',
                               Hamiltonian_SCCTolerance=1e-7,
-                              Hamiltonian_Filling='Fermi {{Temperature [Kelvin] = {T} }}' .format(T=5),
+                              Hamiltonian_Filling='Fermi {{Temperature [Kelvin] = {T} }}' .format(T=T),
                               Hamiltonian_MaxAngularMomentum_='',
                               Hamiltonian_MaxAngularMomentum_C='p',
                               Hamiltonian_MaxAngularMomentum_O='p',
@@ -174,7 +179,7 @@ def find_geo(folder):
 
     return geo
         
-def relax(krelax=[6, 6, 6], fmax=0.05, geo=None, calc='dftbp'):
+def relax(krelax=[6, 6, 6], fmax=0.05, geo=None, calc='dftbp', T=5):
     """Finds the geometry file and optimizes the structure using the specified calculator 
     (Populates 1-optimization folder with results). 
 
@@ -184,6 +189,7 @@ def relax(krelax=[6, 6, 6], fmax=0.05, geo=None, calc='dftbp'):
         geo (str, optional): Geometry file or structure. 
             Allowed file types are .cif, .gen, .sdf, or .xyz. Defaults to None.
         calc (str, optional): Calculator used. Options are 'dftbp', 'chimes', or 'vasp'. Defaults to 'dftbp'.
+        T (int, optional): Simulation temperature. Defaults to 5.
     """
     folder = os.getcwd()
 
@@ -198,7 +204,7 @@ def relax(krelax=[6, 6, 6], fmax=0.05, geo=None, calc='dftbp'):
     mkdir(folder + '/1-optimization')
     with chdir(folder + '/1-optimization'):
         with out('relax'):
-            relax_structure(krelax=krelax, fmax=fmax, geo=geo, mode=calc)
+            relax_structure(krelax=krelax, fmax=fmax, geo=geo, mode=calc, T=T)
 
 if __name__ == '__main__':
     relax()

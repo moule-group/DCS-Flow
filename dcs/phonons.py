@@ -34,6 +34,10 @@ class CLICommand:
             default=[8, 8, 8],
             nargs=3,
             type=int)
+        add('--temp',
+            help='Set the temperature in Kelvin',
+            default=5,
+            type=int)
 
 
     @staticmethod
@@ -43,7 +47,7 @@ class CLICommand:
         Args:
             args (argparse): Command line arguments added to parser using the function add_arguments.
         """
-        phonons(args.dim, args.kforce, args.mesh, args.calc)
+        phonons(args.dim, args.kforce, args.mesh, args.calc, args.temp)
 
 
 def generate_supercell(dim, mode):
@@ -130,7 +134,7 @@ def organize_folders(mode):
                 move(filename, '{}/supercell.cell' .format(dir))
 
 
-def calculate_forces(kforce, mode, dir):
+def calculate_forces(kforce, mode, T, dir):
     """Runs single point energy calculation.
 
     Args:
@@ -142,6 +146,7 @@ def calculate_forces(kforce, mode, dir):
         if isdone('forces'):
             return
         else:
+            print(dir)
             if mode == 'chimes':
                 from ase.calculators.dftb import Dftb
                 from dcs.chimes import run_md_input
@@ -150,7 +155,7 @@ def calculate_forces(kforce, mode, dir):
                                   Hamiltonian_ChIMES='Yes',
                                   Hamiltonian_SCC='Yes',
                                   Hamiltonian_SCCTolerance=1e-7,
-                                  Hamiltonian_Filling='Fermi {{Temperature [Kelvin] = {T} }}' .format(T=5),
+                                  Hamiltonian_Filling='Fermi {{Temperature [Kelvin] = {T} }}' .format(T=T),
                                   Hamiltonian_MaxAngularMomentum_='',
                                   Hamiltonian_MaxAngularMomentum_C='p',
                                   Hamiltonian_MaxAngularMomentum_O='p',
@@ -168,7 +173,7 @@ def calculate_forces(kforce, mode, dir):
                 calculator = Dftb(kpts=kforce,
                                   Hamiltonian_SCC='Yes',
                                   Hamiltonian_SCCTolerance=1e-7,
-                                  Hamiltonian_Filling='Fermi {{Temperature [Kelvin] = {T} }}' .format(T=5),
+                                  Hamiltonian_Filling='Fermi {{Temperature [Kelvin] = {T} }}' .format(T=T),
                                   Hamiltonian_MaxAngularMomentum_='',
                                   Hamiltonian_MaxAngularMomentum_C='p',
                                   Hamiltonian_MaxAngularMomentum_O='p',
@@ -222,7 +227,7 @@ def calculate_forces(kforce, mode, dir):
                 
             done('forces')
                 
-def multi_forces(kforce, mode, mpi=False):
+def multi_forces(kforce, mode, T, mpi=False):
     """Calls calculate_forces function using parallel processing,
         calculates forces for specified mode. 
 
@@ -232,7 +237,7 @@ def multi_forces(kforce, mode, mpi=False):
         mpi (bool, optional): Not currently implemented. Defaults to False. 
     """
     from functools import partial
-    command = partial(calculate_forces, kforce, mode)
+    command = partial(calculate_forces, kforce, mode, T)
     
     dirlist = np.array(sorted([x.name for x in os.scandir() if x.is_dir()]))
 
@@ -284,7 +289,7 @@ def calculate_mesh(mesh, mode):
     phonon.write_yaml_mesh()
 
 
-def phonons(dim=[4, 4, 4], kforce=[1, 1, 1], mesh=[8, 8, 8], calc='dftbp'):
+def phonons(dim=[4, 4, 4], kforce=[1, 1, 1], mesh=[8, 8, 8], calc='dftbp', T=5):
     """Runs phonon supercell displacement calculations, populates 2-phonons folder with results.
 
     Args:
@@ -292,6 +297,7 @@ def phonons(dim=[4, 4, 4], kforce=[1, 1, 1], mesh=[8, 8, 8], calc='dftbp'):
         kforce (list, optional): Number of k points for force calculations. Defaults to [1, 1, 1].
         mesh (list, optional): Uniform meshes for each axis. Defaults to [8, 8, 8].
         calc (str, optional): Calculator used for task. Options are 'dftbp', 'chimes', 'vasp', or 'castep'. Defaults to 'dftbp'.
+        T (int, optional): Simulation temperature. Defaults to 5.
 
     Raises:
         NotImplementedError: Raised if 'calc' specified is not available. 
@@ -318,7 +324,7 @@ def phonons(dim=[4, 4, 4], kforce=[1, 1, 1], mesh=[8, 8, 8], calc='dftbp'):
             else:
                 generate_supercell(dim, calc)
                 organize_folders(calc)
-                multi_forces(kforce, calc)
+                multi_forces(kforce, calc, T)
                 calculate_mesh(mesh, calc)
                 done('phonons')
 
