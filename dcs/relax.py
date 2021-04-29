@@ -48,7 +48,7 @@ def relax_structure(krelax, fmax, geo, mode, T):
         fmax (float): Maximum allowed force for convergence between atoms.
         geo (str): Geometry file or structure. Allowed file types are .cif, .gen, .sdf, or .xyz. 
         mode (str): Calculator used. Options are 'dftbp', 'chimes', 'vasp', or 'castep'. 
-        T (int, optional): Simulation temperature. Defaults to 300.
+        T (int, optional): Simulation temperature. Only used for DFTB+ and ChIMES.
 
     Raises:
         NotImplementedError: If specified calculator is not an option for mode, error raised. 
@@ -189,7 +189,7 @@ def relax(krelax=[6, 6, 6], fmax=0.05, geo=None, calc='dftbp', T=5):
         geo (str, optional): Geometry file or structure. 
             Allowed file types are .cif, .gen, .sdf, or .xyz. Defaults to None.
         calc (str, optional): Calculator used. Options are 'dftbp', 'chimes', or 'vasp'. Defaults to 'dftbp'.
-        T (int, optional): Simulation temperature. Defaults to 5.
+        T (int, optional): Simulation temperature. Defaults to 5K. Only used for DFTB+ and ChIMES.
     """
     folder = os.getcwd()
 
