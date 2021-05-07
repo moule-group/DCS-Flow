@@ -140,6 +140,7 @@ def calculate_forces(kforce, mode, T, dir):
     Args:
         kforce (list): Number of k points for force calculations.
         mode (str): Calculator used for task. Options are 'dftbp', 'chimes', 'vasp', or 'castep'. 
+        T (int, optional): Simulation temperature. Only used for DFTB+ and ChIMES.
         dir (str): Directory to change to and run calculator in.
     """
     with chdir(dir):
@@ -297,7 +298,7 @@ def phonons(dim=[4, 4, 4], kforce=[1, 1, 1], mesh=[8, 8, 8], calc='dftbp', T=5):
         kforce (list, optional): Number of k points for force calculations. Defaults to [1, 1, 1].
         mesh (list, optional): Uniform meshes for each axis. Defaults to [8, 8, 8].
         calc (str, optional): Calculator used for task. Options are 'dftbp', 'chimes', 'vasp', or 'castep'. Defaults to 'dftbp'.
-        T (int, optional): Simulation temperature. Defaults to 5.
+        T (int, optional): Simulation temperature. Defaults to 5K. Only used for DFTB+ and ChIMES.
 
     Raises:
         NotImplementedError: Raised if 'calc' specified is not available. 

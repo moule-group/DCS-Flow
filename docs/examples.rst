@@ -27,6 +27,7 @@ Edit the workflow parameters file to match the following values.
        "fmax": 0.05,
        "geo": null,
        "calc": "dftbp",
+       "T":5,
        "dim": [
            2,
            2,
@@ -107,6 +108,7 @@ Edit the workflow parameters file to match the following values.
        "fmax": 0.05,
        "geo": null,
        "calc": "dftbp",
+       "T":5,
        "dim": [
            2,
            2,
@@ -233,6 +235,7 @@ In the workflow parameters, edit the calculator to chimes and change the default
        "fmax": 0.05,
        "geo": null,
        "calc": "chimes",
+       "T":5,
        "dim": [
            2,
            2,

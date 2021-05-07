@@ -41,30 +41,32 @@ DCS-Flow has a command line interface implemented. Examples for how to use it ar
 ### Main Functions
 
 #### Relax 
-* ```relax(krelax=[6, 6, 6], fmax=0.05, geo=None, calc='dftbp'):```
+* ```relax(krelax=[6, 6, 6], fmax=0.05, geo=None, calc='dftbp', T=5):```
     * Finds the geometry file and optimizes the structure using the specified calculator (Populates 1-optimization folder with results). 
     * The following input args are defined in the workflow parameters file:  
         * krelax (list, optional): Number of k points for relaxation. Defaults to [6, 6, 6].  
         * fmax (float, optional): Maximum allowed force for convergence between atoms. Defaults to 0.01.  
         * geo (str, optional): Geometry file or structure. 
             Allowed file types are .cif, .gen, .sdf, or .xyz. Defaults to None.  
-        * calc (str, optional): Calculator used. Options are 'dftbp', 'chimes', 'castep', or 'vasp'. Defaults to 'dftbp'.  
+        * calc (str, optional): Calculator used. Options are 'dftbp', 'chimes', 'castep', or 'vasp'. Defaults to 'dftbp'.
+	* T (int, optional): Simulation temperature. Defaults to 5K. Only used for DFTB+ and ChIMES.
 
 ```
-dcs relax --krelax 6 6 6 --fmax 0.05 --geo TCNQ.cif --calc dftbp
+dcs relax --krelax 6 6 6 --fmax 0.05 --geo TCNQ.cif --calc dftbp --temp 5
 ```
 
 #### Phonons
-* ```phonons(dim=[4, 4, 4], kforce=[1, 1, 1], mesh=[8, 8, 8], calc='dftbp'):```
+* ```phonons(dim=[4, 4, 4], kforce=[1, 1, 1], mesh=[8, 8, 8], calc='dftbp', T=5):```
     * Runs phonon supercell displacement calculations, populates 2-phonons folder with results. 
     * The following input args are defined in the workflow parameters file: 
         * dim (list, optional): Dimensions of the supercell. Defaults to [4, 4, 4].
         * kforce (list, optional): Number of k points for force calculations. Defaults to [1, 1, 1].
         * mesh (list, optional): Uniform meshes for each axis. Defaults to [8, 8, 8].
         * calc (str, optional): Calculator used for task. Options are 'dftbp', 'chimes', 'vasp', or 'castep'. Defaults to 'dftbp'.
+	* T (int, optional): Simulation temperature. Defaults to 5K. Only used for DFTB+ and ChIMES.
 
 ``` 
-dcs phonons --dim 4 4 4 --kforce 1 1 1 --mesh 8 8 8 --calc dftbp
+dcs phonons --dim 4 4 4 --kforce 1 1 1 --mesh 8 8 8 --calc dftbp --temp 5
 ```
 
 #### Oclimax
@@ -155,6 +157,7 @@ Edit the workflow parameters file to match the following values.
     "fmax": 0.05,
     "geo": null,
     "calc": "dftbp",
+    "T": 5,
     "dim": [
         2,
         2,
@@ -230,6 +233,7 @@ Edit the workflow parameters file to match the following values.
     "fmax": 0.05,
     "geo": null,
     "calc": "dftbp",
+    "T": 5,
     "dim": [
         2,
         2,
@@ -351,6 +355,7 @@ In the workflow parameters, edit the calculator to chimes and change the default
     "fmax": 0.05,
     "geo": null,
     "calc": "chimes",
+    "T": 5,
     "dim": [
         2,
         2,
