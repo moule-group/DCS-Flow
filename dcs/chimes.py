@@ -181,7 +181,10 @@ def rdf(smax, pair):
     
     # choose rmin as the first position where aveg is greater than zero          
     i = np.where(aveg > 0)
-    rmin = r[i[0][0]]
+    try:
+        rmin = r[i[0][0]]
+    except:
+        return 0.1, 0.1, 0.1
 
     # smooth g function
     box_pts = 5
