@@ -140,7 +140,17 @@ def multi_fmatch(T):
 
     nframes = len(traj)
     setsymbols = set(traj[0].get_chemical_symbols())
-    smax = round(min(traj[0].get_cell().lengths()) / 2, 2)
+
+    # find smax
+    cell = traj[0].get_cell()
+    vol = traj[0].get_volume()
+    pbc = traj[0].get_pbc()
+    smaxlist = []
+    for i in range(3):
+        if pbc[i]:
+            axb = np.cross(cell[(i + 1) % 3, :], cell[(i + 2) % 3, :])
+            smaxlist.append(vol / np.linalg.norm(axb))
+    smax = float(str(min(smaxlist) / 2)[:3])
 
     return nframes, setsymbols, smax 
 
@@ -165,7 +175,7 @@ def rdf(smax, pair):
     traj = Trajectory('dft.traj')
     ana = Analysis(list(traj))
 
-    rdf = ana.get_rdf(smax-0.4, 100, elements=pair, return_dists=True)
+    rdf = ana.get_rdf(smax, 100, elements=pair, return_dists=True)
     r = rdf[0][1]
 
     # get average g function                                                                            
@@ -203,7 +213,7 @@ def rdf(smax, pair):
             rmax = r[imax]
         except:
             if smax < 2 * rmin:
-                rmax = smax - 0.4
+                rmax = smax
             else:
                 rmax = 2 * rmin
 
