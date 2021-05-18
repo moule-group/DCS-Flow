@@ -118,7 +118,7 @@ def relax_structure(krelax, fmax, geo, mode, T):
                               ediffg=-fmax,
                               sigma=0.05,
                               nwrite=1,
-                              ncore=16,
+                              ncore=64,
                               lreal=False,
                               lcharg=False,
                               lwave=False,
