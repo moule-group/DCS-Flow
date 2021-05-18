@@ -136,7 +136,7 @@ def run_castep_md(atoms, T, steps, time_step, dump_interval):
         calculator.param.md_thermostat = 'nose-hoover'
         calculator.param.md_elec_energy_tol = 1e-6
         calculator.param.devel_code = 'PARALLEL: bands=4 kpoints=1 gvectors=64 :ENDPARALLEL'
-        calculator.cell.fix_com = True
+        # calculator.cell.fix_com = True
         calculator.cell.fix_all_cell = True
         # calculator.cell.symmetry_generate = True
         atoms.set_calculator(calculator)
