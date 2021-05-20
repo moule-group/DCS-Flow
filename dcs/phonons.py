@@ -168,7 +168,7 @@ def calculate_forces(kforce, mode, T, dir):
                                   Options_WriteResultsTag='Yes')
                 calculator.write_dftb_in(filename='dftb_in.hsd')
                 os.system('dftb+ 1>> forces.out 2>> forces.err')
-
+                
             if mode == 'dftbp':
                 from ase.calculators.dftb import Dftb
                 calculator = Dftb(kpts=kforce,
@@ -203,11 +203,11 @@ def calculate_forces(kforce, mode, T, dir):
                                   lwave=False,
                                   xc='pbe',
                                   gamma=True)
-                calculator.calculate(atoms)
+                atoms.set_calculator(calculator)
+                atoms.get_potential_energy()
                 
             if mode == 'castep':
                 import ase.calculators.castep
-
                 atoms = read('supercell.cell')
                 calculator = ase.calculators.castep.Castep(kpts={'size':kforce, 'gamma':True})
                 directory = '../' + dir
@@ -223,8 +223,8 @@ def calculate_forces(kforce, mode, T, dir):
                 calculator.param.num_dump_cycles = 0
                 calculator.param.devel_code = 'PARALLEL: bands=4 kpoints=1 gvectors=64 :ENDPARALLEL'
                 calculator.param.opt_strategy = 'speed'
-
-                calculator.calculate(atoms)
+                atoms.set_calculator(calculator)
+                atoms.get_potential_energy()
                 
             done('forces')
                 
