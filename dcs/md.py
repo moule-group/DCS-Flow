@@ -99,6 +99,22 @@ def run_vasp_md(atoms, T, steps, time_step, dump_interval):
         write('md.traj', vasptraj)
         done('md')
 
+def set_castep_pbc():
+    from ase import Atoms
+    from ase.calculators.singlepoint import SinglePointCalculator
+    from ase.io import Trajectory
+    traj = Trajectory('md_noPBC.traj')
+    md = Trajectory('md.traj', 'w')
+    for frame in traj:
+        species = frame.symbols
+        pos = frame.positions
+        cell = frame.cell
+        energy = frame.get_potential_energy()
+        forces = frame.get_forces()
+        image = Atoms(species, pos, cell=cell, pbc=True)
+        image.calc = SinglePointCalculator(atoms=image, energy=energy, forces=forces)
+        md.write(image)
+        
 def run_castep_md(atoms, T, steps, time_step, dump_interval):
     """Runs castep md calculation on atoms for specified intervals.
 
@@ -142,7 +158,8 @@ def run_castep_md(atoms, T, steps, time_step, dump_interval):
         atoms.set_calculator(calculator)
         atoms.get_potential_energy()
         casteptraj = read('md.md', index=slice(0, steps, dump_interval))
-        write('md.traj', casteptraj)
+        write('md_noPBC.traj', casteptraj)
+        set_castep_pbc()
         done('md')
 
 
