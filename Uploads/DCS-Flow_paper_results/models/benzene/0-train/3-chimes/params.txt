@@ -1,0 +1,87 @@
+! Date  2021-02-01
+!
+! Number of variables =  30
+! Number of equations    =  7350
+! LARS implementation of LASSO used
+! LASSO alpha =  0.0001
+! RMS force error =  7.529995044538375
+! max abs variable =  241.38338976787355
+! number of fitting vars =  16
+! Bayesian Information Criterion =   29820.186730096873
+!
+USECOUL: false
+FITCOUL: false
+USEPOVR: false
+FITPOVR: false
+USE3BCH: false
+USE4BCH: false
+
+PAIRTYP: CHEBYSHEV  10 0 0 -1 1
+
+ATOM TYPES: 2
+
+# TYPEIDX #	# ATM_TYP #	# ATMCHRG #	# ATMMASS #
+0		C		0		12.0107
+1		H		0		1.00784
+
+ATOM PAIRS: 3
+
+# PAIRIDX #	# ATM_TY1 #	# ATM_TY1 #	# S_MINIM #	# S_MAXIM #	# S_DELTA #	# CHBDIST #	# MORSE_LAMBDA #
+	0               C               C               1               1.6             0.01            MORSE           1.4             
+	1               H               H               0.3             0.3             0.01            MORSE           0.3             
+	2               C               H               0.9             1.6             0.01            MORSE           1.1             
+
+FCUT TYPE: TERSOFF 0.5
+
+ATOM PAIR TRIPLETS: 0
+ATOM PAIR QUADRUPLETS: 0
+
+PAIR CHEBYSHEV PARAMS 
+
+PAIRTYPE PARAMS: 0 C C
+
+0 -186.64948924911823
+1 -241.38338976787355
+2 -174.11423868259715
+3 -34.08021014395037
+4 -20.939116332608247
+5 83.28654436556832
+6 24.009625263506585
+7 61.98377482460345
+8 9.566307765461705
+9 15.711684557713081
+ 
+PAIRTYPE PARAMS: 1 H H
+
+0 0.0
+1 0.0
+2 0.0
+3 0.0
+4 0.0
+5 0.0
+6 0.0
+7 0.0
+8 0.0
+9 0.0
+ 
+PAIRTYPE PARAMS: 2 C H
+
+0 0.0
+1 0.0
+2 0.0
+3 -25.53652957861515
+4 0.0
+5 -3.176088149071958
+6 -10.338358635780272
+7 2.86061319872077
+8 -2.8302781354367834
+9 -0.33401931069636404
+ 
+
+PAIRMAPS: 4
+0 CC
+2 CH
+2 HC
+1 HH
+
+ENDFILE

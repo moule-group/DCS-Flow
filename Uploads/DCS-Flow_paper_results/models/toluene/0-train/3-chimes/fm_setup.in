@@ -1,0 +1,41 @@
+####### CONTROL VARIABLES #######
+
+# TRJFILE # 
+        dft-dftb.xyzf
+# WRAPTRJ # 
+        true
+# NFRAMES # 
+        50
+# NLAYERS # 
+        1
+# FITCOUL # 
+        false
+# FITSTRS #
+        true
+# FITENER # 
+        false
+# FITPOVR # 
+        false
+# PAIRTYP # 
+        CHEBYSHEV 12 12 0 -1 1
+# CHBTYPE #
+        MORSE
+	
+####### TOPOLOGY VARIABLES #######
+
+# NATMTYP # 
+2	
+
+
+# TYPEIDX #	# ATM_TYP #	# ATMCHRG #	# ATMMASS #
+1		C		 0		12.080
+2		H		 0		1.0080
+
+# PAIRIDX #     # ATM_TY1 #     # ATM_TY1 #     # S_MINIM #     # S_MAXIM #     # S_DELTA #     # MORSE_LAMBDA #        # USEOVRP #     # NIJBINS #     # NIKBINS #     # NJKBINS #
+1               C               C               1.2             1.7             0.01            1.42                     false           0               0               0
+2               C               H               0.9             1.25             0.01            1.1                     false           0               0               0
+3               H               H               1.4             2.0             0.01            1.8                     false           0               0               0
+
+# FCUTTYP #
+TERSOFF 0.5
+# ENDFILE #

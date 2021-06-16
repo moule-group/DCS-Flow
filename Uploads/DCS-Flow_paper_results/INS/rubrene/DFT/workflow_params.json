@@ -1,0 +1,29 @@
+{
+    "krelax": [
+        2,
+        2,
+        2
+    ],
+    "fmax": 0.02,
+    "geo": null,
+    "calc": "vasp",
+    "T": 5,
+    "dim": [
+        1,
+        1,
+        1
+    ],
+    "kforce": [
+        2,
+        2,
+        2
+    ],
+    "mesh": [
+        8,
+        8,
+        8
+    ],
+    "params": null,
+    "task": 0,
+    "e_unit": 0
+}

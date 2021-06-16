@@ -1,0 +1,23 @@
+{
+    "krelax": [
+        2,
+        2,
+        2
+    ],
+    "fmax": 0.05,
+    "geo": null,
+    "calc": "vasp",
+    "optgeo": null,
+    "T": 400,
+    "md_size": [
+        1,
+        1,
+        1
+    ],
+    "steps": 25000,
+    "time_step": 0.2,
+    "dump_interval": 500,
+    "trajfile": null,
+    "b2": 12,
+    "b3": 2
+}

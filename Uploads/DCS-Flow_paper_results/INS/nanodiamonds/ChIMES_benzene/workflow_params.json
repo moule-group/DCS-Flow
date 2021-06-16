@@ -1,0 +1,28 @@
+{
+    "krelax": [
+        6,
+        6,
+        6
+    ],
+    "fmax": 0.01,
+    "geo": null,
+    "calc": "chimes",
+    "dim": [
+        4,
+        4,
+        4
+    ],
+    "kforce": [
+        2,
+        2,
+        2
+    ],
+    "mesh": [
+        20,
+        20,
+        20
+    ],
+    "params": null,
+    "task": 0,
+    "e_unit": 0
+}

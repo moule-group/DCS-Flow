@@ -1,0 +1,105 @@
+! Date  2021-01-25
+!
+! Number of variables =  48
+! Number of equations    =  42150
+! LARS implementation of LASSO used
+! LASSO alpha =  0.0001
+! RMS force error =  5.342068552933865
+! max abs variable =  205.1288035166723
+! number of fitting vars =  24
+! Bayesian Information Criterion =   141509.74722723474
+!
+USECOUL: false
+FITCOUL: false
+USEPOVR: false
+FITPOVR: false
+USE3BCH: false
+USE4BCH: false
+
+PAIRTYP: CHEBYSHEV  16 0 0 -1 1
+
+ATOM TYPES: 2
+
+# TYPEIDX #	# ATM_TYP #	# ATMCHRG #	# ATMMASS #
+0		C		0		12.0107
+1		H		0		1.00784
+
+ATOM PAIRS: 3
+
+# PAIRIDX #	# ATM_TY1 #	# ATM_TY1 #	# S_MINIM #	# S_MAXIM #	# S_DELTA #	# CHBDIST #	# MORSE_LAMBDA #
+	0               C               C               1.2             1.7             0.01            MORSE           3               
+	1               H               H               0.3             0.3             0.01            MORSE           3               
+	2               C               H               0.9             1.7             0.01            MORSE           3               
+
+FCUT TYPE: TERSOFF 0.5
+
+ATOM PAIR TRIPLETS: 0
+ATOM PAIR QUADRUPLETS: 0
+
+PAIR CHEBYSHEV PARAMS 
+
+PAIRTYPE PARAMS: 0 C C
+
+0 0.0
+1 -205.1288035166723
+2 -13.888095190654237
+3 -200.38689699182993
+4 0.0
+5 -150.73950773952413
+6 4.005080311059334
+7 -95.393651068497
+8 4.163288407723591
+9 -50.340969935787705
+10 2.8106286803100624
+11 -21.110144469624945
+12 1.242727000561123
+13 -6.3320638965275515
+14 0.28479042532545584
+15 -1.024527899807755
+ 
+PAIRTYPE PARAMS: 1 H H
+
+0 0.0
+1 0.0
+2 0.0
+3 0.0
+4 0.0
+5 0.0
+6 0.0
+7 0.0
+8 0.0
+9 0.0
+10 0.0
+11 0.0
+12 0.0
+13 0.0
+14 0.0
+15 0.0
+ 
+PAIRTYPE PARAMS: 2 C H
+
+0 24.648186929427922
+1 15.044011922583328
+2 0.0
+3 0.0
+4 0.0
+5 -0.839921439807451
+6 -1.3352661903936958
+7 0.0
+8 -0.5670862972298201
+9 -0.5837995307285976
+10 0.0
+11 -0.36272137453486475
+12 0.0
+13 -0.18929440866666317
+14 0.04514021030087807
+15 -0.06830462611845098
+ 
+
+PAIRMAPS: 4
+0 CC
+2 CH
+2 HC
+1 HH
+
+ENDFILE
