@@ -15,6 +15,7 @@ import sys
 import sphinx_rtd_theme
 sys.path.insert(0, os.path.abspath('..'))
 
+autodoc_mock_imports = ['ase', 'numpy', 'phonopy']
 
 # -- Project information -----------------------------------------------------
 
