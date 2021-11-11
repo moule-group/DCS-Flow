@@ -2,8 +2,9 @@ import os
 import numpy as np
 from shutil import copyfile, move
 from ase.io import read, write
-from dcs import mkdir, chdir, out, done, isdone
+from dcs import mkdir, chdir, out, done, isdone, read_json, write_json
 from phonopy import Phonopy
+from pathlib import Path
 
 class CLICommand:
     'Calculate phonons'
@@ -38,6 +39,9 @@ class CLICommand:
             help='Set the temperature in Kelvin',
             default=5,
             type=int)
+        add('--get-params',
+            action='store_true',
+            help='Get JSON file with default parameters for calculator')
 
 
     @staticmethod
@@ -47,6 +51,10 @@ class CLICommand:
         Args:
             args (argparse): Command line arguments added to parser using the function add_arguments.
         """
+        if args.get_params:
+            write_params(args.kforce, args.calc, args.temp)
+            return
+
         phonons(args.dim, args.kforce, args.mesh, args.calc, args.temp)
 
 
@@ -92,6 +100,7 @@ def generate_supercell(dim, mode):
                                         supercell=supercell,
                                         cells_with_disps=supercells,
                                         optional_structure_info=info,
+                                        zfill_width=4,
                                         additional_info=additional_info)
     
     phonon.save()
@@ -108,33 +117,84 @@ def organize_folders(mode):
     if mode == 'dftbp':
         for filename in os.listdir('.'):
             if filename.startswith('geo.genS-'):
-                dir = filename[9:12]
+                dir = filename[9:13]
                 mkdir(dir)
                 move(filename, '{}/geo_end.gen' .format(dir))
 
     if mode == 'chimes':
         for filename in os.listdir('.'):
             if filename.startswith('geo.genS-'):
-                dir = filename[9:12]
+                dir = filename[9:13]
                 mkdir(dir)
                 move(filename, '{}/geo_end.gen' .format(dir))
  
     if mode == 'vasp':
         for filename in os.listdir('.'):
             if filename.startswith('POSCAR-'):
-                dir = filename[7:10]
+                dir = filename[7:11]
                 mkdir(dir)
                 move(filename, '{}/POSCAR' .format(dir))
 
     if mode == 'castep':
         for filename in os.listdir('.'):
             if filename.startswith('supercell-'):
-                dir = filename[10:13]
+                dir = filename[10:14]
                 mkdir(dir)
                 move(filename, '{}/supercell.cell' .format(dir))
 
+def calculator_kwargs(kforce, mode, T, folder='.'):
+    if mode == 'chimes':
+        if_ChIMES = 'Yes'
+    else:
+        if_ChIMES = 'No'
+        
+    if mode == 'dftbp' or mode == 'chimes':
+        kwargs = dict(kpts=kforce,
+                      Hamiltonian_ChIMES=if_ChIMES,
+                      Hamiltonian_SCC='Yes',
+                      Hamiltonian_SCCTolerance=1e-7,
+                      Hamiltonian_Filling='Fermi {{Temperature [Kelvin] = {T} }}' .format(T=T),
+                      Hamiltonian_MaxAngularMomentum_='',
+                      Hamiltonian_MaxAngularMomentum_C='p',
+                      Hamiltonian_MaxAngularMomentum_O='p',
+                      Hamiltonian_MaxAngularMomentum_H='s',
+                      Hamiltonian_MaxAngularMomentum_N='p',
+                      Hamiltonian_MaxAngularMomentum_S='d',
+                      Analysis_='',
+                      Analysis_CalculateForces='Yes',
+                      Options_WriteResultsTag='Yes')
 
-def calculate_forces(kforce, mode, T, dir):
+    elif mode == 'vasp':
+        kwargs = dict(kpts=kforce,
+                      prec='Accurate',
+                      encut=520,
+                      ibrion=-1,
+                      ediff=1e-8,
+                      ismear=0,
+                      sigma=0.05,
+                      nwrite=1,
+                      ncore=64,
+                      lreal=False,
+                      lcharg=False,
+                      lwave=False,
+                      xc='pbe',
+                      gamma=True)
+
+    params = Path(folder + '/phonons_calc_params.json')
+    if params.is_file():
+        kwargs2 = read_json(params)
+        kwargs.update(**kwargs2)
+
+    return kwargs
+
+def write_params(kforce, mode, T):
+    """Writes json file with default arguments for the relaxation calculator. 
+    """
+
+    kwargs = calculator_kwargs(kforce, mode, T)
+    write_json('phonons_calc_params.json', kwargs)
+                
+def calculate_forces(mode, kwargs, dir):
     """Runs single point energy calculation.
 
     Args:
@@ -148,61 +208,24 @@ def calculate_forces(kforce, mode, T, dir):
             return
         else:
             print(dir)
+            if mode == 'dftbp':
+                from ase.calculators.dftb import Dftb
+                calculator = Dftb(**kwargs)
+                calculator.write_dftb_in(filename='dftb_in.hsd')
+                os.system('dftb+ 1>> forces.out 2>> forces.err')
+
             if mode == 'chimes':
                 from ase.calculators.dftb import Dftb
                 from dcs.chimes import run_md_input
                 run_md_input('../../')
-                calculator = Dftb(kpts=kforce,
-                                  Hamiltonian_ChIMES='Yes',
-                                  Hamiltonian_SCC='Yes',
-                                  Hamiltonian_SCCTolerance=1e-7,
-                                  Hamiltonian_Filling='Fermi {{Temperature [Kelvin] = {T} }}' .format(T=T),
-                                  Hamiltonian_MaxAngularMomentum_='',
-                                  Hamiltonian_MaxAngularMomentum_C='p',
-                                  Hamiltonian_MaxAngularMomentum_O='p',
-                                  Hamiltonian_MaxAngularMomentum_H='s',
-                                  Hamiltonian_MaxAngularMomentum_N='p',
-                                  Hamiltonian_MaxAngularMomentum_S='d',
-                                  Analysis_='',
-                                  Analysis_CalculateForces='Yes',
-                                  Options_WriteResultsTag='Yes')
+                calculator = Dftb(**kwargs)
                 calculator.write_dftb_in(filename='dftb_in.hsd')
-                os.system('dftb+ 1>> forces.out 2>> forces.err')
-                
-            if mode == 'dftbp':
-                from ase.calculators.dftb import Dftb
-                calculator = Dftb(kpts=kforce,
-                                  Hamiltonian_SCC='Yes',
-                                  Hamiltonian_SCCTolerance=1e-7,
-                                  Hamiltonian_Filling='Fermi {{Temperature [Kelvin] = {T} }}' .format(T=T),
-                                  Hamiltonian_MaxAngularMomentum_='',
-                                  Hamiltonian_MaxAngularMomentum_C='p',
-                                  Hamiltonian_MaxAngularMomentum_O='p',
-                                  Hamiltonian_MaxAngularMomentum_H='s',
-                                  Hamiltonian_MaxAngularMomentum_N='p',
-                                  Hamiltonian_MaxAngularMomentum_S='d',
-                                  Analysis_='',
-                                  Analysis_CalculateForces='Yes')
-                calculator.write_dftb_in(filename='dftb_in.hsd')
-                os.system('dftb+ 1>> forces.out 2>> forces.err')
-                
+                os.system('dftb+ 1>> forces.out 2>> forces.err')                
+               
             if mode == 'vasp':    
                 from ase.calculators.vasp import Vasp
                 atoms = read('POSCAR')
-                calculator = Vasp(kpts=kforce,
-                                  prec='Accurate',
-                                  encut=520,
-                                  ibrion=-1,
-                                  ediff=1e-8,
-                                  ismear=0,
-                                  sigma=0.05,
-                                  nwrite=1,
-                                  ncore=64,
-                                  lreal=False,
-                                  lcharg=False,
-                                  lwave=False,
-                                  xc='pbe',
-                                  gamma=True)
+                calculator = Vasp(**kwargs)
                 atoms.set_calculator(calculator)
                 atoms.get_potential_energy()
                 
@@ -228,7 +251,7 @@ def calculate_forces(kforce, mode, T, dir):
                 
             done('forces')
                 
-def multi_forces(kforce, mode, T, mpi=False):
+def multi_forces(kforce, mode, T, folder, mpi=False):
     """Calls calculate_forces function using parallel processing,
         calculates forces for specified mode. 
 
@@ -238,7 +261,8 @@ def multi_forces(kforce, mode, T, mpi=False):
         mpi (bool, optional): Not currently implemented. Defaults to False. 
     """
     from functools import partial
-    command = partial(calculate_forces, kforce, mode, T)
+    kwargs = calculator_kwargs(kforce, mode, T, folder)
+    command = partial(calculate_forces, mode, kwargs)
     
     dirlist = np.array(sorted([x.name for x in os.scandir() if x.is_dir()]))
 
@@ -255,7 +279,7 @@ def multi_forces(kforce, mode, T, mpi=False):
                 executor.map(command, dirlist)
         else:
             from multiprocessing import Pool        
-            with Pool(processes=64) as pool:
+            with Pool(processes=4) as pool:
                 pool.map(command, dirlist)
 
     
@@ -325,7 +349,7 @@ def phonons(dim=[4, 4, 4], kforce=[1, 1, 1], mesh=[8, 8, 8], calc='dftbp', T=5):
             else:
                 generate_supercell(dim, calc)
                 organize_folders(calc)
-                multi_forces(kforce, calc, T)
+                multi_forces(kforce, calc, T, folder)
                 calculate_mesh(mesh, calc)
                 done('phonons')
 

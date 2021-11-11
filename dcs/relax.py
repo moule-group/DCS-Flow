@@ -1,7 +1,8 @@
 import os
 from ase.optimize import BFGS
 from ase.io import read
-from dcs import mkdir, chdir, out, done, isdone
+from dcs import mkdir, chdir, out, done, isdone, read_json, write_json
+from pathlib import Path
 
 class CLICommand:
     'Optimize structure'
@@ -29,7 +30,10 @@ class CLICommand:
             help='Set the temperature in Kelvin',
             default=5,
             type=int)
-        
+        add('--get-params',
+            action='store_true',
+            help='Get JSON file with default parameters for calculator')
+
 
     @staticmethod
     def run(args):
@@ -38,9 +42,72 @@ class CLICommand:
         Args:
             args (argparse): Command line arguments added to parser using the function add_arguments.
         """
+        if args.get_params:
+            write_params(args.krelax, args.fmax, args.geo, args.calc, args.temp)
+            return
+        
         relax(args.krelax, args.fmax, args.geo, args.calc, args.temp)
 
-def relax_structure(krelax, fmax, geo, mode, T):
+def calculator_kwargs(krelax, fmax, geo, mode, T, folder='.'):
+    if mode == 'chimes':
+        if_ChIMES = 'Yes'
+    else:
+        if_ChIMES = 'No'
+        
+    if mode == 'dftbp' or mode == 'chimes':
+        kwargs = dict(label='relax',
+                      Driver_='LBFGS',
+                      Driver_MovedAtoms='1:-1',
+                      Driver_empty='MaxForceComponent[eV/AA] = {}' .format(fmax),
+                      Driver_MaxSteps=1000,
+                      Driver_LatticeOpt='Yes',
+                      Driver_Isotropic='Yes',
+                      kpts=krelax,
+                      Hamiltonian_ChIMES=if_ChIMES,
+                      Hamiltonian_SCC='Yes',
+                      Hamiltonian_SCCTolerance=1e-7,
+                      Hamiltonian_Filling='Fermi {{Temperature [Kelvin] = {T} }}' .format(T=T),
+                      Hamiltonian_MaxAngularMomentum_='',
+                      Hamiltonian_MaxAngularMomentum_C='p',
+                      Hamiltonian_MaxAngularMomentum_O='p',
+                      Hamiltonian_MaxAngularMomentum_H='s',
+                      Hamiltonian_MaxAngularMomentum_N='p',
+                      Hamiltonian_MaxAngularMomentum_S='d')
+
+    elif mode == 'vasp':
+        kwargs = dict(kpts=krelax,
+                      prec='Accurate',
+                      encut=520,
+                      nsw=1000,
+                      isif=3,
+                      ismear=0,
+                      ibrion=1,
+                      ediff=1e-8,
+                      ediffg=-fmax,
+                      sigma=0.05,
+                      nwrite=1,
+                      ncore=64,
+                      lreal=False,
+                      lcharg=False,
+                      lwave=False,
+                      xc='pbe',
+                      gamma=True)
+
+    params = Path(folder + '/relax_calc_params.json')
+    if params.is_file():
+        kwargs2 = read_json(params)
+        kwargs.update(**kwargs2)
+
+    return kwargs
+
+def write_params(krelax, fmax, geo, mode, T):
+    """Writes json file with default arguments for the relaxation calculator. 
+    """
+
+    kwargs = calculator_kwargs(krelax, fmax, geo, mode, T)
+    write_json('relax_calc_params.json', kwargs)
+
+def relax_structure(krelax, fmax, geo, mode, T, folder):
     """Defines arguments for specified calculator and optimizes the structure.
     
     Args:
@@ -57,73 +124,22 @@ def relax_structure(krelax, fmax, geo, mode, T):
         return
     else:
         atoms = read(geo)
-        formula = atoms.get_chemical_formula()
+        kwargs = calculator_kwargs(krelax, fmax, geo, mode, T, folder)
 
         if mode == 'dftbp':
             from ase.calculators.dftb import Dftb
-            calculator = Dftb(label='relax',
-                              atoms=atoms,
-                              Driver_='LBFGS',
-                              Driver_MovedAtoms='1:-1',
-                              Driver_empty='MaxForceComponent[eV/AA] = {}' .format(fmax),
-                              Driver_MaxSteps=1000,
-                              Driver_LatticeOpt='Yes',
-                              Driver_Isotropic='Yes',
-                              kpts=krelax,
-                              Hamiltonian_SCC='Yes',
-                              Hamiltonian_SCCTolerance=1e-7,
-                              Hamiltonian_Filling='Fermi {{Temperature [Kelvin] = {T} }}' .format(T=T),
-                              Hamiltonian_MaxAngularMomentum_='',
-                              Hamiltonian_MaxAngularMomentum_C='p',
-                              Hamiltonian_MaxAngularMomentum_O='p',
-                              Hamiltonian_MaxAngularMomentum_H='s',
-                              Hamiltonian_MaxAngularMomentum_N='p',
-                              Hamiltonian_MaxAngularMomentum_S='d')
+            calculator = Dftb(**kwargs)
 
         elif mode == 'chimes':
             from ase.calculators.dftb import Dftb
             from dcs.chimes import run_md_input
             folder = os.getcwd()            
             run_md_input(folder + '/..')
-            calculator = Dftb(label='relax',
-                              atoms=atoms,
-                              Driver_='LBFGS',
-                              Driver_MovedAtoms='1:-1',
-                              Driver_empty='MaxForceComponent[eV/AA] = {}' .format(fmax),
-                              Driver_MaxSteps=1000,
-                              Driver_LatticeOpt='Yes',
-                              Driver_Isotropic='Yes',
-                              kpts=krelax,
-                              Hamiltonian_ChIMES='Yes',
-                              Hamiltonian_SCC='Yes',
-                              Hamiltonian_SCCTolerance=1e-7,
-                              Hamiltonian_Filling='Fermi {{Temperature [Kelvin] = {T} }}' .format(T=T),
-                              Hamiltonian_MaxAngularMomentum_='',
-                              Hamiltonian_MaxAngularMomentum_C='p',
-                              Hamiltonian_MaxAngularMomentum_O='p',
-                              Hamiltonian_MaxAngularMomentum_H='s',
-                              Hamiltonian_MaxAngularMomentum_N='p',
-                              Hamiltonian_MaxAngularMomentum_S='d')
+            calculator = Dftb(**kwargs)
 
         elif mode == 'vasp':
             from ase.calculators.vasp import Vasp
-            calculator = Vasp(kpts=krelax,
-                              prec='Accurate',
-                              encut=520,
-                              nsw=1000,
-                              isif=3,
-                              ismear=0,
-                              ibrion=1,
-                              ediff=1e-8,
-                              ediffg=-fmax,
-                              sigma=0.05,
-                              nwrite=1,
-                              ncore=64,
-                              lreal=False,
-                              lcharg=False,
-                              lwave=False,
-                              xc='pbe',
-                              gamma=True)
+            calculator = Vasp(**kwargs)
 
         elif mode == 'castep':
             import ase.calculators.castep
@@ -204,7 +220,8 @@ def relax(krelax=[6, 6, 6], fmax=0.05, geo=None, calc='dftbp', T=5):
     mkdir(folder + '/1-optimization')
     with chdir(folder + '/1-optimization'):
         with out('relax'):
-            relax_structure(krelax=krelax, fmax=fmax, geo=geo, mode=calc, T=T)
+            relax_structure(krelax=krelax, fmax=fmax, geo=geo,
+                            mode=calc, T=T, folder=folder)
 
 if __name__ == '__main__':
     relax()
