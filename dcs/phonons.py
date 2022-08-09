@@ -211,7 +211,8 @@ def calculate_forces(mode, kwargs, dir):
             if mode == 'dftbp':
                 from ase.calculators.dftb import Dftb
                 calculator = Dftb(**kwargs)
-                calculator.write_dftb_in(filename='dftb_in.hsd')
+                with open('dftb_in.hsd', 'w') as file:
+                    calculator.write_dftb_in(file)
                 os.system('dftb+ 1>> forces.out 2>> forces.err')
 
             if mode == 'chimes':
@@ -219,7 +220,8 @@ def calculate_forces(mode, kwargs, dir):
                 from dcs.chimes import run_md_input
                 run_md_input('../../')
                 calculator = Dftb(**kwargs)
-                calculator.write_dftb_in(filename='dftb_in.hsd')
+                with open('dftb_in.hsd', 'w') as file:
+                    calculator.write_dftb_in(file)
                 os.system('dftb+ 1>> forces.out 2>> forces.err')                
                
             if mode == 'vasp':    
