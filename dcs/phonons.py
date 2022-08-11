@@ -78,8 +78,7 @@ def generate_supercell(dim, mode):
 
     # reading structure file
     cell_info = collect_cell_info(supercell_matrix,
-                                  interface_mode=mode,
-                                  return_dict=True)
+                                  interface_mode=mode)
     units = get_default_physical_units(interface_mode=mode)
 
     # Initialize phonopy
