@@ -143,14 +143,25 @@ def organize_folders(mode):
                 move(filename, '{}/supercell.cell' .format(dir))
 
 def calculator_kwargs(kforce, mode, T, folder='.'):
-    if mode == 'chimes':
-        if_ChIMES = 'Yes'
-    else:
-        if_ChIMES = 'No'
-        
-    if mode == 'dftbp' or mode == 'chimes':
+    if mode == 'dftbp':
         kwargs = dict(kpts=kforce,
-                      Hamiltonian_ChIMES=if_ChIMES,
+                      Hamiltonian_SCC='Yes',
+                      Hamiltonian_SCCTolerance=1e-7,
+                      Hamiltonian_Filling='Fermi {{Temperature [Kelvin] = {T} }}' .format(T=T),
+                      Hamiltonian_MaxAngularMomentum_='',
+                      Hamiltonian_MaxAngularMomentum_C='p',
+                      Hamiltonian_MaxAngularMomentum_O='p',
+                      Hamiltonian_MaxAngularMomentum_H='s',
+                      Hamiltonian_MaxAngularMomentum_N='p',
+                      Hamiltonian_MaxAngularMomentum_S='d',
+                      Analysis_='',
+                      Analysis_CalculateForces='Yes',
+                      Options_WriteResultsTag='Yes')
+
+    elif mode == 'chimes':
+        kwargs = dict(kpts=kforce,
+                      Hamiltonian_ChIMES_='',
+                      Hamiltonian_ChIMES_ParameterFile='params.txt',
                       Hamiltonian_SCC='Yes',
                       Hamiltonian_SCCTolerance=1e-7,
                       Hamiltonian_Filling='Fermi {{Temperature [Kelvin] = {T} }}' .format(T=T),

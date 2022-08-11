@@ -48,13 +48,8 @@ class CLICommand:
         
         relax(args.krelax, args.fmax, args.geo, args.calc, args.temp)
 
-def calculator_kwargs(krelax, fmax, geo, mode, T, folder='.'):
-    if mode == 'chimes':
-        if_ChIMES = 'Yes'
-    else:
-        if_ChIMES = 'No'
-        
-    if mode == 'dftbp' or mode == 'chimes':
+def calculator_kwargs(krelax, fmax, geo, mode, T, folder='.'):        
+    if mode == 'dftbp':
         kwargs = dict(label='relax',
                       Driver_='LBFGS',
                       Driver_MovedAtoms='1:-1',
@@ -63,7 +58,27 @@ def calculator_kwargs(krelax, fmax, geo, mode, T, folder='.'):
                       Driver_LatticeOpt='Yes',
                       Driver_Isotropic='Yes',
                       kpts=krelax,
-                      Hamiltonian_ChIMES=if_ChIMES,
+                      Hamiltonian_SCC='Yes',
+                      Hamiltonian_SCCTolerance=1e-7,
+                      Hamiltonian_Filling='Fermi {{Temperature [Kelvin] = {T} }}' .format(T=T),
+                      Hamiltonian_MaxAngularMomentum_='',
+                      Hamiltonian_MaxAngularMomentum_C='p',
+                      Hamiltonian_MaxAngularMomentum_O='p',
+                      Hamiltonian_MaxAngularMomentum_H='s',
+                      Hamiltonian_MaxAngularMomentum_N='p',
+                      Hamiltonian_MaxAngularMomentum_S='d')
+
+    elif mode == 'chimes':
+        kwargs = dict(label='relax',
+                      Driver_='LBFGS',
+                      Driver_MovedAtoms='1:-1',
+                      Driver_empty='MaxForceComponent[eV/AA] = {}' .format(fmax),
+                      Driver_MaxSteps=1000,
+                      Driver_LatticeOpt='Yes',
+                      Driver_Isotropic='Yes',
+                      kpts=krelax,
+                      Hamiltonian_ChIMES_='',
+                      Hamiltonian_ChIMES_ParameterFile='params.txt',
                       Hamiltonian_SCC='Yes',
                       Hamiltonian_SCCTolerance=1e-7,
                       Hamiltonian_Filling='Fermi {{Temperature [Kelvin] = {T} }}' .format(T=T),
